@@ -40,22 +40,22 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۵ از ۷۵ بخش (۷٪)**
+**۱۴ از ۷۵ بخش (۱۹٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
 
 | بخش | عنوان | وضعیت |
 |---|---|---|
-| [`01.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/01.md) | ۱ | ⬜ ترجمه‌نشده |
-| [`02.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/02.md) | ۲ | ⬜ ترجمه‌نشده |
-| [`03.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/03.md) | ۳ | ⬜ ترجمه‌نشده |
-| [`04.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/04.md) | ۴ | ⬜ ترجمه‌نشده |
-| [`05.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/05.md) | ۵ | ⬜ ترجمه‌نشده |
-| [`06.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/06.md) | ۶ | ⬜ ترجمه‌نشده |
-| [`07.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/07.md) | ۷ | ⬜ ترجمه‌نشده |
-| [`08.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/08.md) | ۸ | ⬜ ترجمه‌نشده |
-| [`09.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/09.md) | ۹ | ⬜ ترجمه‌نشده |
+| [`01.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/01.md) | ۱ | 🟢 بازبینی‌شده |
+| [`02.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/02.md) | ۲ | 🟢 بازبینی‌شده |
+| [`03.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/03.md) | ۳ | 🟢 بازبینی‌شده |
+| [`04.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/04.md) | ۴ | 🟢 بازبینی‌شده |
+| [`05.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/05.md) | ۵ | 🟢 بازبینی‌شده |
+| [`06.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/06.md) | ۶ | 🟢 بازبینی‌شده |
+| [`07.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/07.md) | ۷ | 🟢 بازبینی‌شده |
+| [`08.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/08.md) | ۸ | 🟢 بازبینی‌شده |
+| [`09.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/09.md) | ۹ | 🟢 بازبینی‌شده |
 | [`10.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/10.md) | ۱۰ | ⬜ ترجمه‌نشده |
 | [`11.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/11.md) | ۱۱ | ⬜ ترجمه‌نشده |
 | [`12.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/12.md) | ۱۲ | ⬜ ترجمه‌نشده |
