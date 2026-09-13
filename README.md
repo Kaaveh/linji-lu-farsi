@@ -6,7 +6,7 @@ of the ninth-century Chinese Chan master Lin-chi Yi-hsüan, compiled by his
 students and printed in 1120.
 
 Sixty-nine numbered sections in four parts, plus front matter, an appendix and
-a glossary. The apparatus runs to 506 notes.
+a glossary. The apparatus runs to 253 notes.
 
 📖 **[Read it online](https://kaavehdev.ir/translations/linji-lu)** ·
 📄 **[Latest PDF and EPUB](../../releases/latest)**

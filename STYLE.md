@@ -107,7 +107,7 @@ If prose digits should be Persian too, set `latin_digits = true` in
 
 ## 6. Notes
 
-**Governs:** the apparatus, which is substantial — 506 notes across 69 sections.
+**Governs:** the apparatus, which is substantial — 253 notes across 69 sections.
 
 The source uses **endnotes per section**, not page-bottom footnotes: each
 section ends with a `## یادداشت‌ها` list and the references are anchored links
