@@ -1,7 +1,9 @@
 ---
-status: untranslated
+status: reviewed
 ---
 
 # صفحهٔ عنوان
 
-<!-- TODO: translate -->
+گردآوری‌شده توسط وارثِ دارما، هویی‌جان
+
+ساکن معبد سان‌شنگ<a id="m2-1"></a>[^۱^](01.md#n2-1)

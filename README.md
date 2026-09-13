@@ -40,7 +40,7 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۰ از ۷۵ بخش (۰٪)**
+**۵ از ۷۵ بخش (۷٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
@@ -88,7 +88,7 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`39.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/39.md) | ۳۹ | ⬜ ترجمه‌نشده |
 | [`40.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/40.md) | ۴۰ | ⬜ ترجمه‌نشده |
 | [`41.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/41.md) | ۴۱ | ⬜ ترجمه‌نشده |
-| [`42.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/42.md) | ۴۲ | ⬜ ترجمه‌نشده |
+| [`42.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/42.md) | ۴۲ | 🟢 بازبینی‌شده |
 | [`43.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/43.md) | ۴۳ | ⬜ ترجمه‌نشده |
 | [`44.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/44.md) | ۴۴ | ⬜ ترجمه‌نشده |
 | [`45.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/45.md) | ۴۵ | ⬜ ترجمه‌نشده |
@@ -118,10 +118,10 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`69.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/69.md) | ۶۹ | ⬜ ترجمه‌نشده |
 | [`appendix.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/appendix.md) | پیوست | ⬜ ترجمه‌نشده |
 | [`glossary.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/glossary.md) | واژه‌نامه | ⬜ ترجمه‌نشده |
-| [`ma-fang-preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/ma-fang-preface.md) | دیباچهٔ ما فانگ | ⬜ ترجمه‌نشده |
-| [`preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/preface.md) | پیش‌گفتار | ⬜ ترجمه‌نشده |
-| [`record-title-page.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/record-title-page.md) | صفحهٔ عنوان | ⬜ ترجمه‌نشده |
-| [`translators-introduction.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/translators-introduction.md) | مقدمهٔ مترجم | ⬜ ترجمه‌نشده |
+| [`ma-fang-preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/ma-fang-preface.md) | دیباچهٔ ما فانگ | 🟢 بازبینی‌شده |
+| [`preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/preface.md) | پیش‌گفتار | 🟢 بازبینی‌شده |
+| [`record-title-page.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/record-title-page.md) | صفحهٔ عنوان | 🟢 بازبینی‌شده |
+| [`translators-introduction.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/translators-introduction.md) | مقدمهٔ مترجم | 🟢 بازبینی‌شده |
 
 </details>
 
