@@ -1,0 +1,177 @@
+# Book build. One source tree, three outputs.
+#
+# TBD markers below are the maintainer's calls, not defaults to keep: the book
+# title, the author credit, and the four part titles are translation decisions
+# and should be settled the same way any other term is.
+
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "آموزه‌های ذن استاد لین‌چی"        # TBD
+  subtitle: "برگردان فارسی از متن انگلیسی برتون واتسون"   # TBD
+  author: "کاوه"                             # TBD: how you want to be credited
+  date: today
+
+  repo-url: https://github.com/Kaaveh/linji-lu-farsi
+  repo-branch: main
+  # `edit` is the one that matters. It turns a typo into a web-editor commit
+  # with no clone, and produces more fixes than every other channel combined.
+  repo-actions: [edit, issue]
+  downloads: [pdf, epub]
+  search: true
+
+  sidebar:
+    style: docked
+    # 69 numbered sections make an unusably long nav if every part is open.
+    # Collapsed, the sidebar is six entries and the page stops being as tall
+    # as the navigation.
+    collapse-level: 1
+
+  chapters:
+    - index.md
+    - fa/preface.md
+    - fa/translators-introduction.md
+    - fa/ma-fang-preface.md
+    - fa/record-title-page.md
+    - part: "دفتر یکم: برآمدن به تالار"
+      chapters:
+        - fa/01.md
+        - fa/02.md
+        - fa/03.md
+        - fa/04.md
+        - fa/05.md
+        - fa/06.md
+        - fa/07.md
+        - fa/08.md
+        - fa/09.md
+    - part: "دفتر دوم: آموزش به انجمن"
+      chapters:
+        - fa/10.md
+        - fa/11.md
+        - fa/12.md
+        - fa/13.md
+        - fa/14.md
+        - fa/15.md
+        - fa/16.md
+        - fa/17.md
+        - fa/18.md
+        - fa/19.md
+        - fa/20.md
+        - fa/21.md
+        - fa/22.md
+        - fa/23.md
+    - part: "دفتر سوم: آزمودن و سنجیدن"
+      chapters:
+        - fa/24.md
+        - fa/25.md
+        - fa/26.md
+        - fa/27.md
+        - fa/28.md
+        - fa/29.md
+        - fa/30.md
+        - fa/31.md
+        - fa/32.md
+        - fa/33.md
+        - fa/34.md
+        - fa/35.md
+        - fa/36.md
+        - fa/37.md
+        - fa/38.md
+        - fa/39.md
+        - fa/40.md
+        - fa/41.md
+        - fa/42.md
+        - fa/43.md
+        - fa/44.md
+        - fa/45.md
+        - fa/46.md
+        - fa/47.md
+    - part: "دفتر چهارم: کارنامه"
+      chapters:
+        - fa/48.md
+        - fa/49.md
+        - fa/50.md
+        - fa/51.md
+        - fa/52.md
+        - fa/53.md
+        - fa/54.md
+        - fa/55.md
+        - fa/56.md
+        - fa/57.md
+        - fa/58.md
+        - fa/59.md
+        - fa/60.md
+        - fa/61.md
+        - fa/62.md
+        - fa/63.md
+        - fa/64.md
+        - fa/65.md
+        - fa/66.md
+        - fa/67.md
+        - fa/68.md
+        - fa/69.md
+
+  appendices:
+    - fa/appendix.md
+    - fa/glossary.md
+
+# fa-IR, not fa. Quarto's relative-path rewriter treats a bare `fa` as a path
+# because a directory of that name exists, and emits lang="../fa" on every
+# page under fa/. A region subtag sidesteps it, and pandoc still maps fa-IR to
+# babel's `persian` for the PDF.
+lang: fa-IR
+dir: rtl
+
+# Quarto has no built-in fa locale. Without this every piece of chrome renders
+# in English inside a Persian book. See the file header.
+language: _language.yml
+
+# Off deliberately. The section number is already the heading text -- fa/42.md
+# opens with "# ۴۲" -- so Quarto's own numbering would render "۴۲ ۴۲".
+number-sections: false
+
+format:
+  html:
+    theme: cosmo
+    css: assets/rtl.css
+    toc: true
+    # 2, not 1. Quarto puts the "Edit this page" link in the margin beside
+    # the page TOC, and falls back to the footer when there is no TOC at all.
+    # At depth 1 no chapter has a TOC, so the single most useful link in the
+    # book ends up below the fold on every page.
+    toc-depth: 2
+    toc-title: "در این بخش"
+    link-external-newwindow: true
+
+  pdf:
+    # LuaLaTeX, not XeLaTeX. See tex/preamble.tex for why -- under XeLaTeX
+    # pandoc picks babel with bidi=default, which reverses Latin-script runs
+    # embedded in Persian text.
+    pdf-engine: lualatex
+    documentclass: book
+    mainfont: "Vazirmatn-Regular.ttf"
+    mainfontoptions:
+      - Path=fonts/
+      - BoldFont=Vazirmatn-Bold.ttf
+      - Renderer=Harfbuzz
+    fontsize: 12pt
+    geometry:
+      - top=25mm
+      - bottom=25mm
+      - inner=28mm
+      - outer=22mm
+    include-in-header: tex/preamble.tex
+    colorlinks: true
+
+  epub:
+    # Pandoc supports this but does not derive it from `dir`, so an RTL book
+    # otherwise ships with a left-to-right spine and pages turn the wrong way.
+    page-progression-direction: rtl
+    # Vendored so the book reads correctly on devices with no Persian font.
+    epub-fonts:
+      - fonts/Vazirmatn-Regular.ttf
+      - fonts/Vazirmatn-Bold.ttf
+    css: assets/epub.css
+    toc-depth: 1

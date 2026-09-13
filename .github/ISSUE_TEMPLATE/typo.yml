@@ -1,0 +1,37 @@
+name: غلط تایپی — Typo or orthography
+description: Report a typo, a wrong character, or a spacing problem
+title: "fix: "
+labels: ["typo"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If you would rather just fix it, every page of the book has an
+        **«ویرایش این صفحه در گیت‌هاب»** link that opens the web editor. No
+        clone needed. Either way is welcome.
+
+  - type: input
+    id: chapter
+    attributes:
+      label: Section
+      description: The number or filename.
+      placeholder: "42, or fa/42.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: text
+    attributes:
+      label: The line as it currently reads
+      description: Copy and paste it. One line is enough.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: What it should say
+      render: text
+    validations:
+      required: false

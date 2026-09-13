@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+*.md diff=markdown
+
+fonts/*   binary
+*.ttf     binary
+*.otf     binary
+*.woff    binary
+*.woff2   binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.pdf     binary
+*.epub    binary

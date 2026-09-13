@@ -1,0 +1,25 @@
+# Review ownership. GitHub requests a review from the owner of every path a
+# pull request touches.
+
+*   @Kaaveh
+
+# Adding per-chapter editors later
+# --------------------------------
+# When someone takes lasting responsibility for a run of sections, give them
+# those paths. Later rules win, so put the specific ones below the catch-all:
+#
+#   /fa/24.md  @Kaaveh @some-editor
+#   /fa/25.md  @Kaaveh @some-editor
+#
+# GitHub's CODEOWNERS has no range syntax, so a run of sections means one line
+# each. That is tedious but explicit, which is the right trade for something
+# that governs who can approve a change to the text.
+#
+# Keep @Kaaveh on text paths even when delegating: consistency of voice across
+# the whole book is a maintainer responsibility and cannot be reviewed one
+# chapter at a time.
+#
+# Tooling is different — it can be owned outright by whoever maintains it:
+#
+#   /tools/     @some-tooling-person
+#   /.github/   @some-tooling-person

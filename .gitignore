@@ -1,0 +1,51 @@
+# The source text is licensed to the maintainer for private use and for
+# producing translations. It is NOT redistributable. Never commit it.
+# tools/check_parity.py and tools/check_glossary.py read it locally and
+# skip themselves in CI, where it is absent by design.
+source/
+
+# Quarto
+/_book/
+/.quarto/
+/_freeze/
+/site_libs/
+
+# LaTeX intermediates. tex/preamble.tex is tracked; keep-tex output is not.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.tex
+!tex/*.tex
+
+# Build artefacts
+*.pdf
+*.epub
+!fonts/*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Editors and OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+**/*.quarto_ipynb

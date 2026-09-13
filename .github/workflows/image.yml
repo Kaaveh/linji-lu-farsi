@@ -1,0 +1,67 @@
+name: image
+
+# Publishes the build container to GHCR so nobody has to build it locally and
+# CI does not rebuild a multi-gigabyte TeX image on every push.
+#
+# A fifth workflow beyond the four in the plan, on purpose: folding this into
+# build.yml would rebuild the image on every pull request, which is minutes of
+# CI for a change that almost never happens.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Dockerfile
+      - tools/texlive-packages.txt
+      - tools/requirements.txt
+      - fonts/**
+      - .github/workflows/image.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: image
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/linji-lu-farsi
+          tags: |
+            type=raw,value=latest
+            type=sha,format=long
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # The Dockerfile's own smoke test proves lualatex can typeset Persian.
+      # This proves the published image can render the actual book.
+      - name: Render the book with the image just pushed
+        run: |
+          docker run --rm -v "$PWD:/book" -w /book \
+            ghcr.io/${{ github.repository_owner }}/linji-lu-farsi:latest \
+            quarto render --to pdf
+          test -f _book/*.pdf

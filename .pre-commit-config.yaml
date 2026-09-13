@@ -1,0 +1,53 @@
+# Fast hooks only. Anything that needs TeX or the full test suite belongs in
+# CI, not in the path between you and a commit.
+#
+#     pip install pre-commit -r tools/requirements.txt
+#     pre-commit install --install-hooks
+#     pre-commit install --hook-type commit-msg     # for the DCO check
+#
+# The `local` hooks below use `language: system`, so they run against whatever
+# `python` is on your PATH -- it needs PyYAML and regex from
+# tools/requirements.txt. `just venv` sets that up.
+#
+# There is no fa/-mirrors-source/ hook here on purpose: contributors do not
+# have source/, so it would block every commit they make. `just check` covers
+# it for the maintainer, who does.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        # Two trailing spaces are a hard line break in Markdown, and the
+        # quoted verse in this book depends on them. Stripping those would
+        # silently reflow poetry into prose.
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=512]
+
+  - repo: local
+    hooks:
+      - id: normalize
+        name: Persian orthography
+        entry: python tools/normalize.py --fix
+        language: system
+        files: ^fa/.*\.md$
+        # Exits non-zero if a bidi override is present, which --fix will not
+        # remove. That is intended: a human has to look at those.
+
+      - id: linebreaks
+        name: Semantic line breaks
+        entry: python tools/check_linebreaks.py --fix
+        language: system
+        files: ^fa/.*\.md$
+
+      - id: dco
+        name: DCO sign-off
+        entry: tools/hooks/check-dco.sh
+        language: script
+        stages: [commit-msg]

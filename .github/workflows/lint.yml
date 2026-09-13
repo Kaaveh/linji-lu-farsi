@@ -1,0 +1,107 @@
+name: lint
+
+# Deliberately does not use the container. The checkers need Python and two
+# small wheels; pulling a multi-gigabyte TeX image to run a two-second lint
+# would make every PR slower for no benefit. build.yml uses the container,
+# which is where it earns its keep.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checkers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: tools/requirements.txt
+
+      - run: pip install -r tools/requirements.txt
+
+      - name: Tests for the checkers
+        run: python -m unittest discover -s tools/tests
+
+      # Each on its own step so a red run names the failing check in the UI.
+      - name: Orthography
+        run: python tools/normalize.py --check
+
+      - name: Semantic line breaks
+        run: python tools/check_linebreaks.py --check
+
+      # Exits 0 with a notice here: source/ is licensed to the maintainer for
+      # translation, not for redistribution, so CI never has it. This step is
+      # kept so the notice appears in the log and nobody assumes it ran.
+      - name: Parity
+        run: python tools/check_parity.py --check
+
+      # The forbidden-rendering half needs only fa/, so it does run here.
+      - name: Glossary
+        run: python tools/check_glossary.py --check
+
+      - name: README status table is current
+        run: python tools/status_table.py --check
+
+  spelling:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install hunspell and the Persian dictionary
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends hunspell hunspell-fa
+
+      # en_US is loaded alongside fa_IR because the translation carries
+      # transliterated names and Latin technical terms in ordinary prose.
+      # tools/dict/project.dic is the project's own wordlist.
+      - name: Spell check
+        run: |
+          set -o pipefail
+          unknown=$(hunspell -d fa_IR,en_US -p tools/dict/project.dic -l fa/*.md \
+                    | sort -u)
+          if [ -n "$unknown" ]; then
+            echo "Unrecognised words. Fix them, or add genuine terms to tools/dict/project.dic:"
+            echo "$unknown"
+            exit 1
+          fi
+          echo "spelling: clean"
+
+  dco:
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Inbound equals outbound. Every commit needs `git commit -s`.
+      - name: Every commit is signed off
+        run: |
+          base='${{ github.event.pull_request.base.sha }}'
+          head='${{ github.event.pull_request.head.sha }}'
+          missing=0
+          while read -r sha; do
+            if ! git log -1 --format='%B' "$sha" | grep -qi '^Signed-off-by: .\+ <.\+@.\+>'; then
+              echo "missing Signed-off-by: $(git log -1 --format='%h %s' "$sha")"
+              missing=1
+            fi
+          done < <(git rev-list "$base..$head")
+          if [ "$missing" -ne 0 ]; then
+            echo
+            echo "Sign off with: git commit -s   (or: git rebase --signoff $base)"
+            exit 1
+          fi
+          echo "dco: all commits signed off"

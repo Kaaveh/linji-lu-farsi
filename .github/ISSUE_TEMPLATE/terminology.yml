@@ -1,0 +1,90 @@
+name: پیشنهاد واژگانی — Terminology proposal
+description: Propose or challenge the Persian rendering of a term
+title: "term: "
+labels: ["terminology"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **These issues are the project's decision log.**
+
+        In two years the most valuable thing this repository holds may be a
+        searchable record of *why* a word was rendered the way it was. Please
+        write for that reader — someone who was not here, cannot ask you, and
+        needs to understand what was weighed.
+
+        Once settled, the outcome goes into `glossary.yml` with a link back to
+        this issue, and CI enforces it from then on.
+
+        Please do **not** open a pull request that changes a term. It bypasses
+        this record.
+
+  - type: input
+    id: source-term
+    attributes:
+      label: Source term
+      description: Exactly as it appears in the English text.
+      placeholder: "Followers of the Way"
+    validations:
+      required: true
+
+  - type: input
+    id: original
+    attributes:
+      label: Chinese / Sanskrit original, if known
+      description: Helps when the English is itself an interpretive choice.
+      placeholder: "道流"
+    validations:
+      required: false
+
+  - type: textarea
+    id: candidates
+    attributes:
+      label: Candidate renderings
+      description: |
+        One per line. Include the ones you think are wrong — the record is more
+        useful when it shows what was rejected.
+      placeholder: |
+        رهروان راه
+        پویندگان طریقت
+        سالکان
+    validations:
+      required: true
+
+  - type: textarea
+    id: argument
+    attributes:
+      label: Argument
+      description: |
+        What does each candidate get right and wrong? Consider register,
+        existing Buddhist vocabulary in Persian, unwanted Sufi or Islamic
+        connotation, and how the term reads when it recurs sixty times.
+    validations:
+      required: true
+
+  - type: textarea
+    id: precedent
+    attributes:
+      label: Precedent in existing Persian translations
+      description: |
+        How have published Persian translations of Buddhist or Zen texts handled
+        this? Cite what you can. "None found" is a useful answer.
+    validations:
+      required: false
+
+  - type: textarea
+    id: occurrences
+    attributes:
+      label: Where it occurs
+      description: Section numbers, if you know them. Helps judge how much rides on it.
+      placeholder: "sections 11, 12, 13, 18, 19, 22"
+    validations:
+      required: false
+
+  - type: input
+    id: recommendation
+    attributes:
+      label: Your recommendation
+      placeholder: "رهروان راه"
+    validations:
+      required: true

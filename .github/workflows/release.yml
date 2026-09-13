@@ -1,0 +1,80 @@
+name: release
+
+# Tagging is what produces a citable edition. MAJOR is a new edition or a
+# retranslation, MINOR is a new chapter or a substantive revision, PATCH is
+# typos and orthography. See the README.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/kaaveh/linji-lu-farsi:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # A release must be reproducible from a clean tree, so no build cache
+      # here even though it would be faster.
+      - name: Render
+        run: quarto render
+
+      - name: Name the artefacts after the tag
+        id: name
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+          cp _book/*.pdf  "dist/linji-lu-farsi-${version}.pdf"
+          cp _book/*.epub "dist/linji-lu-farsi-${version}.epub"
+
+          # The whole rendered site, for kaavehdev.ir to unpack into
+          # public/translations/linji-lu/. Cloudflare Workers Builds has no
+          # Quarto, so the site cannot render this itself -- it fetches this
+          # tarball at build time, pinned to a version it names explicitly.
+          #
+          # The PDF and EPUB stay inside the tarball as well as being attached
+          # separately: the book's own download buttons link to them by
+          # relative path, and would 404 without them.
+          tar -czf "dist/linji-lu-farsi-${version}-html.tar.gz" -C _book .
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      # Quarto emits only relative asset paths and a relative
+      # <meta name="quarto:offset">, so the bundle is relocatable. Assert it,
+      # because a future Quarto version that emits root-absolute paths would
+      # break the site silently and only in production.
+      - name: Bundle is relocatable
+        run: |
+          if grep -rohE '(href|src)="/[^"]*"' _book --include='*.html' | grep -q .; then
+            echo "Root-absolute asset paths found; this will break under /translations/linji-lu/:"
+            grep -rohE '(href|src)="/[^"]*"' _book --include='*.html' | sort -u | head
+            exit 1
+          fi
+          echo "all asset paths are relative"
+
+      - name: Progress at this tag
+        id: progress
+        run: |
+          echo 'table<<EOF' >> "$GITHUB_OUTPUT"
+          python3 tools/status_table.py >> "$GITHUB_OUTPUT"
+          echo 'EOF' >> "$GITHUB_OUTPUT"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/linji-lu-farsi-${{ steps.name.outputs.version }}.pdf
+            dist/linji-lu-farsi-${{ steps.name.outputs.version }}.epub
+            dist/linji-lu-farsi-${{ steps.name.outputs.version }}-html.tar.gz
+          generate_release_notes: true
+          body: |
+            ${{ steps.progress.outputs.table }}
+
+            ---
+
+            The Persian translation is licensed CC BY-SA 4.0; the repository
+            tooling is MIT. The English source text is not redistributed here
+            and remains under its own copyright.

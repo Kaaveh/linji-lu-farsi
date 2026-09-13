@@ -1,0 +1,5 @@
+# Runtime dependencies for the checkers in tools/.
+# Deliberately tiny: CI runs `just check` on every PR and it should finish in
+# seconds. Nothing here pulls a compiler or a model.
+PyYAML==6.0.3
+regex==2026.9.10

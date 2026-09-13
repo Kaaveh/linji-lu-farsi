@@ -1,0 +1,23 @@
+100
+# Project wordlist for hunspell, loaded alongside fa_IR and en_US.
+#
+# The first line must be a number -- hunspell reads it as the expected entry
+# count. It does not have to be exact, but it has to be there.
+#
+# Add a word here only when it is genuinely correct and the dictionary does
+# not know it: transliterated Chinese and Sanskrit names, Buddhist technical
+# vocabulary, and place names. Do not add a word to silence a real typo.
+#
+# One word per line. Keep it sorted so diffs stay readable.
+لین‌چی
+هوانگ‌بو
+پو‌هوا
+چان
+ذن
+بودا
+دارما
+بودیدارما
+شاکیامونی
+کوان‌یین
+سوترا
+کوآن

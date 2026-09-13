@@ -1,0 +1,101 @@
+name: build
+
+# Renders all three formats and attaches the PDF and EPUB to the PR.
+# Reviewers should read typeset Persian, not Markdown -- a bidi problem, a
+# broken ZWNJ or a bad line break is obvious in the PDF and nearly invisible
+# in a diff.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/kaaveh/linji-lu-farsi:latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # TeX lives in the image, so only Quarto's own state is worth caching.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .quarto
+            _freeze
+          key: quarto-${{ runner.os }}-${{ hashFiles('_quarto.yml', 'fa/**') }}
+          restore-keys: quarto-${{ runner.os }}-
+
+      - name: Render HTML, PDF and EPUB
+        run: quarto render
+
+      - name: Name the outputs predictably
+        id: outputs
+        run: |
+          mkdir -p dist
+          cp _book/*.pdf  dist/linji-lu-farsi.pdf
+          cp _book/*.epub dist/linji-lu-farsi.epub
+          echo "pages=$(find _book -name '*.html' | wc -l)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        id: pdf
+        with:
+          name: pdf
+          path: dist/linji-lu-farsi.pdf
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        id: epub
+        with:
+          name: epub
+          path: dist/linji-lu-farsi.epub
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _book
+          if-no-files-found: error
+
+      - name: Comment with the typeset output
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          PDF_URL: ${{ steps.pdf.outputs.artifact-url }}
+          EPUB_URL: ${{ steps.epub.outputs.artifact-url }}
+          PAGES: ${{ steps.outputs.pages }}
+        with:
+          script: |
+            const marker = '<!-- build-artifacts -->';
+            const body = [
+              marker,
+              '### Typeset output for this PR',
+              '',
+              `- [PDF](${process.env.PDF_URL})`,
+              `- [EPUB](${process.env.EPUB_URL})`,
+              `- ${process.env.PAGES} HTML pages (in the \`site\` artifact)`,
+              '',
+              'Please read the PDF before approving. Bidi, ZWNJ and line-break',
+              'problems are obvious when typeset and nearly invisible in a diff.',
+            ].join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existing = comments.data.find(c => c.body && c.body.includes(marker));
+
+            // Update in place so a busy PR does not collect one comment per push.
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

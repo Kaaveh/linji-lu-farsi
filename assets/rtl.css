@@ -1,0 +1,41 @@
+/* Right-to-left corrections for the Quarto HTML book.
+   Quarto sets dir="rtl" on <html>, which flips text and Bootstrap's logical
+   properties, but a few places still assume left-to-right. */
+
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("../fonts/Vazirmatn-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+body {
+  font-family: "Vazirmatn", system-ui, sans-serif;
+  line-height: 1.9;               /* Persian needs more leading than Latin */
+}
+
+/* Justify body prose. Ragged-left is the RTL equivalent of ragged-right and
+   reads poorly in Persian at this measure. */
+main p, main li, main blockquote {
+  text-align: justify;
+}
+
+/* Latin runs inside Persian prose: keep them left-to-right without letting
+   them break the surrounding paragraph direction. */
+main :is(code, kbd, samp) {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* Note back-links sit tight against the note text in the source. */
+main a[href^="#m"] {
+  margin-inline-start: 0.35em;
+  text-decoration: none;
+}

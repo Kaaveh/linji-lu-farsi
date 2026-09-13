@@ -1,0 +1,51 @@
+# Configuration for tools/. This file is config only -- the checkers are
+# plain scripts, not an installed package. Install their dependencies with
+#   pip install -r tools/requirements.txt
+
+# Every normalization rule is individually toggleable. Turning one off here
+# disables it for both --check and --fix, repo-wide. To exempt a region of a
+# single file instead, wrap it in:
+#   <!-- normalize: off -->
+#   ...
+#   <!-- normalize: on -->
+[tool.normalize]
+
+# Arabic Yeh U+064A -> Farsi Yeh U+06CC
+arabic_yeh = true
+
+# Arabic Kaf U+0643 -> Keheh U+06A9
+arabic_kaf = true
+
+# Arabic-Indic digits U+0660-U+0669 -> Extended Arabic-Indic U+06F0-U+06F9
+arabic_digits = true
+
+# Latin digits 0-9 -> Persian U+06F0-U+06F9.
+# Off by default: the source carries Latin-digit years and Taisho numbers that
+# should stay Latin, and note back-links are anchors, not prose. Turn on only
+# if STYLE.md settles on Persian digits everywhere.
+latin_digits = false
+
+# Strip Tatweel / Kashida U+0640
+tatweel = true
+
+# ASCII , ; ? adjacent to Persian text -> U+060C U+061B U+061F
+punctuation = true
+
+# ZWNJ (U+200C) discipline
+zwnj_mi = true          # mi/nemi verbal prefix + space + verb -> ZWNJ
+zwnj_plural = true      # plural haa written as a separate word -> ZWNJ
+zwnj_comparative = true # comparative tar / superlative tarin -> ZWNJ
+zwnj_collapse = true    # collapse repeated ZWNJ
+zwnj_trim = true        # drop ZWNJ next to a space or at a word boundary
+
+# Straight and curly ASCII quotes -> Persian guillemets
+quotes = true
+
+# Diacritics / harakat U+064B-U+0652.
+# "preserve" (default) leaves them alone; they carry meaning in poetry and in
+# quoted scripture. "strip" removes them.
+harakat = "preserve"
+
+# Bidi overrides U+202A-U+202E and U+2066-U+2069 are always an error and are
+# never auto-fixed, because they can make a diff display in a different order
+# than it is stored. Not toggleable by design.

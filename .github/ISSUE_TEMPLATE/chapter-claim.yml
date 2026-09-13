@@ -1,0 +1,59 @@
+name: برداشتن یک بخش — Claim a chapter
+description: Ask to translate one or more sections
+title: "claim: "
+labels: ["chapter:claim-requested"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Chapter translation is coordinated rather than open, so that the book
+        sounds like one translator. Please read
+        [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md#claiming-a-chapter)
+        first — particularly the note on why this is coordinated.
+
+        A maintainer will apply the `chapter:claimed` label and update the
+        pinned tracking issue. A claim lapses after a month of silence; that is
+        not a judgement, just housekeeping. Re-claim whenever you like.
+
+  - type: input
+    id: sections
+    attributes:
+      label: Which sections
+      description: A number, a list, or a range.
+      placeholder: "24–30"
+    validations:
+      required: true
+
+  - type: input
+    id: timeline
+    attributes:
+      label: Roughly when do you expect to finish
+      description: An honest estimate is more useful than an ambitious one.
+      placeholder: "about six weeks"
+    validations:
+      required: true
+
+  - type: textarea
+    id: background
+    attributes:
+      label: Anything relevant about your background
+      description: |
+        Optional, and not a test. Familiarity with Chan/Zen texts, with
+        Classical Chinese, or with literary Persian translation all help a
+        maintainer know what kind of review to give.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: acknowledgements
+    attributes:
+      label: Before claiming
+      options:
+        - label: I have read STYLE.md, and I understand the register decisions are binding
+          required: true
+        - label: I will use semantic line breaks — one sentence per line
+          required: true
+        - label: I will sign off my commits with `git commit -s`
+          required: true
+        - label: I will raise terminology questions as issues rather than deciding them in a PR
+          required: true
