@@ -51,6 +51,17 @@ Four files at `status: translated`, `just check` green, PDF read.
 5. **`record-title-page.md` is nearly empty.** Check what parity expects before
    assuming it is trivial.
 
+6. **Per section, the gTranslator loop.** One `source/` file at a time, never
+   concatenated — the command and the reasons are in `000-overview.md`. Draft
+   with `-w --raw`, revise against `STYLE.md`, restore the note markup per §6,
+   run `LOCAL=1 just fix` then `LOCAL=1 just check`, set `status:` (`draft`
+   while the machine output is still raw, `translated` once you have been
+   through it), and read the section in the PDF before moving on.
+
+   `translators-introduction.md` is the largest single file in the repository at
+   39,543 characters — nine chunks at gTranslator's 4,500 default. Expect chunk
+   boundaries to fall mid-argument and check the seams.
+
 ## Acceptance criteria
 
 - [ ] All four at `status: translated`; `just status-write` run.

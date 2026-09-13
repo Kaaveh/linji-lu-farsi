@@ -40,7 +40,12 @@ Twenty-four sections at `status: translated`, `just check` green, PDF read.
    Lin-chi's — he is a holy fool. Decide once whether that comes through in the
    Persian, and be consistent.
 
-5. **Per section**: `status: translated`, `LOCAL=1 just check`, read in the PDF.
+5. **Per section, the gTranslator loop.** One `source/` file at a time, never
+   concatenated — the command and the reasons are in `000-overview.md`. Draft
+   with `-w --raw`, revise against `STYLE.md`, restore the note markup per §6,
+   run `LOCAL=1 just fix` then `LOCAL=1 just check`, set `status:` (`draft`
+   while the machine output is still raw, `translated` once you have been
+   through it), and read the section in the PDF before moving on.
 
 ## Sections
 

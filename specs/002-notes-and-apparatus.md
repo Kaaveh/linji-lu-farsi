@@ -56,9 +56,25 @@ Two things need settling before any section is translated, because retrofitting
    count and `check_parity.py` will say so. If a note is deliberately dropped,
    that is a `<!-- parity: offset -->`, not a `skip`.
 
-7. **Demonstrate it.** Apply the convention to one real section with notes —
+7. **Settle how markup survives gTranslator.** The book has 1,012 inline markup
+   tokens and machine translation will not leave them alone. Decide a repeatable
+   procedure and write it into `STYLE.md` §6 so every later spec follows the
+   same one. The options, roughly:
+
+   - **Strip and restore.** Remove the anchors before translating, keep an
+     ordered list, re-insert afterwards. Reliable, but manual per file.
+   - **Translate around them.** Send only the prose between markers.
+     Fiddlier to script, but the markers never reach Google.
+   - **Translate as-is and repair.** Simplest to run, most to check.
+
+   Whichever it is, the check afterwards is mechanical and should be scripted:
+   the anchor ids in `fa/NN.md` must be the same multiset as in `source/NN.md`.
+   If that ends up as a small addition to `tools/`, it belongs in this spec.
+
+8. **Demonstrate it.** Apply the convention to one real section with notes —
    section 42 is a good size, two notes — and render the PDF to confirm the
-   markers, the list and the back-links all behave.
+   markers, the list and the back-links all behave. Do it through the real
+   gTranslator path, not by hand, or the procedure in requirement 7 is untested.
 
 ## Acceptance criteria
 
@@ -67,6 +83,8 @@ Two things need settling before any section is translated, because retrofitting
 - [ ] Back-links resolve in HTML; note markers render as decided in the PDF.
 - [ ] `check_parity.py` reports that section as matching.
 - [ ] Anchor ids in `fa/` are byte-identical to `source/`.
+- [ ] The markup-survival procedure is written into `STYLE.md` §6 and was
+      exercised on the demonstration section through gTranslator, not by hand.
 
 ## Out of scope
 

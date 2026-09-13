@@ -35,6 +35,12 @@ and the status table tracks how far through it you are.
 - **Never add the source text to this repository.** `source/` is gitignored
   because the English is licensed to the maintainer for translation only. It is
   not public domain.
+- **Draft with `gTranslator`, one file at a time.** See `specs/000-overview.md`
+  for the command and the reasoning. `-w` is mandatory — every other mode
+  serves a much weaker model, and it fails silently. Never concatenate files:
+  the book is 245,394 characters against a 5,000-character cap, and `fa/` must
+  mirror `source/` file-for-file or parity cannot pair them. Machine output is
+  a `draft`, never a `translated`.
 - One sentence per line in everything under `fa/`.
 
 ## Stack facts

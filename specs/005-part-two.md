@@ -47,7 +47,12 @@ Fourteen sections at `status: translated`, `just check` green, PDF read.
    is a document in itself. Translate the body first, then the notes, then check
    every back-link resolves.
 
-6. **Per section**: `status: translated`, `LOCAL=1 just check`, read in the PDF.
+6. **Per section, the gTranslator loop.** One `source/` file at a time, never
+   concatenated — the command and the reasons are in `000-overview.md`. Draft
+   with `-w --raw`, revise against `STYLE.md`, restore the note markup per §6,
+   run `LOCAL=1 just fix` then `LOCAL=1 just check`, set `status:` (`draft`
+   while the machine output is still raw, `translated` once you have been
+   through it), and read the section in the PDF before moving on.
 
 ## Sections
 

@@ -44,7 +44,18 @@ Both files at `status: translated`, `just check` green, PDF read.
 4. **`appendix.md`** is ordinary prose and needs no special handling beyond the
    usual.
 
-5. **Re-check the whole book afterwards.** Finishing the glossary is the first
+5. **Per section, the gTranslator loop.** One `source/` file at a time, never
+   concatenated — the command and the reasons are in `000-overview.md`. Draft
+   with `-w --raw`, revise against `STYLE.md`, restore the note markup per §6,
+   run `LOCAL=1 just fix` then `LOCAL=1 just check`, set `status:` (`draft`
+   while the machine output is still raw, `translated` once you have been
+   through it), and read the section in the PDF before moving on.
+
+   The glossary is a list of short independent entries, so chunk boundaries are
+   harmless there — but the Advanced model has less context to work with per
+   entry, and headwords are exactly where a wrong rendering is most visible.
+
+6. **Re-check the whole book afterwards.** Finishing the glossary is the first
    moment every term in the book is visible in one place. Expect to find
    inconsistencies in already-translated sections; fix them as `revise(chNN):`.
 

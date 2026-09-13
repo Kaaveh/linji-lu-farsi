@@ -67,4 +67,7 @@ contains 506 anchors in total.
 - [ ] The typeset PDF was read for the sections touched — not just the Markdown.
 - [ ] `status:` front matter updated, and `just status-write` run.
 - [ ] No terminology invented outside the issue → `glossary.yml` process.
+- [ ] Drafts came from gTranslator per file with `-w`, and no file is still
+      sitting at `draft` — machine output is a starting point, not an outcome.
+- [ ] Note anchor ids in every touched `fa/` file still match `source/`.
 - [ ] Status table above updated; work committed, signed off.

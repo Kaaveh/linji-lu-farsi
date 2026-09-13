@@ -74,6 +74,73 @@ What the checkers catch, so you do not have to:
 | `check_parity.py` | a dropped paragraph, by block count against `source/` |
 | `check_glossary.py` | a forbidden rendering; a missing approved one |
 
+## Translating a file
+
+First drafts are produced with **`gTranslator`**, at
+`/Users/kaavehmohamedi/Project/Backend/gTranslator`. Its own README documents
+the findings behind it; the parts that matter here:
+
+```bash
+GT=~/Project/Backend/gTranslator
+"$GT/.venv/bin/python" "$GT/gtranslate.py" \
+    -f source/42.md -t fa -w --raw -o /tmp/42.fa.md
+```
+
+**`-w` / `--web` is not optional.** Only the browser-driven mode reaches
+Google's Advanced (Gemini) model, which reads a whole passage and produces
+literary register with ezafe. Every HTTP path — the default endpoint, the Cloud
+Translation API — serves the old Classic model, which translates clause by
+clause and is markedly worse for this book. `--raw` is the right companion to
+`--web`: the Advanced model handles wrapped input by itself.
+
+The failure is silent. gTranslator's own README is emphatic: the model picker on
+the page reports "Advanced" even while Classic is being served. **Never trust
+the picker — judge the output text.** If a passage suddenly reads mechanically,
+suspect the model before suspecting the source.
+
+### One file at a time. Never the whole book.
+
+This is a hard requirement, not a preference:
+
+- **The site caps input at 5,000 characters.** The book concatenated is 245,394
+  — fifty-five times over. The tool chunks at 4,500 by default, and 8 of the 75
+  files exceed the cap on their own. `translators-introduction.md` (39,543
+  chars) and `19.md` (38,739) are nine chunks each.
+- **`fa/` must mirror `source/` file-for-file** or `check_parity.py` cannot pair
+  them. A single concatenated translation would have to be split back up by
+  hand, which is exactly the operation that drops a paragraph.
+- **Failures stay isolated.** One file that comes back mangled is one file to
+  re-run.
+
+Budget roughly 11 seconds per 800 characters.
+
+### The output is a draft, not a translation
+
+Set `status: draft` when the machine output lands, and `translated` only after
+you have been through it. gTranslator knows nothing about this project:
+
+- **It has never read `STYLE.md`.** Register, pronouns, dialogue punctuation and
+  proper-noun policy are all yours to impose afterwards.
+- **It has never read `glossary.yml`.** It will render a settled term three
+  different ways across three files. `check_glossary.py` is the corrective.
+- **It will not produce semantic line breaks or correct Persian orthography.**
+  Run `LOCAL=1 just fix` on the file immediately after.
+
+### The markup hazard
+
+The source carries **1,012 inline markup tokens** — note anchors, superscript
+references and back-links — sitting mid-sentence:
+
+```
+…to the lecture seat.<a id="m2-2"></a>[<sup>²</sup>](#n2-2)
+```
+
+Machine translation mangles these: dropped, duplicated, reordered, or with the
+ASCII inside them "translated". They are load-bearing — 253 notes resolve
+through them, and the ids must stay byte-identical to `source/`. Spec 002
+settles the handling; until then, assume every file needs its markup verified
+after translation, not assumed.
+
 ## Conventions in `fa/`
 
 Front matter is `status:` only, one of `untranslated` → `claimed` → `draft` →
