@@ -65,4 +65,32 @@ not from this spec.
 
 ## Implementation notes
 
-_(filled in during implementation)_
+**Dropped, 2026-09-13.** Not deferred — dropped.
+
+The maintainer settled the translation policy: `fa/` carries raw gTranslator
+output, normalised by `LOCAL=1 just fix`, and nothing else. No hand revision.
+
+That removes the enforcement mechanism this spec assumed. §1 (register) and §2
+(pronouns and honorifics) are decisions that only bind a human editor, and there
+is no human editor. Writing them into `STYLE.md` would describe prose nobody
+will write, which is worse than `<<<TBD>>>` because it looks settled.
+
+The requirements that do survive are mechanical, and belong where the machine
+can be made to obey them:
+
+| Was | Now lives in |
+|---|---|
+| §3 quote glyphs | `quotes` in `pyproject.toml`, already `true` |
+| §4 proper nouns | `glossary.yml` + `check_glossary.py`, via terminology issues |
+| §5 digits | `latin_digits` in `pyproject.toml`, already `false` |
+| §6 note markers and anchors | spec 002, which keeps them |
+
+Also recorded, because it blocked acceptance criterion 4 regardless: **the
+repository has no git remote**, so the terminology issues this spec called for
+cannot be opened. `.github/ISSUE_TEMPLATE/terminology.yml` exists and the
+process in `CONTRIBUTING.md` stands; it needs a remote before it can run. Any
+`glossary.yml` entry added before then will have no `decided_in:` to point at.
+
+`STYLE.md` is left as it is. Its `<<<TBD>>>` markers are now accurate: those
+decisions are genuinely unmade, and under a machine-only pipeline they stay
+unmade until someone chooses to revise by hand.

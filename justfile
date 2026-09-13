@@ -28,6 +28,7 @@ check: test
     {{python}} tools/normalize.py --check
     {{python}} tools/check_linebreaks.py --check
     {{python}} tools/check_parity.py --check
+    {{python}} tools/anchors.py --check
     {{python}} tools/check_glossary.py --check
     {{python}} tools/status_table.py --check
 

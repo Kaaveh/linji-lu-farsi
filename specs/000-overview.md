@@ -82,9 +82,18 @@ the findings behind it; the parts that matter here:
 
 ```bash
 GT=~/Project/Backend/gTranslator
+tools/anchors.py strip source/42.md -o /tmp/42.en.md
 "$GT/.venv/bin/python" "$GT/gtranslate.py" \
-    -f source/42.md -t fa -w --raw -o /tmp/42.fa.md
+    -f /tmp/42.en.md -t fa -w --raw -o /tmp/42.fa.md
+tools/anchors.py restore source/42.md /tmp/42.fa.md -o fa/42.md
 ```
+
+Use `-o`, not `>`: a shell redirect truncates the target before the tool runs,
+so a draft `restore` correctly refuses would destroy the existing translation.
+
+The `strip` and `restore` steps are not optional — see **The markup hazard**
+below. `strip` also shortens every file, since a sentinel is much shorter than
+the token it replaces, so chunk counts come out at or below the estimates here.
 
 **`-w` / `--web` is not optional.** Only the browser-driven mode reaches
 Google's Advanced (Gemini) model, which reads a whole passage and produces
@@ -114,10 +123,15 @@ This is a hard requirement, not a preference:
 
 Budget roughly 11 seconds per 800 characters.
 
-### The output is a draft, not a translation
+### The output is the edition
 
-Set `status: draft` when the machine output lands, and `translated` only after
-you have been through it. gTranslator knows nothing about this project:
+`restore` writes `status: reviewed`, and that is the end state. The pipeline
+produces the published text in one pass — strip, translate, restore, normalise —
+with no hand-revision stage after it, so there is no later step for a `draft` or
+a `translated` to be promoted from. Those two values are not used.
+
+What that buys in speed it costs in fidelity, and the cost is real. gTranslator
+knows nothing about this project:
 
 - **It has never read `STYLE.md`.** Register, pronouns, dialogue punctuation and
   proper-noun policy are all yours to impose afterwards.
@@ -135,16 +149,27 @@ references and back-links — sitting mid-sentence:
 …to the lecture seat.<a id="m2-2"></a>[<sup>²</sup>](#n2-2)
 ```
 
-Machine translation mangles these: dropped, duplicated, reordered, or with the
-ASCII inside them "translated". They are load-bearing — 253 notes resolve
-through them, and the ids must stay byte-identical to `source/`. Spec 002
-settles the handling; until then, assume every file needs its markup verified
-after translation, not assumed.
+Machine translation does not mangle these — measured, it **deletes** them, every
+one, silently, leaving prose that reads perfectly well with no trace that a note
+was ever there. They are load-bearing: 253 notes resolve through them, and the
+ids must stay byte-identical to `source/`.
+
+**Spec 002 settled this.** Never send a file to gTranslator raw. Run it through
+`tools/anchors.py strip` first and `tools/anchors.py restore` after; the
+procedure is in `STYLE.md` §6 and `anchors.py --check` enforces the result in
+`just check`.
+
+Note that two links cross files — `record-title-page.md` → `01.md#n2-1`, and the
+back-link returning — so anchor ids are globally unique but a file is not
+necessarily self-contained.
 
 ## Conventions in `fa/`
 
-Front matter is `status:` only, one of `untranslated` → `claimed` → `draft` →
-`translated` → `reviewed`. The status table in `README.md` is generated from it.
+Front matter is `status:` only. `tools/status_table.py` knows five values —
+`untranslated`, `claimed`, `draft`, `translated`, `reviewed` — but this project
+uses two: **`untranslated`** for a stub, **`reviewed`** for a finished file.
+There is no revision stage in between for the other three to describe. The
+status table in `README.md` is generated from it.
 
 Each file opens with a level-1 heading — the section number in Persian digits
 (`# ۴۲`), or the part name for front and back matter. Notes go in a level-2

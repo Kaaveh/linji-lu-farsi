@@ -114,22 +114,99 @@ section ends with a `## یادداشت‌ها` list and the references are ancho
 that jump both ways. Keep that. Section 19 alone has 47 notes; as footnotes that
 page would be unreadable.
 
-The translation therefore has two distinct kinds of note, and they must be
-visually distinguishable:
+Settled in spec 002. All of it is mechanical, and `tools/anchors.py` does it —
+none of these are per-chapter judgement calls.
 
-- **Author's notes** — carried over from the source, in the endnote list
-- **Translator's notes** — yours, explaining a choice or a Persian-specific
-  problem
+### The decisions
 
-- How a translator's note is marked as distinct: `<<<TBD>>>`
-- When a translator's note is warranted at all: `<<<TBD>>>`
-- Whether translator's notes go in the same list or a separate one: `<<<TBD>>>`
-- Whether any author's note may be dropped as irrelevant to a Persian reader:
-  `<<<TBD>>>`
+- **Endnotes per section stay.** Not converted to Pandoc `[^n]` footnotes.
+  Section 19 has 47 notes; at the foot of a page it would be unreadable, and the
+  anchor scheme already works in HTML, PDF and EPUB. Do not relitigate.
+- **Note markers are Persian digits in Pandoc's native superscript**:
+  `[<sup>²</sup>](#n2-2)` becomes `[^۲^](#n2-2)`. The raw `<sup>` wrapper is
+  **dropped**, and this is not cosmetic — Pandoc passes raw `<sup>` through to
+  HTML but silently discards it for LaTeX, so with the wrapper all 253 markers
+  set at full body size in the PDF. `^۲^` compiles to `\textsuperscript{۲}` for
+  LaTeX and back to `<sup>۲</sup>` for HTML, so one form is right everywhere.
+- **Note list numbers are Persian digits**: `<a id="n39-1"></a>۱. `. The anchor
+  precedes the digit, so the block classifies as a paragraph rather than a
+  Markdown list — which is what the source does too, so parity is unaffected.
+- **Anchor ids are never translated.** `m2-2` / `n2-2` stay byte-identical ASCII;
+  they are what the 506 cross-references resolve against. `tools/_md.py` protects
+  them from the orthography pass, and `anchors.py` re-emits them from `source/`
+  rather than from the translation, so they cannot drift. If you are ever
+  hand-editing an anchor id, something has gone wrong upstream.
+- **The notes heading is `## یادداشت‌ها`** — level 2, because section files open
+  at level 1 (`# ۴۲`) where the source opens at level 3 (`### 42`).
+- **Translator's notes: none.** `fa/` carries machine output normalised by
+  `just fix`, with no hand revision (see spec 001), so there is no translator
+  voice to footnote. If that policy ever changes, these become real Pandoc
+  footnotes — `tex/preamble.tex` already mirrors the footnote rule to the right
+  edge for exactly this case — which keeps them visually distinct from the
+  author's endnotes without any further convention.
+- **No author's note is dropped.** Each note is a block, so dropping one changes
+  the block count and `check_parity.py` will say so. If one ever is dropped
+  deliberately, that is a `<!-- parity: offset -->`, never a `skip`.
 
-Note markers in the source use Latin superscript digits (`²`, `³`). Persian
-should use `۲`, `۳`. That is a mechanical change; decide it here and it can be
-enforced.
+### How the markup survives gTranslator
+
+The book carries 1,012 inline markup tokens sitting mid-sentence. Google
+Translate's Advanced model does not mangle them — it **deletes** them, all of
+them, silently. Measured on `source/42.md`: ten tokens in, zero out. So
+"translate as-is and repair" has nothing to repair, and restoring by position
+afterwards is impossible, because markers sit mid-sentence rather than at
+paragraph ends.
+
+What the model does preserve, in place and mid-sentence, is bracketed numeric
+sentinels — measured across six bracket styles, twelve in and twelve out. So
+every file goes through `tools/anchors.py`:
+
+```bash
+GT=~/Project/Backend/gTranslator
+tools/anchors.py strip source/42.md -o /tmp/42.en.md
+"$GT/.venv/bin/python" "$GT/gtranslate.py" -f /tmp/42.en.md -t fa -w --raw -o /tmp/42.fa.md
+tools/anchors.py restore source/42.md /tmp/42.fa.md -o fa/42.md
+LOCAL=1 just fix && LOCAL=1 just check
+```
+
+**Use `-o`, never a shell redirect.** `> fa/42.md` truncates the file before the
+tool runs, so a draft that `restore` correctly refuses destroys the translation
+that was already there. With `-o` nothing is written until validation passes.
+
+`strip` swaps every token for a `⟦n⟧` sentinel (U+27E6/U+27E7, absent from all 75
+source files). `restore` puts the tokens back where the model left the
+sentinels — so if it moved a sentence, the marker moves with it, which is what
+you want — and **fails loudly** if a sentinel was dropped, duplicated or
+invented. Never repair a mangled file by hand; re-run it.
+
+Headings go through the same mechanism, because every heading in the book is
+structural rather than prose — 69 `### <number>`, 66 `#### Notes`, 4
+`## Part ...`, and 6 named front/back-matter titles. Not one needs translating,
+so all are re-emitted deterministically and the model never sees them.
+
+`tools/anchors.py --check` runs in `just check` and compares the anchor-id and
+note-link multisets in `fa/` against `source/`, plus the count of Markdown hard
+line breaks — lose those and the Ikkyū poem in `preface.md` reflows into prose.
+Like `check_parity.py` it is maintainer-local, and reports "skipped" in CI where
+`source/` is absent.
+
+### Long files: keep each submission small
+
+On a submission of a few thousand characters Google intermittently merges a
+paragraph or swallows a token — roughly one fault per long request, varying from
+run to run, so re-running the whole file is a lottery. Nine files are long
+enough to be split: `11`, `18`, `19`, `21`, `23`, `48`, `69`, `glossary`,
+`translators-introduction`.
+
+For those, translate in **verified groups of about 1,200 characters**, checking
+each group's sentinel set and paragraph count before moving on and retrying only
+the group that failed. `translators-introduction.md` went through as 46 groups,
+every one clean first time; the same file submitted whole lost a paragraph and a
+note marker on all three attempts. The other 66 files fit in one request and need
+none of this.
+
+Never hand-repair a file that comes back short. `restore` refuses it for a
+reason — re-run the piece.
 
 ## 7. Verse and quoted scripture
 
@@ -170,6 +247,7 @@ These are not up for discussion per-chapter; they are checked in CI.
 | No bidi override characters | `tools/normalize.py` (never auto-fixed) |
 | Settled terminology | `tools/check_glossary.py` |
 | No dropped paragraphs | `tools/check_parity.py` (maintainer, locally) |
+| Note anchors match the source | `tools/anchors.py --check` (maintainer, locally) |
 
 Harakat are **preserved** by default, because they carry meaning in verse and
 quoted scripture. See section 7.
