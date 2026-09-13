@@ -47,10 +47,6 @@ jobs:
       - name: Parity
         run: python tools/check_parity.py --check
 
-      # The forbidden-rendering half needs only fa/, so it does run here.
-      - name: Glossary
-        run: python tools/check_glossary.py --check
-
       - name: README status table is current
         run: python tools/status_table.py --check
 

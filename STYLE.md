@@ -72,9 +72,8 @@ the decision goes the other way, turn `quotes` off in `pyproject.toml`.
 **Governs:** every Chinese name in the book, which is a lot of them.
 
 Three defensible policies — transliterate into Persian script, keep the Latin
-form, or give both on first occurrence and one thereafter. This interacts with
-the glossary: whatever is chosen becomes a `glossary.yml` entry per name, so the
-checker can enforce it.
+form, or give both on first occurrence and one thereafter. Whatever is chosen
+has to be held by hand: there is no terminology checker any more.
 
 Note that the source uses Wade-Giles (Lin-chi, Huang-po, Ch'an), not Pinyin
 (Linji, Huangbo, Chan). Transliterating from Wade-Giles into Persian and
@@ -245,7 +244,6 @@ These are not up for discussion per-chapter; they are checked in CI.
 | Farsi Yeh, Keheh, Persian digits, no Tatweel | `tools/normalize.py` |
 | ZWNJ in `می‌`, `ها`, `تر`/`ترین` | `tools/normalize.py` |
 | No bidi override characters | `tools/normalize.py` (never auto-fixed) |
-| Settled terminology | `tools/check_glossary.py` |
 | No dropped paragraphs | `tools/check_parity.py` (maintainer, locally) |
 | Note anchors match the source | `tools/anchors.py --check` (maintainer, locally) |
 

@@ -46,11 +46,15 @@ way. This is why `check_parity.py` runs locally and reports "skipped" in CI.
 right-to-left text is unreadable — changed words scatter in visual order, which
 has nothing to do with storage order. `check_linebreaks.py` enforces it.
 
-**Terminology goes through issues.** Open a terminology issue, argue it, record
-the outcome in `glossary.yml` with a link back. Those issues are the decision
-log; in two years the most valuable thing here may be a searchable record of why
-a word was rendered the way it was. Never settle a term inside a translation
-commit.
+**Terminology goes through issues.** Open an issue and argue it there. The
+thread is the decision log; in two years the most valuable thing here may be a
+searchable record of why a word was rendered the way it was. Never settle a
+term inside a translation commit.
+
+There is no longer a machine-readable half. `glossary.yml` and
+`check_glossary.py` were removed after spec 005 — the file never held an entry,
+so it enforced nothing across the first eighteen translated files. Consistency
+is now held by reading, not by CI.
 
 ## Toolchain
 
@@ -72,7 +76,7 @@ What the checkers catch, so you do not have to:
 | `normalize.py` | Arabic Yeh/Kaf, ZWNJ discipline, Arabic-Indic digits, Tatweel, quotes, **bidi overrides** (reported, never auto-fixed) |
 | `check_linebreaks.py` | more than one sentence on a line |
 | `check_parity.py` | a dropped paragraph, by block count against `source/` |
-| `check_glossary.py` | a forbidden rendering; a missing approved one |
+| `anchors.py --check` | a note anchor that drifted from `source/` |
 
 ## Translating a file
 
@@ -135,8 +139,9 @@ knows nothing about this project:
 
 - **It has never read `STYLE.md`.** Register, pronouns, dialogue punctuation and
   proper-noun policy are all yours to impose afterwards.
-- **It has never read `glossary.yml`.** It will render a settled term three
-  different ways across three files. `check_glossary.py` is the corrective.
+- **It knows nothing of the project's terminology.** It will render a settled
+  term three different ways across three files, and since `check_glossary.py`
+  was removed, nothing will tell you.
 - **It will not produce semantic line breaks or correct Persian orthography.**
   Run `LOCAL=1 just fix` on the file immediately after.
 

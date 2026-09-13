@@ -59,7 +59,7 @@ Twenty-four sections at `status: translated`, `just check` green, PDF read.
 - [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
 - [ ] The part read in the typeset PDF.
 - [ ] The shout formula is byte-identical everywhere it appears.
-- [ ] No terminology settled outside the issue → `glossary.yml` process.
+- [ ] No terminology settled outside a terminology issue.
 
 ## Out of scope
 

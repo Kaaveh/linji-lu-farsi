@@ -34,7 +34,7 @@ apparatus  pilot  short  short  core  intro  back  ship
 **001 is dropped.** `fa/` carries raw gTranslator output normalised by
 `LOCAL=1 just fix`, with no hand revision, so the register and pronoun decisions
 it existed to make have nothing to bind. Its surviving mechanical requirements
-moved to `pyproject.toml`, `glossary.yml` and spec 002 — see its
+moved to `pyproject.toml` and spec 002 — see its
 [implementation notes](./001-style-decisions.md#implementation-notes).
 
 - **004 (Part One) is the pilot.** Nine sections, 2,506 words — the smallest body
@@ -72,7 +72,7 @@ contains 506 anchors in total.
 - [ ] `LOCAL=1 just check` passes.
 - [ ] The typeset PDF was read for the sections touched — not just the Markdown.
 - [ ] `status:` front matter updated, and `just status-write` run.
-- [ ] No terminology invented outside the issue → `glossary.yml` process.
+- [ ] No terminology invented outside a terminology issue.
 - [ ] Text came from gTranslator per file with `-w`, through `anchors.py strip`
       and `restore -o`, and every touched file is at `status: reviewed`.
       `draft` and `translated` are not used — see `000-overview.md`.

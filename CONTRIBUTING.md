@@ -8,7 +8,7 @@ Thank you for reading this before opening something. It will save us both time.
 Public contributions are welcome for:
 
 - **Typos and orthography** — send a pull request
-- **Terminology proposals** — [open an issue](../../issues/new?template=terminology.yml); please do not open a pull request
+- **Terminology proposals** — open an issue; please do not open a pull request
 - **Factual and footnote corrections** — issue or pull request, either is fine
 - **Tooling** — the scripts in `tools/`, the build, the workflows
 
@@ -146,17 +146,11 @@ a region can be exempted:
 
 ## Terminology
 
-**Open an issue, not a pull request.** Use the
-[terminology template](../../issues/new?template=terminology.yml).
+**Open an issue, not a pull request.**
 
-Those issues are the project's decision log. In two years the most valuable
-thing this repository contains may be a searchable record of *why* a word was
-rendered the way it was — what the alternatives were, what precedent existed in
-other Persian translations, and what settled it. A pull request that silently
-changes a term destroys that record.
-
-Once settled, the decision is recorded in [`glossary.yml`](glossary.yml) with a
-link back to the issue, and `tools/check_glossary.py` enforces it from then on.
+The issue thread is the whole record. Nothing enforces a rendering
+mechanically, so consistency across chapters is a matter of reading — and a
+pull request that silently changes a term leaves no trace of why.
 
 ## Claiming a chapter
 
@@ -189,7 +183,7 @@ chapter where there is one. Sign off every commit.
 
 ## What happens to your pull request
 
-1. **lint** runs the orthography, line-break, glossary and spelling checks, and
+1. **lint** runs the orthography, line-break and spelling checks, and
    verifies every commit is signed off.
 2. **build** renders all three formats and posts a comment linking the PDF and
    EPUB.

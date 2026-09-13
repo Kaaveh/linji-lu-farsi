@@ -138,8 +138,7 @@ proposals, footnote corrections and tooling are open to everyone. See
 [CONTRIBUTING.md](CONTRIBUTING.md) — it explains why, and how to claim a chapter
 if you do want to translate.
 
-Translation conventions live in [STYLE.md](STYLE.md). Settled terminology lives
-in [glossary.yml](glossary.yml), each entry linked to the issue that decided it.
+Translation conventions live in [STYLE.md](STYLE.md).
 
 ## Building from source
 
@@ -154,7 +153,7 @@ just build          # HTML, PDF and EPUB into _book/
 
 | | |
 |---|---|
-| `just check` | orthography, line breaks, parity, glossary, tests |
+| `just check` | orthography, line breaks, parity, note anchors, tests |
 | `just fix` | correct what can be corrected automatically |
 | `just build` | all three formats |
 | `just pdf` / `just epub` | one format |
@@ -244,5 +243,4 @@ assets/        RTL and EPUB stylesheets
 tools/         checkers, stub generator, status table, tests
 _quarto.yml    the book: three formats, 75 chapters in four parts
 _language.yml  Persian UI strings — Quarto ships no fa locale
-glossary.yml   settled terminology, enforced by CI
 ```

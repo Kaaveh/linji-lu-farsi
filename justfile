@@ -29,7 +29,6 @@ check: test
     {{python}} tools/check_linebreaks.py --check
     {{python}} tools/check_parity.py --check
     {{python}} tools/anchors.py --check
-    {{python}} tools/check_glossary.py --check
     {{python}} tools/status_table.py --check
 
 # Unit and end-to-end tests for the checkers.

@@ -36,8 +36,8 @@ Twenty-two sections at `status: translated`, `just check` green, PDF read.
    covered.
 
 4. **Place names cluster here.** The travelling sections name many temples and
-   prefectures. Apply the §4 decision consistently and add them to
-   `glossary.yml` as you go, via issues.
+   prefectures. Apply the §4 decision consistently, settling them by issue as
+   you go.
 
 5. **Per section, the gTranslator loop.** One `source/` file at a time, never
    concatenated — the command and the reasons are in `000-overview.md`. Draft
@@ -59,7 +59,7 @@ Twenty-two sections at `status: translated`, `just check` green, PDF read.
 - [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
 - [ ] The part read in the typeset PDF, `69.md` re-read on its own.
 - [ ] The Huang-po/Lin-chi address form is consistent and consciously chosen.
-- [ ] Place names all present in `glossary.yml`.
+- [ ] Place names rendered consistently across the part.
 
 ## Out of scope
 

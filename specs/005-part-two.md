@@ -40,8 +40,8 @@ Fourteen sections at `status: translated`, `just check` green, PDF read.
 
 4. **The technical vocabulary concentrates here.** The four-fold formulations,
    the true man of no rank, the fourfold relation of guest and host, the three
-   mysterious gates. Each is a terminology issue. Expect this part to add more
-   `glossary.yml` entries than the other three combined.
+   mysterious gates. Each is a terminology issue. Expect this part to settle
+   more of them than the other three combined.
 
 5. **Section 19's notes need their own pass.** Forty-seven notes in one section
    is a document in itself. Translate the body first, then the notes, then check
@@ -77,7 +77,7 @@ Fourteen sections at `status: translated`, `just check` green, PDF read.
 - [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
 - [ ] The part read in the typeset PDF; section 19 re-read for note behaviour.
 - [ ] Every note in 19 has a resolving back-link in the HTML output.
-- [ ] Every technical term traces to an issue and a `glossary.yml` entry.
+- [ ] Every technical term traces to a terminology issue.
 
 ## Out of scope
 
@@ -164,5 +164,7 @@ never at another, which is still unexplained.
 
 Requirements 3, 4 and 5 — the sermon register at length, the technical
 vocabulary as terminology issues, and section 19's note pass — are all
-downstream of having the sections translated. `glossary.yml` is still empty, as
-it was after 004. The four landed sections were not read in the typeset PDF.
+downstream of having the sections translated. No terminology was settled; the
+`glossary.yml` mechanism was removed outright after this spec, having never
+held an entry across the first eighteen translated files. The four landed
+sections were not read in the typeset PDF.

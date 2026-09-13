@@ -1,7 +1,7 @@
 # The source text is licensed to the maintainer for private use and for
 # producing translations. It is NOT redistributable. Never commit it.
-# tools/check_parity.py and tools/check_glossary.py read it locally and
-# skip themselves in CI, where it is absent by design.
+# tools/check_parity.py reads it locally and skips itself in CI, where it
+# is absent by design.
 source/
 
 # Quarto

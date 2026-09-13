@@ -26,10 +26,9 @@ and the status table tracks how far through it you are.
 
 - **The spec is the contract.** If reality forces a deviation, do the sensible
   thing and record it in an `## Implementation notes` section on that spec.
-- **Never invent a Persian rendering and present it as settled.** Terminology is
-  decided in a GitHub issue, recorded in `glossary.yml` with a link back, and
-  enforced by CI from then on. A rendering that has not been through that is a
-  suggestion, and must be labelled as one.
+- **Never invent a Persian rendering and present it as settled.** A rendering
+  that has not been argued out is a suggestion, and must be labelled as one.
+  Nothing enforces terminology mechanically any more — see `STYLE.md` §4.
 - **`STYLE.md` is binding.** If it says `<<<TBD>>>` for something you need,
   that is a decision to ask for, not to make.
 - **Never add the source text to this repository.** `source/` is gitignored
@@ -56,7 +55,7 @@ and the status table tracks how far through it you are.
 - `just check` runs everything CI runs; `LOCAL=1 just check` skips the container
   and is what you want for a fast loop. `just venv` sets the host env up.
 - Four checkers in `tools/`: orthography (`normalize.py`), semantic line breaks,
-  source/translation block parity, glossary terms. 153 tests.
+  source/translation block parity, note anchors (`anchors.py`). 150 tests.
 - `check_parity.py` only works locally — CI has no `source/`.
 
 ## Quality bar

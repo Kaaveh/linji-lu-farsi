@@ -31,10 +31,10 @@ Both files at `status: translated`, `just check` green, PDF read.
    a Persian reader hunt. Whatever is chosen, record it in `STYLE.md` and, if the
    order changes, declare the parity consequence rather than skipping the file.
 
-2. **Every headword must already be in `glossary.yml`.** The glossary file is
-   where terminology becomes visible to the reader; a headword rendered
-   differently here than in the body is the worst possible inconsistency.
-   `check_glossary.py` catches it — treat any warning on this file as an error.
+2. **Every headword must match the body.** The glossary chapter is where
+   terminology becomes visible to the reader; a headword rendered differently
+   here than in the body is the worst possible inconsistency. Nothing catches
+   this any more, so it has to be checked by reading.
 
 3. **The parenthetical Sanskrit forms.** The source gives full diacritics
    (Ānanda, Aṅgulimāla) where they differ from the simplified form used in the
@@ -63,8 +63,7 @@ Both files at `status: translated`, `just check` green, PDF read.
 
 - [ ] Both files at `status: translated`; `just status-write` run.
 - [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
-- [ ] `check_glossary.py` reports zero warnings across the whole `fa/` tree.
-- [ ] Every glossary headword appears in `glossary.yml` with a deciding issue.
+- [ ] Every glossary headword matches the rendering the body settled on.
 - [ ] Ordering decision recorded in `STYLE.md`; any parity offset declared.
 
 ## Out of scope

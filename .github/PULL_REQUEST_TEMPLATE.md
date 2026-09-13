@@ -33,11 +33,10 @@ build workflow posts a comment with a PDF link a minute or two after you push.
 ## Terminology
 
 - [ ] This PR introduces no new rendering of a term
-- [ ] It uses a rendering already settled in `glossary.yml`
 - [ ] It needs a terminology decision — issue #___
 
 <!--
-If a term needs deciding, open a terminology issue rather than settling it
-here. Those issues are the project's decision log; a PR that quietly changes a
-term erases the reasoning.
+If a term needs deciding, open an issue rather than settling it here. Nothing
+checks terminology mechanically, so a PR that quietly changes a term leaves no
+trace of why.
 -->
