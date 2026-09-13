@@ -16,7 +16,7 @@ when you start (`🟨 In progress`) and when you finish (`✅ Done`).
 | 002 | [Notes & apparatus convention](./002-notes-and-apparatus.md)| —          | ✅ Done        |
 | 003 | [Front matter](./003-front-matter.md)                       | 002        | ✅ Done        |
 | 004 | [Part One — Ascending the Hall](./004-part-one.md)          | 002        | ✅ Done        |
-| 005 | [Part Two — Instructing the Group](./005-part-two.md)       | 004        | ⬜ Not started |
+| 005 | [Part Two — Instructing the Group](./005-part-two.md)       | 004        | 🟨 In progress |
 | 006 | [Part Three — Testing and Rating](./006-part-three.md)      | 004        | ⬜ Not started |
 | 007 | [Part Four — Record of Activities](./007-part-four.md)      | 004        | ⬜ Not started |
 | 008 | [Back matter](./008-back-matter.md)                         | 001–007    | ⬜ Not started |
