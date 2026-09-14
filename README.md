@@ -40,7 +40,7 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۶۳ از ۷۵ بخش (۸۴٪)**
+**۶۵ از ۷۵ بخش (۸۷٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
@@ -116,8 +116,8 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`67.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/67.md) | ۶۷ | 🟢 بازبینی‌شده |
 | [`68.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/68.md) | ۶۸ | 🟢 بازبینی‌شده |
 | [`69.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/69.md) | ۶۹ | 🟢 بازبینی‌شده |
-| [`appendix.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/appendix.md) | پیوست | ⬜ ترجمه‌نشده |
-| [`glossary.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/glossary.md) | واژه‌نامه | ⬜ ترجمه‌نشده |
+| [`appendix.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/appendix.md) | پیوست | 🟢 بازبینی‌شده |
+| [`glossary.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/glossary.md) | واژه‌نامه | 🟢 بازبینی‌شده |
 | [`ma-fang-preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/ma-fang-preface.md) | دیباچهٔ ما فانگ | 🟢 بازبینی‌شده |
 | [`preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/preface.md) | پیش‌گفتار | 🟢 بازبینی‌شده |
 | [`record-title-page.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/record-title-page.md) | صفحهٔ عنوان | 🟢 بازبینی‌شده |

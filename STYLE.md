@@ -87,6 +87,20 @@ transliterating from Pinyin give different results.
 - Whether Wade-Giles or Pinyin is the basis for transliteration: `<<<TBD>>>`
 - Handling of the apostrophe in Wade-Giles (Ch'an, P'u-hua, T'ang): `<<<TBD>>>`
 
+### Settled in spec 008 — the glossary
+
+- **The glossary keeps the source's ordering.** It stays alphabetised by the
+  English headword rather than re-sorted into Persian alphabetical order. A
+  Persian reader looking up «آناندا» therefore has to know it files under A.
+  This is reversible: `check_parity.py` compares block *counts*, not order, so
+  re-sorting later costs no parity offset — contrary to what spec 008
+  requirement 1 assumes.
+- **Parenthetical Sanskrit forms keep the Latin diacritical form**, exactly as
+  the source gives them (Ānanda, Aṅgulimāla). They are not transliterated and
+  not doubled.
+
+Both apply to `glossary.md`. Neither settles the wider §4 questions above.
+
 ## 5. Digits
 
 **Governs:** section numbers, note markers, dates, and numbers in prose.
