@@ -53,14 +53,6 @@ Twenty-four sections at `status: translated`, `just check` green, PDF read.
 - [ ] 32 · 33 · 34 · 35 · 36 · 37 · 38 · 39
 - [ ] 40 · 41 · 42 · 43 · 44 · 45 · 46 · 47
 
-## Acceptance criteria
-
-- [ ] All twenty-four at `status: translated`; `just status-write` run.
-- [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
-- [ ] The part read in the typeset PDF.
-- [ ] The shout formula is byte-identical everywhere it appears.
-- [ ] No terminology settled outside a terminology issue.
-
 ## Out of scope
 
 Other parts. Front and back matter.

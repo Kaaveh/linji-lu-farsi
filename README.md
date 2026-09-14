@@ -40,7 +40,7 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۱۸ از ۷۵ بخش (۲۴٪)**
+**۴۱ از ۷۵ بخش (۵۵٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
@@ -70,30 +70,30 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`21.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/21.md) | ۲۱ | ⬜ ترجمه‌نشده |
 | [`22.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/22.md) | ۲۲ | 🟢 بازبینی‌شده |
 | [`23.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/23.md) | ۲۳ | ⬜ ترجمه‌نشده |
-| [`24.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/24.md) | ۲۴ | ⬜ ترجمه‌نشده |
-| [`25.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/25.md) | ۲۵ | ⬜ ترجمه‌نشده |
-| [`26.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/26.md) | ۲۶ | ⬜ ترجمه‌نشده |
-| [`27.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/27.md) | ۲۷ | ⬜ ترجمه‌نشده |
-| [`28.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/28.md) | ۲۸ | ⬜ ترجمه‌نشده |
-| [`29.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/29.md) | ۲۹ | ⬜ ترجمه‌نشده |
-| [`30.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/30.md) | ۳۰ | ⬜ ترجمه‌نشده |
-| [`31.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/31.md) | ۳۱ | ⬜ ترجمه‌نشده |
-| [`32.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/32.md) | ۳۲ | ⬜ ترجمه‌نشده |
-| [`33.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/33.md) | ۳۳ | ⬜ ترجمه‌نشده |
-| [`34.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/34.md) | ۳۴ | ⬜ ترجمه‌نشده |
-| [`35.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/35.md) | ۳۵ | ⬜ ترجمه‌نشده |
-| [`36.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/36.md) | ۳۶ | ⬜ ترجمه‌نشده |
-| [`37.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/37.md) | ۳۷ | ⬜ ترجمه‌نشده |
-| [`38.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/38.md) | ۳۸ | ⬜ ترجمه‌نشده |
-| [`39.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/39.md) | ۳۹ | ⬜ ترجمه‌نشده |
-| [`40.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/40.md) | ۴۰ | ⬜ ترجمه‌نشده |
-| [`41.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/41.md) | ۴۱ | ⬜ ترجمه‌نشده |
+| [`24.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/24.md) | ۲۴ | 🟢 بازبینی‌شده |
+| [`25.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/25.md) | ۲۵ | 🟢 بازبینی‌شده |
+| [`26.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/26.md) | ۲۶ | 🟢 بازبینی‌شده |
+| [`27.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/27.md) | ۲۷ | 🟢 بازبینی‌شده |
+| [`28.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/28.md) | ۲۸ | 🟢 بازبینی‌شده |
+| [`29.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/29.md) | ۲۹ | 🟢 بازبینی‌شده |
+| [`30.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/30.md) | ۳۰ | 🟢 بازبینی‌شده |
+| [`31.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/31.md) | ۳۱ | 🟢 بازبینی‌شده |
+| [`32.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/32.md) | ۳۲ | 🟢 بازبینی‌شده |
+| [`33.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/33.md) | ۳۳ | 🟢 بازبینی‌شده |
+| [`34.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/34.md) | ۳۴ | 🟢 بازبینی‌شده |
+| [`35.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/35.md) | ۳۵ | 🟢 بازبینی‌شده |
+| [`36.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/36.md) | ۳۶ | 🟢 بازبینی‌شده |
+| [`37.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/37.md) | ۳۷ | 🟢 بازبینی‌شده |
+| [`38.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/38.md) | ۳۸ | 🟢 بازبینی‌شده |
+| [`39.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/39.md) | ۳۹ | 🟢 بازبینی‌شده |
+| [`40.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/40.md) | ۴۰ | 🟢 بازبینی‌شده |
+| [`41.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/41.md) | ۴۱ | 🟢 بازبینی‌شده |
 | [`42.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/42.md) | ۴۲ | 🟢 بازبینی‌شده |
-| [`43.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/43.md) | ۴۳ | ⬜ ترجمه‌نشده |
-| [`44.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/44.md) | ۴۴ | ⬜ ترجمه‌نشده |
-| [`45.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/45.md) | ۴۵ | ⬜ ترجمه‌نشده |
-| [`46.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/46.md) | ۴۶ | ⬜ ترجمه‌نشده |
-| [`47.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/47.md) | ۴۷ | ⬜ ترجمه‌نشده |
+| [`43.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/43.md) | ۴۳ | 🟢 بازبینی‌شده |
+| [`44.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/44.md) | ۴۴ | 🟢 بازبینی‌شده |
+| [`45.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/45.md) | ۴۵ | 🟢 بازبینی‌شده |
+| [`46.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/46.md) | ۴۶ | 🟢 بازبینی‌شده |
+| [`47.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/47.md) | ۴۷ | 🟢 بازبینی‌شده |
 | [`48.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/48.md) | ۴۸ | ⬜ ترجمه‌نشده |
 | [`49.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/49.md) | ۴۹ | ⬜ ترجمه‌نشده |
 | [`50.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/50.md) | ۵۰ | ⬜ ترجمه‌نشده |
