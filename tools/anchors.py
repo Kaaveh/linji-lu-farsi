@@ -105,8 +105,10 @@ TOKEN = regex.compile(
 # are dropped from fa/, which would leave 24.md's marker stranded on a line of
 # its own and its back-link resolving to nothing. Reattach it to the heading
 # that follows, which also keeps the file's declared `parity: offset -1` true.
+# Matched against the *restored* body, so the marker is already in its Persian
+# form -- `[^۱^](#n25-1)`, not `[<sup>¹</sup>](#n25-1)`.
 ORPHAN_MARKER = regex.compile(
-    r'^(?P<marker>(?:<a id="[^"]*"></a>\[<sup>[^<]*</sup>\]\([^)]*\))+)\n+(?P<head>\#{1,6} .*)$',
+    r'^(?P<marker>(?:<a id="[^"]*"></a>\[[^\]]*\]\([^)]*\))+)\n+(?P<head>\#{1,6} .*)$',
     regex.MULTILINE,
 )
 

@@ -83,6 +83,15 @@ class TestRestore(unittest.TestCase):
         self.assertIn('<a id="m39-1"></a>[^۱^](#n39-1)پرسید.', out)
 
 
+    def test_a_dropped_part_heading_reattaches_its_marker(self):
+        source = (
+            '## Part Three: Testing and Rating<a id="m25-1"></a>[<sup>¹</sup>](#n25-1)'
+            "\n\n### 24\n\nHe asked.\n"
+        )
+        out = restore("24.md", source, strip("24.md", source))
+        self.assertIn('# ۲۴<a id="m25-1"></a>[^۱^](#n25-1)', out)
+
+
 class TestHeadings(unittest.TestCase):
     def test_part_headings_are_dropped(self):
         self.assertIsNone(fa_heading("01.md", "##", "Part One: Ascending the Hall"))
