@@ -40,7 +40,7 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۶۵ از ۷۵ بخش (۸۷٪)**
+**۷۲ از ۷۵ بخش (۹۶٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
@@ -58,14 +58,14 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`09.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/09.md) | ۹ | 🟢 بازبینی‌شده |
 | [`10.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/10.md) | ۱۰ | 🟢 بازبینی‌شده |
 | [`11.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/11.md) | ۱۱ | ⬜ ترجمه‌نشده |
-| [`12.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/12.md) | ۱۲ | ⬜ ترجمه‌نشده |
+| [`12.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/12.md) | ۱۲ | 🟢 بازبینی‌شده |
 | [`13.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/13.md) | ۱۳ | 🟢 بازبینی‌شده |
-| [`14.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/14.md) | ۱۴ | ⬜ ترجمه‌نشده |
-| [`15.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/15.md) | ۱۵ | ⬜ ترجمه‌نشده |
-| [`16.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/16.md) | ۱۶ | ⬜ ترجمه‌نشده |
-| [`17.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/17.md) | ۱۷ | ⬜ ترجمه‌نشده |
-| [`18.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/18.md) | ۱۸ | ⬜ ترجمه‌نشده |
-| [`19.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/19.md) | ۱۹ | ⬜ ترجمه‌نشده |
+| [`14.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/14.md) | ۱۴ | 🟢 بازبینی‌شده |
+| [`15.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/15.md) | ۱۵ | 🟢 بازبینی‌شده |
+| [`16.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/16.md) | ۱۶ | 🟢 بازبینی‌شده |
+| [`17.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/17.md) | ۱۷ | 🟢 بازبینی‌شده |
+| [`18.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/18.md) | ۱۸ | 🟢 بازبینی‌شده |
+| [`19.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/19.md) | ۱۹ | 🟢 بازبینی‌شده |
 | [`20.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/20.md) | ۲۰ | 🟢 بازبینی‌شده |
 | [`21.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/21.md) | ۲۱ | ⬜ ترجمه‌نشده |
 | [`22.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/22.md) | ۲۲ | 🟢 بازبینی‌شده |
