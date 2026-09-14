@@ -18,7 +18,7 @@ when you start (`🟨 In progress`) and when you finish (`✅ Done`).
 | 004 | [Part One — Ascending the Hall](./004-part-one.md)          | 002        | ✅ Done        |
 | 005 | [Part Two — Instructing the Group](./005-part-two.md)       | 004        | 🟨 In progress |
 | 006 | [Part Three — Testing and Rating](./006-part-three.md)      | 004        | 🟨 In progress |
-| 007 | [Part Four — Record of Activities](./007-part-four.md)      | 004        | ⬜ Not started |
+| 007 | [Part Four — Record of Activities](./007-part-four.md)      | 004        | 🟨 In progress |
 | 008 | [Back matter](./008-back-matter.md)                         | 001–007    | ⬜ Not started |
 | 009 | [First release & publication](./009-release-and-publish.md) | 003–008    | ⬜ Not started |
 

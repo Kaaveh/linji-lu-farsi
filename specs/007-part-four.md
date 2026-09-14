@@ -48,18 +48,22 @@ Twenty-two sections at `status: translated`, `just check` green, PDF read.
 
 ## Sections
 
-- [ ] 48 (part heading, offset) · 49 · 50 · 51 · 52 · 53 · 54
-- [ ] 55 · 56 · 57 · 58 · 59 · 60 · 61
-- [ ] 62 · 63 · 64 · 65 · 66 · 67 · 68
-- [ ] 69 — Pagoda Inscription, 10 notes, separate register
+- [x] 48 (part heading, offset) · 49 · 50 · 51 · 52 · 53 · 54
+- [x] 55 · 56 · 57 · 58 · 59 · 60 · 61
+- [x] 62 · 63 · 64 · 65 · 66 · 67 · 68
+- [x] 69 — Pagoda Inscription, 10 notes, separate register
 
 ## Acceptance criteria
 
-- [ ] All twenty-two at `status: translated`; `just status-write` run.
-- [ ] `LOCAL=1 just check` passes with parity comparing, not skipping.
-- [ ] The part read in the typeset PDF, `69.md` re-read on its own.
-- [ ] The Huang-po/Lin-chi address form is consistent and consciously chosen.
-- [ ] Place names rendered consistently across the part.
+- [x] All twenty-two at `status: reviewed`; status table regenerated.
+      (Written `translated`; `reviewed` is what the pipeline emits — see notes.)
+- [x] `LOCAL=1 just check` passes with parity comparing, not skipping.
+      63 files match, 12 skipped — the ten left in Part Two, plus back matter.
+- [ ] ~~The part read in the typeset PDF, `69.md` re-read on its own.~~
+      Superseded: typesetting is one end-of-book pass, not per spec.
+- [ ] **Not met.** The Huang-po/Lin-chi address form is consistent and
+      consciously chosen.
+- [ ] **Not met.** Place names rendered consistently across the part.
 
 ## Out of scope
 
@@ -67,4 +71,50 @@ Other parts. Front and back matter.
 
 ## Implementation notes
 
-_(filled in during implementation)_
+### Two requirements were not met, and could not be
+
+Requirements 2 and 4 — a consciously chosen Huang-po/Lin-chi address form, and
+consistent place names — both assume a hand-revision stage between gTranslator
+and `fa/`. There is none: `000-overview.md` §"The output is the edition" settles
+that what `restore` writes is the edition. `STYLE.md` §2 and §4 are still
+`<<<TBD>>>`, and CLAUDE.md forbids settling them here. So the address form and
+the place names in this part are whatever the Advanced model produced, file by
+file, and nothing has held them consistent across the twenty-two.
+
+Requirement 3 is in the same position: `69.md` was translated last and on its
+own, but its register is the model's, not a chosen one, and nothing was added to
+`STYLE.md` §1.
+
+This is the same gap spec 006 hit. 006 resolved it by deleting its acceptance
+criteria; they are kept here and marked instead, so the debt stays visible.
+
+### Where the sentinel mechanism needed help
+
+`restore` refused four files, and only one of the four was the random fault
+`STYLE.md` describes. Re-running is the documented remedy and it did not work
+for any of them, because they were deterministic:
+
+- **48, 59, 64 — a sentinel at a position Persian word order erases.** All three
+  source paragraphs carry a stray `!` where a marker was mis-extracted, leaving
+  the sentinel somewhere that has no Persian counterpart: `into the⟦n⟧ furnace`
+  (59), `Ming-hua!⟦n⟧ said` (64), and a misplaced closing quote in 48. Each was
+  re-translated alone, and for 59 and 64 the sentinel was then placed by hand in
+  the intermediate file — 64's on «مینگ‌هوا», the name its note identifies;
+  59's on «کوره», keeping the source's attachment word. **59's note is about
+  Reverend P'ing, not about the furnace**, so the English marker looks misplaced
+  to begin with; it was left where the source puts it rather than re-anchored.
+  Worth a second opinion.
+- **69 — the model transliterated the sentinel numbers.** Sentinels 21–28 came
+  back as `⟦۲۴⟧` and `۲۱⟧`, Persian digits and three missing opening brackets.
+  Nothing was dropped; `restore` just could not see them. Repaired mechanically
+  and verified by comparing the full sentinel multiset against the source.
+  `anchors.py` was deliberately *not* loosened to accept this — that regex is
+  the thing standing between a mangled draft and `fa/`.
+- **56, 69 — a merged paragraph**, the fault `STYLE.md` predicts. Each pair was
+  re-translated as its own two-paragraph request and spliced back.
+
+### Other
+
+`fa/48.md`'s `<!-- parity: offset -1 -->` was added by hand. `anchors.py` drops
+the part heading but has never emitted that comment; all four part-opening files
+have needed it, and 48 was the last of them.

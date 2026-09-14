@@ -40,7 +40,7 @@ It reports "skipped" there and runs locally for the maintainer.
 
 <!-- BEGIN status table -->
 
-**۴۱ از ۷۵ بخش (۵۵٪)**
+**۶۳ از ۷۵ بخش (۸۴٪)**
 
 <details>
 <summary>Per-section status (75 files)</summary>
@@ -94,28 +94,28 @@ It reports "skipped" there and runs locally for the maintainer.
 | [`45.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/45.md) | ۴۵ | 🟢 بازبینی‌شده |
 | [`46.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/46.md) | ۴۶ | 🟢 بازبینی‌شده |
 | [`47.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/47.md) | ۴۷ | 🟢 بازبینی‌شده |
-| [`48.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/48.md) | ۴۸ | ⬜ ترجمه‌نشده |
-| [`49.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/49.md) | ۴۹ | ⬜ ترجمه‌نشده |
-| [`50.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/50.md) | ۵۰ | ⬜ ترجمه‌نشده |
-| [`51.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/51.md) | ۵۱ | ⬜ ترجمه‌نشده |
-| [`52.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/52.md) | ۵۲ | ⬜ ترجمه‌نشده |
-| [`53.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/53.md) | ۵۳ | ⬜ ترجمه‌نشده |
-| [`54.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/54.md) | ۵۴ | ⬜ ترجمه‌نشده |
-| [`55.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/55.md) | ۵۵ | ⬜ ترجمه‌نشده |
-| [`56.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/56.md) | ۵۶ | ⬜ ترجمه‌نشده |
-| [`57.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/57.md) | ۵۷ | ⬜ ترجمه‌نشده |
-| [`58.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/58.md) | ۵۸ | ⬜ ترجمه‌نشده |
-| [`59.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/59.md) | ۵۹ | ⬜ ترجمه‌نشده |
-| [`60.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/60.md) | ۶۰ | ⬜ ترجمه‌نشده |
-| [`61.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/61.md) | ۶۱ | ⬜ ترجمه‌نشده |
-| [`62.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/62.md) | ۶۲ | ⬜ ترجمه‌نشده |
-| [`63.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/63.md) | ۶۳ | ⬜ ترجمه‌نشده |
-| [`64.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/64.md) | ۶۴ | ⬜ ترجمه‌نشده |
-| [`65.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/65.md) | ۶۵ | ⬜ ترجمه‌نشده |
-| [`66.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/66.md) | ۶۶ | ⬜ ترجمه‌نشده |
-| [`67.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/67.md) | ۶۷ | ⬜ ترجمه‌نشده |
-| [`68.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/68.md) | ۶۸ | ⬜ ترجمه‌نشده |
-| [`69.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/69.md) | ۶۹ | ⬜ ترجمه‌نشده |
+| [`48.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/48.md) | ۴۸ | 🟢 بازبینی‌شده |
+| [`49.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/49.md) | ۴۹ | 🟢 بازبینی‌شده |
+| [`50.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/50.md) | ۵۰ | 🟢 بازبینی‌شده |
+| [`51.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/51.md) | ۵۱ | 🟢 بازبینی‌شده |
+| [`52.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/52.md) | ۵۲ | 🟢 بازبینی‌شده |
+| [`53.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/53.md) | ۵۳ | 🟢 بازبینی‌شده |
+| [`54.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/54.md) | ۵۴ | 🟢 بازبینی‌شده |
+| [`55.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/55.md) | ۵۵ | 🟢 بازبینی‌شده |
+| [`56.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/56.md) | ۵۶ | 🟢 بازبینی‌شده |
+| [`57.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/57.md) | ۵۷ | 🟢 بازبینی‌شده |
+| [`58.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/58.md) | ۵۸ | 🟢 بازبینی‌شده |
+| [`59.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/59.md) | ۵۹ | 🟢 بازبینی‌شده |
+| [`60.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/60.md) | ۶۰ | 🟢 بازبینی‌شده |
+| [`61.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/61.md) | ۶۱ | 🟢 بازبینی‌شده |
+| [`62.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/62.md) | ۶۲ | 🟢 بازبینی‌شده |
+| [`63.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/63.md) | ۶۳ | 🟢 بازبینی‌شده |
+| [`64.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/64.md) | ۶۴ | 🟢 بازبینی‌شده |
+| [`65.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/65.md) | ۶۵ | 🟢 بازبینی‌شده |
+| [`66.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/66.md) | ۶۶ | 🟢 بازبینی‌شده |
+| [`67.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/67.md) | ۶۷ | 🟢 بازبینی‌شده |
+| [`68.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/68.md) | ۶۸ | 🟢 بازبینی‌شده |
+| [`69.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/69.md) | ۶۹ | 🟢 بازبینی‌شده |
 | [`appendix.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/appendix.md) | پیوست | ⬜ ترجمه‌نشده |
 | [`glossary.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/glossary.md) | واژه‌نامه | ⬜ ترجمه‌نشده |
 | [`ma-fang-preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/ma-fang-preface.md) | دیباچهٔ ما فانگ | 🟢 بازبینی‌شده |
