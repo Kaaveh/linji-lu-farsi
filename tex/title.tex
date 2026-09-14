@@ -1,0 +1,30 @@
+% Title block. A copy of Quarto's stock pdf/pandoc/title.tex with one change:
+% the last line also typesets `book-version` from _quarto.yml, on its own line
+% above the date. \maketitle sets \date in a centred block, so the \\ breaks the
+% line there and nowhere else. The conditional means the file still renders if
+% the key is ever removed.
+%
+% Careful editing this header: pandoc parses template syntax inside LaTeX
+% comments too. A dollar-delimited conditional written out in prose here is
+% read as a real partial call and aborts the render with "Could not find data
+% file 'templates/if.patched'".
+%
+% Neither pandoc's EPUB title page nor Quarto's HTML title block has a slot for
+% extra metadata the way the LaTeX one does, so those two take the version from
+% index.md instead -- same key, read through a meta shortcode.
+
+$if(title)$
+\title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+$if(subtitle)$
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{$subtitle$}
+$endif$
+$-- This supports Quarto's authors normalization
+\author{$for(authors)$$it.name.literal$$sep$ \and $endfor$}
+\date{$if(book-version)$$book-version$\\[0.35em]$endif$$date$}

@@ -4,6 +4,17 @@
 # title, the author credit, and the four part titles are translation decisions
 # and should be settled the same way any other term is.
 
+# The one place the version is written. Bump it here, then tag the commit to
+# match -- `git tag -a v0.0.1`. Semantics: MAJOR is a new edition, MINOR is
+# content landing, PATCH is corrections. 1.0.0 is all 75 sections translated
+# and read in the typeset PDF.
+#
+# Read by tex/title.tex for the PDF title page, and by index.md via
+# `{{< meta book-version >}}` for HTML and EPUB, which have no title-page slot.
+# Top-level rather than under `book:` so pandoc exposes it to the LaTeX
+# template as a plain $book-version$ variable.
+book-version: "نسخهٔ ۰.۰.۱"
+
 project:
   type: book
   output-dir: _book
@@ -170,6 +181,9 @@ format:
       - inner=28mm
       - outer=22mm
     include-in-header: tex/preamble.tex
+    # Stock title block plus one line: the version above the date. See the file.
+    template-partials:
+      - tex/title.tex
     colorlinks: true
 
   epub:

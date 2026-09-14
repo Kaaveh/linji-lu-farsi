@@ -8,6 +8,18 @@ in source/ is reported as a parity orphan, correctly.
 Written by the maintainer, not translated from anything. Edit freely.
 -->
 
+<!--
+The version, for HTML and EPUB only. Both build their first page from this
+file, and neither pandoc's EPUB title page nor Quarto's HTML title block has a
+slot for extra metadata the way the LaTeX one does. The PDF gets it on the
+title page instead, from tex/title.tex, so it is hidden here to avoid printing
+it twice. Single source either way: `book-version` in _quarto.yml.
+-->
+
+::: {.content-visible unless-format="pdf"}
+{{< meta book-version >}}
+:::
+
 <!-- TODO: توضیح کوتاه دربارهٔ کتاب، متن اصلی، و روش برگردان -->
 
 ## وضعیت {.unnumbered}
