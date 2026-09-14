@@ -151,6 +151,13 @@ format:
     # embedded in Persian text.
     pdf-engine: lualatex
     documentclass: book
+    # `openany`, not the book class's default `openright`. Under openright every
+    # \chapter does a \cleardoublepage to start on a recto, and 75 of this book's
+    # sections are a page or less -- Part Three averages 170 words -- so each one
+    # left an empty verso behind it. Measured: 61 of 200 pages were blank but for
+    # a page number. Two-sided layout and the asymmetric binding margins below
+    # are unaffected; only the forced recto start goes.
+    classoption: [openany]
     mainfont: "Vazirmatn-Regular.ttf"
     mainfontoptions:
       - Path=fonts/
