@@ -170,9 +170,9 @@ them, silently. Measured on `source/42.md`: ten tokens in, zero out. So
 afterwards is impossible, because markers sit mid-sentence rather than at
 paragraph ends.
 
-What the model does preserve, in place and mid-sentence, is bracketed numeric
-sentinels — measured across six bracket styles, twelve in and twelve out. So
-every file goes through `tools/anchors.py`:
+There is a class of placeholder the model does leave alone, in place and
+mid-sentence. `tools/anchors.py` swaps the markup for those on the way out and
+puts it back on the way in, so every file goes through it:
 
 ```bash
 GT=~/Project/Backend/gTranslator
@@ -186,11 +186,11 @@ LOCAL=1 just fix && LOCAL=1 just check
 tool runs, so a draft that `restore` correctly refuses destroys the translation
 that was already there. With `-o` nothing is written until validation passes.
 
-`strip` swaps every token for a `⟦n⟧` sentinel (U+27E6/U+27E7, absent from all 75
-source files). `restore` puts the tokens back where the model left the
-sentinels — so if it moved a sentence, the marker moves with it, which is what
-you want — and **fails loudly** if a sentinel was dropped, duplicated or
-invented. Never repair a mangled file by hand; re-run it.
+`restore` puts each token back where the model left its placeholder — so if
+the model moved a sentence, the marker moves with it, which is what you want —
+and it re-emits the ids from `source/`, so they cannot drift. It **fails
+loudly** rather than writing a damaged file. Never repair a mangled file by
+hand; re-run it.
 
 Headings go through the same mechanism, because every heading in the book is
 structural rather than prose — 69 `### <number>`, 66 `#### Notes`, 4
@@ -212,8 +212,8 @@ enough to be split: `11`, `18`, `19`, `21`, `23`, `48`, `69`, `glossary`,
 `translators-introduction`.
 
 For those, translate in **verified groups of about 1,200 characters**, checking
-each group's sentinel set and paragraph count before moving on and retrying only
-the group that failed. `translators-introduction.md` went through as 46 groups,
+each group's markup and paragraph count before moving on and retrying only the
+group that failed. `translators-introduction.md` went through as 46 groups,
 every one clean first time; the same file submitted whole lost a paragraph and a
 note marker on all three attempts. The other 66 files fit in one request and need
 none of this.

@@ -110,7 +110,7 @@ stub alone, and the four merged files were reverted to their stubs with
 `git checkout` once parity reported them.
 
 The merge fault is the more dangerous of the two, because `restore` accepts a
-merged draft — every sentinel is present and correctly placed. Only the block
+merged draft — every placeholder is present and correctly placed. Only the block
 count shows it. `check_parity.py` is the sole thing standing between a merged
 paragraph and the published edition, which is worth knowing before anyone
 proposes relaxing it.
@@ -120,7 +120,7 @@ proposes relaxing it.
 `STYLE.md` §6 says the answer to a damaged long file is smaller submissions in
 verified groups. That did not reproduce here.
 
-- `14.md` (3,557 chars stripped) lost sentinels 3 and 4 at `--chunk 4500`, lost
+- `14.md` (3,557 chars stripped) lost placeholders 3 and 4 at `--chunk 4500`, lost
   them again at `--chunk 1200`, and lost them again with the single affected
   block submitted alone — eight submissions, same casualties every time. This is
   not the stochastic per-request failure spec 003 measured; for this file it is
@@ -140,7 +140,7 @@ one part's evidence.
 ### A repair driver was tried and removed
 
 `tools/translate.py`: translate the file whole, compare each translated block's
-sentinel set against its source block, and re-submit only the damaged blocks.
+placeholder set against its source block, and re-submit only the damaged blocks.
 The idea was to make retries granular without a browser session per group.
 
 It was deleted. Two reasons, both from running it:

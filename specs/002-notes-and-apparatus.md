@@ -104,10 +104,11 @@ that a note had ever been there. That rules out requirement 7's third option —
 "translate as-is and repair" has nothing to repair — and it rules out positional
 restore too, since markers sit mid-sentence rather than at paragraph ends.
 
-Bracketed numeric sentinels *do* survive, in place, mid-sentence. Tested six
-bracket styles in one pass; twelve sentinels in, twelve out, all correctly
-positioned. `⟦n⟧` (U+27E6/U+27E7) was chosen and verified absent from all 75
-source files. So requirement 7 is settled as **strip and restore**, scripted.
+A survey of placeholder forms found one the model does carry through intact,
+in place and mid-sentence, and it was verified absent from all 75 source files
+before being adopted. So requirement 7 is settled as **strip and restore**,
+scripted. The mechanism now lives in `linji_tools.anchors`; `tools/anchors.py`
+is the half that knows this book's markup.
 
 **2. `tools/anchors.py`** (+ `tools/tests/test_anchors.py`, 20 tests) does
 `strip` / `restore` / `--check`, and `--check` is wired into `just check`
@@ -117,7 +118,7 @@ there is one source of truth and nothing to keep in sync.
 
 Headings went into the same mechanism after a survey found that **all 145
 headings in the book are structural** — 69 `### <number>`, 66 `#### Notes`, 4
-`## Part ...`, 6 named titles already in `make_stubs.DEFAULT_TITLES` — so none
+`## Part ...`, 6 named titles already in `[tool.book.titles]` — so none
 needs translating and all can be re-emitted deterministically.
 
 Verified by dry round-trip over all 74 book files before any translation: anchor
@@ -157,9 +158,9 @@ LaTeX section title also lands in the table of contents.
   `record-title-page.md` → `01.md#n2-1`, and back. Anything that assumes
   per-file self-containment has to allow for it.
 - It gives 4,500 characters as gTranslator's chunk size against a 5,000 cap,
-  which stands — but note that `strip` *shortens* every file, since a sentinel
-  is far shorter than the token it replaces. Chunk counts for the big files will
-  come out at or below the estimates in `specs/README.md`.
+  which stands — but note that `strip` *shortens* every file, since what it
+  substitutes is far shorter than the token it replaces. Chunk counts for the
+  big files will come out at or below the estimates in `specs/README.md`.
 
 **6. Status: `reviewed`, settled.** This spec originally left `fa/42.md` at
 `draft` and flagged the conflict with the definition of done. The maintainer

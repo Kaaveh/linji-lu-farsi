@@ -105,7 +105,7 @@ tools/anchors.py restore source/NN.md $S/NN.fa.md -o fa/NN.md
 LOCAL=1 just fix
 ```
 
-Sentinels in equalled sentinels out on all nine, first attempt, so no file
+Placeholders in equalled placeholders out on all nine, first attempt, so no file
 needed re-running. None of the nine is on `STYLE.md` §6's list of long files, and
 none needed the verified-group procedure — `01.md` is the largest at 4,580
 characters stripped, which gTranslator chunks in two with no seam damage.

@@ -93,7 +93,7 @@ paragraph at every chunk boundary. `split_chunks` is lossless — each chunk
 carries its own trailing separator — but the page returns text with `.strip()`
 applied, so that separator never comes back, and `translate_web` then rejoined
 the results with `"\n".join(...)`. A paragraph break became a line break, and any
-sentinel sitting just before the seam was swallowed with it. Breaks *inside* a
+placeholder sitting just before the seam was swallowed with it. Breaks *inside* a
 chunk were never affected, which is why only long files showed it.
 
 Fixed in `~/Project/Backend/gTranslator` as `_rejoin()`: re-append each chunk's
@@ -104,14 +104,14 @@ there; its existing two still pass. On this file the fix recovered 11 of the 15
 lost paragraph breaks.
 
 **3. The remaining 4 were Google, not gTranslator.** Reproduced with chunk 9
-submitted alone: 3,958 characters, 7 paragraphs in, 6 out, trailing sentinel
+submitted alone: 3,958 characters, 7 paragraphs in, 6 out, trailing placeholder
 gone. It is not positional — a 140-character submission ending in the same
-sentinel round-tripped perfectly, and across three whole-file runs the casualty
-moved (sentinel 4, then 4 again, then 2). It is a per-request failure rate that
+placeholder round-tripped perfectly, and across three whole-file runs the casualty
+moved (placeholder 4, then 4 again, then 2). It is a per-request failure rate that
 rises with submission size.
 
 The answer is to keep each submission small and verify it: 46 groups of ~1,200
-characters, checking each group's sentinel set and paragraph count and retrying
+characters, checking each group's placeholder set and paragraph count and retrying
 only what failed. All 46 passed first time. Written into `STYLE.md` §6 with the
 list of nine files that need it. The other 66 fit in one request.
 

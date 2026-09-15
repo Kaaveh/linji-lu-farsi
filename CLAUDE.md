@@ -62,8 +62,8 @@ and the status table tracks how far through it you are.
   `make_stubs`. What makes them this book's is the `[tool.*]` sections of
   `pyproject.toml`; see spec 010.
 - `tools/anchors.py` **does** stay here. It is the adapter: Watson's token
-  pattern and the Persian form of every heading and marker. The sentinel
-  round-trip it calls is `linji_tools.anchors`. 20 tests here, 154 there.
+  pattern and the Persian form of every heading and marker. The round-trip it
+  calls is `linji_tools.anchors`. 20 tests here, 154 there.
 - `check_parity` only works locally — CI has no `source/`.
 
 ## Quality bar

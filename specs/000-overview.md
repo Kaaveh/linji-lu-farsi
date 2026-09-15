@@ -115,8 +115,9 @@ Use `-o`, not `>`: a shell redirect truncates the target before the tool runs,
 so a draft `restore` correctly refuses would destroy the existing translation.
 
 The `strip` and `restore` steps are not optional — see **The markup hazard**
-below. `strip` also shortens every file, since a sentinel is much shorter than
-the token it replaces, so chunk counts come out at or below the estimates here.
+below. `strip` also shortens every file, since what it substitutes is much
+shorter than the token it replaces, so chunk counts come out at or below the
+estimates here.
 
 **`-w` / `--web` is not optional.** Only the browser-driven mode reaches
 Google's Advanced (Gemini) model, which reads a whole passage and produces

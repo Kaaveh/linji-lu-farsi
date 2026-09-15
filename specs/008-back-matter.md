@@ -120,12 +120,12 @@ Two further defects in the machine output, recorded as suggestions, not fixes:
 What *was* verified as consistent: دارما, بودیساتوا, شاکیامونی, نیروانا,
 کوان-یین, and بودیدارما (9 occurrences, one spelling).
 
-### Where the sentinel mechanism needed help
+### Where the placeholder mechanism needed help
 
 `glossary.md` went through clean first try, chunked at 1,200. `appendix.md` did
-not, and failed the same deterministic way Part Four's did: `K'o-fu?⟦3⟧` puts a
-sentinel on a stray `?` that Persian word order erases. Re-translated alone, the
-sentinel survived but came back as `[۳]` — square brackets and a Persian digit,
+not, and failed the same deterministic way Part Four's did: `K'o-fu?<marker>` puts a
+placeholder on a stray `?` that Persian word order erases. Re-translated alone, the
+placeholder survived but came back as `[۳]` — square brackets and a Persian digit,
 the same transliteration behaviour `69.md` showed. Repaired, and the marker
 placed on «کو-فو», the name its note identifies. `appendix.md` had also merged
 one paragraph, re-translated as its own pair and spliced back.

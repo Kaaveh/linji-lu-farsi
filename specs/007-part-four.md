@@ -88,26 +88,26 @@ own, but its register is the model's, not a chosen one, and nothing was added to
 This is the same gap spec 006 hit. 006 resolved it by deleting its acceptance
 criteria; they are kept here and marked instead, so the debt stays visible.
 
-### Where the sentinel mechanism needed help
+### Where the placeholder mechanism needed help
 
 `restore` refused four files, and only one of the four was the random fault
 `STYLE.md` describes. Re-running is the documented remedy and it did not work
 for any of them, because they were deterministic:
 
-- **48, 59, 64 — a sentinel at a position Persian word order erases.** All three
+- **48, 59, 64 — a placeholder at a position Persian word order erases.** All three
   source paragraphs carry a stray `!` where a marker was mis-extracted, leaving
-  the sentinel somewhere that has no Persian counterpart: `into the⟦n⟧ furnace`
-  (59), `Ming-hua!⟦n⟧ said` (64), and a misplaced closing quote in 48. Each was
-  re-translated alone, and for 59 and 64 the sentinel was then placed by hand in
+  the placeholder somewhere that has no Persian counterpart: `into the<marker> furnace`
+  (59), `Ming-hua!<marker> said` (64), and a misplaced closing quote in 48. Each was
+  re-translated alone, and for 59 and 64 the placeholder was then placed by hand in
   the intermediate file — 64's on «مینگ‌هوا», the name its note identifies;
   59's on «کوره», keeping the source's attachment word. **59's note is about
   Reverend P'ing, not about the furnace**, so the English marker looks misplaced
   to begin with; it was left where the source puts it rather than re-anchored.
   Worth a second opinion.
-- **69 — the model transliterated the sentinel numbers.** Sentinels 21–28 came
-  back as `⟦۲۴⟧` and `۲۱⟧`, Persian digits and three missing opening brackets.
+- **69 — the model transliterated the placeholder numbers.** Placeholders 21–28 came
+  back with Persian digits and three missing delimiters.
   Nothing was dropped; `restore` just could not see them. Repaired mechanically
-  and verified by comparing the full sentinel multiset against the source.
+  and verified by comparing the full placeholder multiset against the source.
   `anchors.py` was deliberately *not* loosened to accept this — that regex is
   the thing standing between a mangled draft and `fa/`.
 - **56, 69 — a merged paragraph**, the fault `STYLE.md` predicts. Each pair was

@@ -38,8 +38,8 @@ Six of the seven `tools/` modules know nothing about this book. Only
 a per-token render function. Make those two parameters and the engine stops
 knowing anything about Watson's markup.
 
-**Engine (moves):** the sentinel round-trip — `⟦n⟧` substitution, restore by
-sentinel position, refusal on dropped / duplicated / unknown sentinels — plus
+**Engine (moves):** the placeholder round-trip — substitution, restore by
+placeholder position, refusal on dropped / duplicated / unknown ones — plus
 `compare()`, `hard_breaks()`, `anchors_of()` and the `-o` write-only-if-valid
 discipline.
 
@@ -80,7 +80,7 @@ None. This is orthogonal to the translation specs and can land at any time.
 
    b. **Parameterise `tokenize()`.** Signature becomes
       `tokenize(text, token_re, render)`. `strip()` and `restore()` thread the
-      two arguments through. No behaviour change — same sentinels, same
+      two arguments through. No behaviour change — same placeholders, same
       validation, same output bytes.
 
    Verify: `LOCAL=1 just check` green, 151 tests still passing, and
@@ -203,14 +203,16 @@ None. This is orthogonal to the translation specs and can land at any time.
 
    ```bash
    git log --all --oneline -- tools/normalize.py    # must be empty
-   git rev-list --all | xargs -I{} git grep -l 'RE_ZWNJ_LOOSE' {} 2>/dev/null
+   git rev-list --all | while read -r c; do
+       git grep -l 'RE_ZWNJ''_LOOSE' "$c" -- '*.py' 2>/dev/null
+   done
    ```
 
    The second command searches every commit's tree for a string unique to the
    moved code. Empty output is the proof.
 
    **A judgement call to make, not to assume:** `specs/000-overview.md` and
-   `specs/002-notes-and-apparatus.md` describe the sentinel technique in prose —
+   `specs/002-notes-and-apparatus.md` describe the placeholder technique in prose —
    why it exists, what fails without it, how `strip`/`restore` work. That is the
    design, in words, and purging the code does not purge it. Decide whether the
    prose stays. Keeping it is defensible (it documents the book's provenance and
@@ -237,13 +239,13 @@ None. This is orthogonal to the translation specs and can land at any time.
 - [ ] A mirror clone of the pre-rewrite history exists offline, verified
       readable, **before** the rewrite runs.
 - [ ] History rewritten: `git log --all -- tools/normalize.py` is empty, and the
-      `RE_ZWNJ_LOOSE` grep across all commits returns nothing.
+      identifier grep across all commits returns nothing for `*.py`.
 - [ ] `git log --all --oneline -- 'source/*'` empty, re-confirmed post-rewrite.
 - [ ] Force-pushed; `v0.0.1` still resolves and its GitHub Release is intact or
       re-created.
 - [ ] The decision on the residual GitHub objects (Support GC, fresh repo, or
       accept) is recorded in `## Implementation notes`.
-- [ ] The decision on the spec prose describing the sentinel technique is
+- [ ] The decision on the spec prose describing the placeholder technique is
       recorded, and acted on in the same rewrite if it is to go.
 - [ ] `LOCAL=1 just check` green on a fresh clone of the **rewritten** remote.
 
@@ -308,7 +310,7 @@ Two config conventions, rather than one section per constant:
 - **`[tool.<checker>]`** tunes one checker, which is what `[tool.normalize]`
   already did. Added `[tool.linebreaks]` and `[tool.status_table]`.
 
-`ABBREVIATIONS` split rather than moved: `GENERAL_ABBREVIATIONS` keeps the
+`ABBREVIATIONS` split rather than moved: a general constant keeps the
 English set (`cf`, `ie`, `Mr`, `vol` …) in the module, and `[tool.linebreaks]
 abbreviations` adds this book's language tags (`Ch`, `Skt`, `Pali` …) on top.
 That is what the spec asked for — "config, defaulting to a general English set".
@@ -342,7 +344,7 @@ vendoring a copy back defeats the exercise. CI is
 **One correction to the spec's framing, made before choosing.** Requirement 2
 describes this as "private source, public wheel — a normal arrangement". A wheel
 is a zip of `.py` files, not a compiled artifact: publishing puts
-`normalize.py` in plain text on PyPI, `RE_ZWNJ_LOOSE` included — the very string
+`normalize.py` in plain text on PyPI, including the very identifier
 requirement 9 greps for as proof of purge. So publishing does not make the
 checkers unreadable, and nothing here should be taken to claim it does.
 
