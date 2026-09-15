@@ -36,7 +36,7 @@ translating. Their Persian forms are derived here:
     #### Notes    ->  ## یادداشت‌ها
     ## Part One:  ->  dropped          (lives in _quarto.yml as a part: entry,
                                         which is the declared parity offset -1)
-    ## Preface    ->  # پیش‌گفتار      (make_stubs.DEFAULT_TITLES)
+    ## Preface    ->  # پیش‌گفتار      ([tool.book.titles] in pyproject.toml)
 
 Note markers become Persian digits, and the source's raw `<sup>` wrapper is
 replaced by Pandoc's native superscript -- `[<sup>²</sup>](#n2-2)` becomes
@@ -58,6 +58,7 @@ from __future__ import annotations
 import argparse
 import sys
 from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -65,13 +66,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import regex
 
 import _md
-from make_stubs import DEFAULT_TITLES, to_persian_digits
+from _md import to_persian_digits
 
-REPO = Path(__file__).resolve().parent.parent
+REPO = _md.REPO
 
 EXCLUDE = {"README.md"}
 
 NOTES_HEADING = "یادداشت‌ها"
+
+# The Persian headings for the six non-numbered files, from [tool.book.titles]
+# in pyproject.toml. Read from config rather than imported from make_stubs.py:
+# the round-trip below is general machinery, and the book's own vocabulary has
+# no business living inside it.
+TITLES = _md.config("book").get("titles", {})
 
 # What `restore` writes. The pipeline produces the published text in one pass --
 # strip, translate, restore, normalise -- with no hand-revision stage after it,
@@ -138,8 +145,8 @@ def fa_heading(name: str, hashes: str, title: str) -> str | None:
         return f"## {NOTES_HEADING}"
     if title.isdigit():
         return f"# {to_persian_digits(int(title))}"
-    if name in DEFAULT_TITLES:
-        return f"# {DEFAULT_TITLES[name]}"
+    if name in TITLES:
+        return f"# {TITLES[name]}"
     raise ValueError(f"{name}: no Persian form for heading {hashes} {title!r}")
 
 
@@ -158,27 +165,37 @@ def fa_token(name: str, match) -> str | None:
     return fa_heading(name, match.group("hashes"), match.group("title"))
 
 
-def tokenize(name: str, text: str) -> tuple[str, list[str | None]]:
-    """Returns (text with sentinels, Persian form of each token by index)."""
+def render_for(name: str):
+    """This book's token renderer, bound to a filename."""
+    return partial(fa_token, name)
+
+
+def tokenize(text: str, token_re, render) -> tuple[str, list[str | None]]:
+    """Returns (text with sentinels, replacement form of each token by index).
+
+    `token_re` and `render` are the only things here that know what a token
+    looks like or what it should become, which is what keeps the round-trip
+    itself free of any knowledge of this book's markup.
+    """
     out: list[str] = []
     forms: list[str | None] = []
     cursor = 0
-    for match in TOKEN.finditer(text):
+    for match in token_re.finditer(text):
         out.append(text[cursor : match.start()])
         out.append(SENTINEL.format(len(forms) + 1))
-        forms.append(fa_token(name, match))
+        forms.append(render(match))
         cursor = match.end()
     out.append(text[cursor:])
     return "".join(out), forms
 
 
-def strip(name: str, text: str) -> str:
-    return tokenize(name, text)[0]
+def strip(text: str, token_re, render) -> str:
+    return tokenize(text, token_re, render)[0]
 
 
-def restore(name: str, source_text: str, draft: str) -> str:
+def restore(name: str, source_text: str, draft: str, token_re, render) -> str:
     """Put the tokens back where the model left the sentinels."""
-    _, forms = tokenize(name, source_text)
+    _, forms = tokenize(source_text, token_re, render)
 
     seen = [int(m.group(1)) for m in SENTINEL_RE.finditer(draft)]
     expected = set(range(1, len(forms) + 1))
@@ -313,10 +330,10 @@ def main(argv: list[str] | None = None) -> int:
         source = args.files[0]
         text = source.read_text(encoding="utf-8")
         if args.mode == "strip":
-            result = strip(source.name, text)
+            result = strip(text, TOKEN, render_for(source.name))
         else:
             draft = args.files[1].read_text(encoding="utf-8")
-            result = restore(source.name, text, draft)
+            result = restore(source.name, text, draft, TOKEN, render_for(source.name))
         # Only now, with validation behind us, is anything written.
         if args.out:
             args.out.write_text(result, encoding="utf-8")

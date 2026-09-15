@@ -2,6 +2,21 @@
 # plain scripts, not an installed package. Install their dependencies with
 #   pip install -r tools/requirements.txt
 
+# Persian headings for the six files that are not numbered sections. Book data,
+# so it lives here rather than inside a checker: make_stubs.py puts these in a
+# new stub, anchors.py renders the source heading into this form, and neither
+# module has to carry the book's own vocabulary to do it.
+#
+# Generic Persian names for document parts, not translations of anything in the
+# book. make_stubs.py --titles overrides them from a TSV.
+[tool.book.titles]
+"preface.md" = "پیش‌گفتار"
+"translators-introduction.md" = "مقدمهٔ مترجم"
+"ma-fang-preface.md" = "دیباچهٔ ما فانگ"
+"record-title-page.md" = "صفحهٔ عنوان"
+"appendix.md" = "پیوست"
+"glossary.md" = "واژه‌نامه"
+
 # Every normalization rule is individually toggleable. Turning one off here
 # disables it for both --check and --fix, repo-wide. To exempt a region of a
 # single file instead, wrap it in:

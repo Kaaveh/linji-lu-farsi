@@ -21,6 +21,7 @@ when you start (`🟨 In progress`) and when you finish (`✅ Done`).
 | 007 | [Part Four — Record of Activities](./007-part-four.md)      | 004        | 🟨 In progress |
 | 008 | [Back matter](./008-back-matter.md)                         | 001–007    | 🟨 In progress |
 | 009 | [First release & publication](./009-release-and-publish.md) | 003–008    | ⬜ Not started |
+| 010 | [Extract the general tooling](./010-extract-general-tooling.md)| —        | 🟨 In progress |
 
 ## Recommended order
 
@@ -30,6 +31,10 @@ Not top to bottom. The numbering follows the book; the work should not.
 002 → 004 → 006 → 007 → 005 → 003 → 008 → 009
 apparatus  pilot  short  short  core  intro  back  ship
 ```
+
+**010 sits outside that chain.** It depends on nothing and nothing depends on
+it, so it can land whenever — but before this repository goes public, since that
+is the point of it.
 
 **001 is dropped.** `fa/` carries raw gTranslator output normalised by
 `LOCAL=1 just fix`, with no hand revision, so the register and pronoun decisions
