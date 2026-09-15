@@ -3,7 +3,8 @@
 ## Context
 
 This repository is going public. The translation *mechanism* should not: it
-lives in [`gTranslator`](https://github.com/Kaaveh/gTranslator) (on this mashine: /Users/kaavehmohamedi/Project/Backend/gTranslator), which stays
+lives in [`gTranslator`](https://github.com/Kaaveh/gTranslator) — cloned at
+`~/Project/Backend/gTranslator` on the maintainer's machine — which stays
 private. What belongs here is the book, the build, and the adapter code that
 knows this particular e-text's shape.
 
@@ -32,6 +33,10 @@ Six of the seven `tools/` modules know nothing about this book. Only
 | `make_stubs.py` | 149 | One constant: `DEFAULT_TITLES` |
 | `anchors.py` | 334 | **Roughly 160 general / 120 adapter / 52 docstring** |
 
+The `anchors.py` estimate came out low on both sides. Actual after the split:
+259 lines of engine and 165 of adapter, both counting their docstrings, which
+are long here because they carry the measurements behind the design.
+
 ### The seam already exists
 
 `anchors.py` splits cleanly because `tokenize()` already walks a regex and calls
@@ -45,7 +50,14 @@ discipline.
 
 **Adapter (stays):** `TOKEN` (the regex matching
 `<a id="m2-2"></a>[<sup>²</sup>](#n2-2)`), `fa_heading()`, `fa_token()`,
-`ORPHAN_MARKER`, `NOTES_HEADING`, `FINAL_STATUS`, `SUPERSCRIPT`.
+`ORPHAN_MARKER`, `NOTES_HEADING`, `FINAL_STATUS`, `SUPERSCRIPT`, plus `TITLES`
+and `EXCLUDE` once they come from config, and a `render_for(name)` helper to
+bind the renderer to a filename.
+
+One correction to the seam as drawn above: `restore()` has adapter work on
+*both* sides of the engine, not just before it. The engine returns the restored
+body; the orphan-marker reattachment and the `status: reviewed` front matter are
+the adapter's, and run after. So it is two seams, not one.
 
 ### The thing that bites
 
@@ -59,7 +71,7 @@ Requirement 2 settles this **before** anything moves.
 ## Goal
 
 The general tooling lives in `gTranslator`. This repository keeps the book, the
-build, and roughly 120 lines of adapter. `LOCAL=1 just check` still passes here,
+build, and roughly 165 lines of adapter. `LOCAL=1 just check` still passes here,
 on a clean clone, without private access — and the extracted code is not
 recoverable from this repository's git history.
 
@@ -78,22 +90,46 @@ None. This is orthogonal to the translation specs and can land at any time.
       module that is about to become general. Move `DEFAULT_TITLES` to a project
       config file that both read.
 
+      **Both symbols have to move, not just the first.** Relocating
+      `DEFAULT_TITLES` alone leaves the import — and so the coupling — in place.
+      `to_persian_digits` is not book data, so it belongs in the shared module
+      rather than in config; `status_table.py` has a second copy of the same
+      digit map, which goes at the same time.
+
    b. **Parameterise `tokenize()`.** Signature becomes
       `tokenize(text, token_re, render)`. `strip()` and `restore()` thread the
       two arguments through. No behaviour change — same placeholders, same
       validation, same output bytes.
 
-   Verify: `LOCAL=1 just check` green, 151 tests still passing, and
-   `git diff` on `fa/` empty after a `strip`/`restore` round-trip of any
-   already-translated file.
+   Verify: `LOCAL=1 just check` green and the tests still passing.
+
+   **The round-trip check this spec originally asked for cannot be run.** It
+   said `git diff` on `fa/` should be empty after a `strip`/`restore` round-trip
+   of an already-translated file. It cannot be: `restore` takes the *translated
+   draft* as input, and the draft behind each `fa/` file was never kept. Feeding
+   the stripped English back in writes English into `fa/`, which is a real diff
+   and proves nothing.
+
+   Check the same claim a stronger way instead — load the pre-refactor
+   `anchors.py` from `HEAD` alongside the new one and compare the output of both
+   `strip` and `restore` over every file in `source/`. Byte-identical on all 75
+   is the proof. `fa/` is then untouched and its diff is empty by construction.
 
 2. **Decide how the public repo gets the private code, and write the decision
    down before moving a single file.**
 
-   - **Recommended: publish to PyPI.** Private source, public wheel — a normal
-     arrangement. CI becomes `pip install linji-tools==x.y.z`. Outside
-     contributors and forks keep working. Costs packaging scaffolding in
-     `gTranslator` (`pyproject.toml`, a release workflow, a version scheme).
+   - **Recommended: publish to PyPI.** CI becomes
+     `pip install linji-tools==x.y.z`. Outside contributors and forks keep
+     working. Costs packaging scaffolding in `gTranslator` (`pyproject.toml`, a
+     release workflow, a version scheme).
+
+     **Do not read this as "private source, public wheel", as an earlier draft
+     of this spec did.** A wheel is a zip of `.py` files, not a compiled
+     artifact: publishing puts every line of the checkers in plain text on PyPI,
+     including the identifier requirement 9 greps for as proof of purge. That is
+     fine, but only because the checkers are not the sensitive part. The
+     mechanism is `gtranslate.py`, CI never needs it, and it stays private under
+     every option here. Choose this for the fork story, not for secrecy.
    - *Submodule or `git+ssh`* needs a deploy key. Forks won't have it, so
      outside PRs lose lint entirely. Rejected unless outside contribution is
      explicitly not wanted.
@@ -101,6 +137,20 @@ None. This is orthogonal to the translation specs and can land at any time.
 
    Record the choice and the reasoning in `## Implementation notes` on this
    spec.
+
+   **If it is PyPI: the private repository now builds a public artifact, and the
+   default packaging behaviour is not on your side.** List the package
+   explicitly — `[tool.setuptools] packages = ["linji_tools"]`, never a
+   discovery glob — and give the package its own README, because setuptools
+   pulls a top-level `README.md` into an sdist without being asked. That is not
+   a theoretical risk: the first build of this package shipped `gTranslator`'s
+   own README, findings and all, inside the tarball.
+
+   `MANIFEST.in` fixes it, but do not let a manifest be the only thing standing
+   between a private repository and PyPI. Write a guard that opens the built
+   wheel and sdist and fails on anything outside the package, run it in the
+   release workflow before the upload step, and test the guard itself by
+   planting a file that must never ship and confirming it fails.
 
 3. **Extract the book-specific constants into config** so the modules that move
    carry no project knowledge:
@@ -110,17 +160,43 @@ None. This is orthogonal to the translation specs and can land at any time.
    | `check_linebreaks.py` | `ABBREVIATIONS` (`Ch Skt Pali Tib Pkt` …) | config, defaulting to a general English set |
    | `check_parity.py` | `EXCLUDE = {"README.md"}` | CLI flag or config |
    | `status_table.py` | `STATUSES` Persian labels, `HEADING_MARKUP` | config |
-   | `make_stubs.py` | `DEFAULT_TITLES` | project file (see 1a) |
+   | `make_stubs.py` | `DEFAULT_TITLES`, `DEFAULT_EXCLUDE` | project file (see 1a) |
+   | `anchors.py` | `EXCLUDE` | same project file |
 
    `normalize.py` needs nothing — `[tool.normalize]` in `pyproject.toml`
    already does this, and is the pattern to copy.
+
+   `EXCLUDE = {"README.md"}` is written out three times, in `check_parity.py`,
+   `make_stubs.py` and `anchors.py`. It is one fact about the book and wants one
+   home, so put project data shared across checkers in `[tool.book]` and keep
+   `[tool.<checker>]` for what tunes a single checker.
+
+   **Deliberately not in scope:** `source` and `fa` as the directory-name
+   defaults, and the `/blob/main/fa/` path `status_table.render()` writes into a
+   link. Those are target-language knowledge rather than book knowledge, every
+   one is already CLI-overridable, and widening this requirement to cover them
+   buys config nobody asked for.
 
 4. **Move the six general modules and the anchors engine** to `gTranslator`,
    with their tests. Tests map one-to-one to modules; `test_broken_fixture.py`
    covers `normalize`, `check_linebreaks` and `check_parity` and moves whole.
    `test_anchors.py` splits: engine tests go, the `fa_heading` tests stay.
+   Whatever tests requirement 1 or 3 add for the shared config move too.
 
-5. **Write the adapter that stays.** One file — roughly 120 lines — holding the
+   **Expect the move to break tests that pass here, and treat that as the
+   point.** Three did: they were reading the *book's* abbreviations, titles and
+   exclusions out of the installed config rather than supplying their own, so
+   they passed in this repository and failed in one with no `[tool.book]`
+   section. That is the leak the extraction exists to find, and it would have
+   shipped silently otherwise. The fix is to give the function the value as a
+   parameter and have the test pass a fixture — which is worth doing anyway,
+   since a general checker should be drivable without a config file at all.
+
+   The moved suite must pass in `gTranslator` with **no project config present**.
+   That is the acceptance test for "these modules carry no project knowledge",
+   and nothing weaker will do.
+
+5. **Write the adapter that stays.** One file — about 165 lines — holding the
    token regex, the heading rules, the orphan-marker reattachment, and the
    Persian constants. It imports the engine and supplies the book's knowledge to
    it. Keep the name `tools/anchors.py` so `CLAUDE.md`, `specs/000-overview.md`
@@ -130,6 +206,17 @@ None. This is orthogonal to the translation specs and can land at any time.
    running local scripts. The `Dockerfile` does the same. The `hunspell` job and
    `tools/dict/project.dic` are untouched — the wordlist is book vocabulary and
    stays.
+
+   `lint.yml` is not the only workflow that shells out to a checker.
+   `release.yml` calls `tools/status_table.py` to put the progress table in the
+   release notes; that is a real break, not stale prose, and it is easy to miss
+   because the workflow only runs on a tag. Grep every workflow for `tools/`
+   before calling this done.
+
+   Two things worth adding while here: a **Note anchors** step, since the adapter
+   is the only checker code left in the repository and nothing in CI exercises
+   it; and an `import linji_tools` assertion in the `Dockerfile`, so a broken pin
+   fails the image build rather than every later `just check`.
 
 7. **Check what `LICENSE-CODE` still covers** once most of the Python has left.
    It currently covers `tools/`. It should end up covering the adapter, the
@@ -164,13 +251,32 @@ None. This is orthogonal to the translation specs and can land at any time.
        --path tools/check_parity.py \
        --path tools/make_stubs.py \
        --path tools/status_table.py \
+       --path tools/check_glossary.py \
+       --path glossary.yml \
        --path tools/tests/test_normalize.py \
        --path tools/tests/test_check_linebreaks.py \
        --path tools/tests/test_check_parity.py \
        --path tools/tests/test_make_stubs.py \
        --path tools/tests/test_status_table.py \
-       --path tools/tests/test_broken_fixture.py
+       --path tools/tests/test_broken_fixture.py \
+       --path tools/tests/test_check_glossary.py \
+       --path tools/tests/test_config.py
    ```
+
+   **The last four were missing from this list and had to be added.** Derive the
+   list from the repository, not from memory:
+
+   ```bash
+   git log --all --diff-filter=D --name-only --pretty=format: -- 'tools/*'
+   ```
+
+   That turns up `check_glossary.py` and its test, 197 lines of general checker
+   removed after spec 005 but still fully readable in history. Strictly it is not
+   "the extracted code" — it was deleted rather than moved — but it is the same
+   class of thing, and leaving it means a public repository shipping a general
+   checker in its history while six others are purged for being exactly that.
+   `glossary.yml` goes with it, and `test_config.py` is whatever requirement 1
+   or 3 added.
 
    Use `git filter-repo`, not `git filter-branch` — the latter is deprecated,
    slow, and silently mishandles tags.
@@ -183,11 +289,15 @@ None. This is orthogonal to the translation specs and can land at any time.
 
    Facts that matter when doing this:
 
-   - The history is **16 commits and one tag (`v0.0.1`)**. Every SHA will
-     change, because the first commit already touches `tools/`.
-   - `filter-repo` rewrites tags, but the **GitHub Release** attached to
-     `v0.0.1` pins a SHA that will no longer exist. Check the release after
-     pushing and re-create it if it broke.
+   - The history was **16 commits and one tag (`v0.0.1`)** when this was
+     written, and 20 by the time the rewrite ran — the preceding requirements
+     add their own. Every SHA changes, because the first commit already touches
+     `tools/`.
+   - `filter-repo` rewrites tags. A **GitHub Release** attached to `v0.0.1`
+     would pin a SHA that no longer exists, so check it after pushing and
+     re-create it if it broke. In the event there was no Release object at all,
+     only the tag, so nothing needed repairing — confirm with
+     `gh release view v0.0.1` rather than assuming either way.
    - `filter-repo` removes the `origin` remote on purpose. Re-add it, then
      `git push --force --all && git push --force --tags`.
    - **Force-pushing does not immediately destroy the old objects on GitHub.**
@@ -203,13 +313,30 @@ None. This is orthogonal to the translation specs and can land at any time.
 
    ```bash
    git log --all --oneline -- tools/normalize.py    # must be empty
-   git rev-list --all | while read -r c; do
+
+   for c in $(git rev-list --all); do
        git grep -l 'RE_ZWNJ''_LOOSE' "$c" -- '*.py' 2>/dev/null
    done
    ```
 
    The second command searches every commit's tree for a string unique to the
-   moved code. Empty output is the proof.
+   moved code. Empty output is the proof — but only if the command can actually
+   fail, and two things here conspire against that:
+
+   - **Scope it to `*.py`.** Unscoped, it matches this spec, which quotes the
+     identifier as its own verification string. The proof command as originally
+     written could not pass.
+   - **Do not run the git call inside a `... | while read` pipeline.** A
+     `git cat-file`/`git grep` that fails inside one can swallow its own error
+     and print nothing, which is indistinguishable from a clean result. This is
+     not hypothetical: a loop of that shape reported the engine as absent from
+     `anchors.py` history when `SENTINEL` was plainly on line 92 of the
+     requirement-1 commit. **Confirm the command against a known-positive case
+     before trusting a negative one.**
+
+   Check more than one identifier. `RE_ZWNJ_RUN`, `ARABIC_INDIC`,
+   `apply_outside_protected`, `toggle_regions` and `COMMENT_ONLY` cover the
+   other moved modules; a single string only proves something about one file.
 
    **A judgement call to make, not to assume:** `specs/000-overview.md` and
    `specs/002-notes-and-apparatus.md` describe the placeholder technique in prose —
@@ -217,6 +344,23 @@ None. This is orthogonal to the translation specs and can land at any time.
    design, in words, and purging the code does not purge it. Decide whether the
    prose stays. Keeping it is defensible (it documents the book's provenance and
    is not runnable); if it goes, it must go in the same rewrite, not a later one.
+
+   Two things this framing gets wrong, both found by doing it:
+
+   - **It is ten files, not two.** `STYLE.md` and `CLAUDE.md` carry the working
+     procedure, and five body specs record per-file failures in their work logs.
+     Grep before estimating. Separate the *technique* from the *procedure* when
+     cutting: removing the rule as well leaves `STYLE.md` §6 telling translators
+     to run two commands for no stated reason, which is the fastest way to get
+     the step skipped on a file that needed it.
+   - **It cannot be combined with keeping `anchors.py`'s history.** Those are
+     the same decision wearing two hats. The adapter keeps the path, so the path
+     survives the rewrite, so the pre-split engine stays readable a few commits
+     back. Redacting the prose that *describes* the technique while the code
+     that *is* the technique sits in the same repository is theatre. Either
+     `--replace-text` over `anchors.py` too, or accept both and scrub the prose
+     in the working tree only, as tidying rather than as a purge. Decide the two
+     together.
 
    **Checked already and clean:** `source/` has never been committed in any of
    the 16 commits, so the licensed English text is not in history. Re-confirm
@@ -306,40 +450,6 @@ Without them the seam is untested: every other test binds the book's own
 `(TOKEN, render_for(name))` pair, so nothing would have caught `tokenize()`
 quietly continuing to depend on the book's markup.
 
-### Requirement 3 — book constants into config
-
-Two config conventions, rather than one section per constant:
-
-- **`[tool.book]`** is the project's own data, shared by whichever checkers need
-  it. `exclude` and `titles` live here. `exclude` was the same `{"README.md"}`
-  written out three times — in `check_parity.py`, `make_stubs.py` and
-  `anchors.py` — and is now written once.
-- **`[tool.<checker>]`** tunes one checker, which is what `[tool.normalize]`
-  already did. Added `[tool.linebreaks]` and `[tool.status_table]`.
-
-`ABBREVIATIONS` split rather than moved: a general constant keeps the
-English set (`cf`, `ie`, `Mr`, `vol` …) in the module, and `[tool.linebreaks]
-abbreviations` adds this book's language tags (`Ch`, `Skt`, `Pali` …) on top.
-That is what the spec asked for — "config, defaulting to a general English set".
-
-`check_parity.compare()` gained an `exclude` parameter and the CLI a matching
-`--exclude`, so the general tool does not have to read a config section to be
-driven.
-
-`status_table.HEADING_MARKUP` is now optional and `None` when unconfigured; a
-project whose headings are plain prose needs no such pattern. `STATUSES` falls
-back to `{}`, which degrades to the existing `❓ {status}` label rather than
-crashing. `--repo-url`'s default moved from a hardcoded URL to config.
-
-Verified three ways: `LOCAL=1 just check` green; every migrated constant asserted
-equal to its pre-config value; and the five modules copied into an empty
-directory with no `pyproject.toml` at all, where each imports cleanly and falls
-back to its general default — which is the property that makes them movable.
-
-`tools/tests/test_config.py` is new, five tests on `_md.config()`. The fallback
-it covers fails silently by design: a renamed section means every caller quietly
-goes permissive, and nothing else in the suite would notice. 153 → 158 tests.
-
 ### Requirement 2 — the distribution decision
 
 **PyPI, packaged from `gTranslator`.** The spec's recommendation, chosen for the
@@ -378,6 +488,40 @@ built wheel and sdist and fails on anything outside `linji_tools/`; it runs in
 `release.yml` before the upload step, and it was itself tested by planting
 `gtranslate.py` in a wheel and confirming it fails. A secret defended only by a
 manifest is not defended.
+
+### Requirement 3 — book constants into config
+
+Two config conventions, rather than one section per constant:
+
+- **`[tool.book]`** is the project's own data, shared by whichever checkers need
+  it. `exclude` and `titles` live here. `exclude` was the same `{"README.md"}`
+  written out three times — in `check_parity.py`, `make_stubs.py` and
+  `anchors.py` — and is now written once.
+- **`[tool.<checker>]`** tunes one checker, which is what `[tool.normalize]`
+  already did. Added `[tool.linebreaks]` and `[tool.status_table]`.
+
+`ABBREVIATIONS` split rather than moved: a general constant keeps the
+English set (`cf`, `ie`, `Mr`, `vol` …) in the module, and `[tool.linebreaks]
+abbreviations` adds this book's language tags (`Ch`, `Skt`, `Pali` …) on top.
+That is what the spec asked for — "config, defaulting to a general English set".
+
+`check_parity.compare()` gained an `exclude` parameter and the CLI a matching
+`--exclude`, so the general tool does not have to read a config section to be
+driven.
+
+`status_table.HEADING_MARKUP` is now optional and `None` when unconfigured; a
+project whose headings are plain prose needs no such pattern. `STATUSES` falls
+back to `{}`, which degrades to the existing `❓ {status}` label rather than
+crashing. `--repo-url`'s default moved from a hardcoded URL to config.
+
+Verified three ways: `LOCAL=1 just check` green; every migrated constant asserted
+equal to its pre-config value; and the five modules copied into an empty
+directory with no `pyproject.toml` at all, where each imports cleanly and falls
+back to its general default — which is the property that makes them movable.
+
+`tools/tests/test_config.py` is new, five tests on `_md.config()`. The fallback
+it covers fails silently by design: a renamed section means every caller quietly
+goes permissive, and nothing else in the suite would notice. 153 → 158 tests.
 
 ### Requirements 4 and 5 — the move and the adapter
 
@@ -442,7 +586,7 @@ it, and that only producing a *new* draft needs it. Written first with `-x`,
 which was wrong — `gtranslate.py` is not executable, so the guard would have
 blocked the maintainer too. Tested both ways.
 
-### Verification
+### Verifying the extraction
 
 - `LOCAL=1 just check` green **on a clean clone with no `source/`**, in a fresh
   venv built from `tools/requirements.txt` alone. `tools/` in that clone is the
