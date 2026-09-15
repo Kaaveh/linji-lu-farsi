@@ -296,3 +296,37 @@ round-trips an unrelated `{{word}}` markup through a plain stdlib `re` pattern.
 Without them the seam is untested: every other test binds the book's own
 `(TOKEN, render_for(name))` pair, so nothing would have caught `tokenize()`
 quietly continuing to depend on the book's markup.
+
+### Requirement 3 — book constants into config
+
+Two config conventions, rather than one section per constant:
+
+- **`[tool.book]`** is the project's own data, shared by whichever checkers need
+  it. `exclude` and `titles` live here. `exclude` was the same `{"README.md"}`
+  written out three times — in `check_parity.py`, `make_stubs.py` and
+  `anchors.py` — and is now written once.
+- **`[tool.<checker>]`** tunes one checker, which is what `[tool.normalize]`
+  already did. Added `[tool.linebreaks]` and `[tool.status_table]`.
+
+`ABBREVIATIONS` split rather than moved: `GENERAL_ABBREVIATIONS` keeps the
+English set (`cf`, `ie`, `Mr`, `vol` …) in the module, and `[tool.linebreaks]
+abbreviations` adds this book's language tags (`Ch`, `Skt`, `Pali` …) on top.
+That is what the spec asked for — "config, defaulting to a general English set".
+
+`check_parity.compare()` gained an `exclude` parameter and the CLI a matching
+`--exclude`, so the general tool does not have to read a config section to be
+driven.
+
+`status_table.HEADING_MARKUP` is now optional and `None` when unconfigured; a
+project whose headings are plain prose needs no such pattern. `STATUSES` falls
+back to `{}`, which degrades to the existing `❓ {status}` label rather than
+crashing. `--repo-url`'s default moved from a hardcoded URL to config.
+
+Verified three ways: `LOCAL=1 just check` green; every migrated constant asserted
+equal to its pre-config value; and the five modules copied into an empty
+directory with no `pyproject.toml` at all, where each imports cleanly and falls
+back to its general default — which is the property that makes them movable.
+
+`tools/tests/test_config.py` is new, five tests on `_md.config()`. The fallback
+it covers fails silently by design: a renamed section means every caller quietly
+goes permissive, and nothing else in the suite would notice. 153 → 158 tests.

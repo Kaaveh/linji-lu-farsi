@@ -2,6 +2,19 @@
 # plain scripts, not an installed package. Install their dependencies with
 #   pip install -r tools/requirements.txt
 
+# ---------------------------------------------------------------------------
+# [tool.book] is this project's own data, shared by whichever checkers need it.
+# The checkers themselves are general; everything here is what makes them run
+# on *this* book. [tool.<checker>] sections below tune one checker each.
+# ---------------------------------------------------------------------------
+
+[tool.book]
+
+# Files in source/ that are not part of the book -- the maintainer's own index
+# and provenance note. make_stubs.py writes no stub for these, and
+# check_parity.py and anchors.py do not look for a translation of them.
+exclude = ["README.md"]
+
 # Persian headings for the six files that are not numbered sections. Book data,
 # so it lives here rather than inside a checker: make_stubs.py puts these in a
 # new stub, anchors.py renders the source heading into this form, and neither
@@ -64,3 +77,36 @@ harakat = "preserve"
 # Bidi overrides U+202A-U+202E and U+2066-U+2069 are always an error and are
 # never auto-fixed, because they can make a diff display in a different order
 # than it is stored. Not toggleable by design.
+
+# ---------------------------------------------------------------------------
+
+# Abbreviations whose trailing period does not end a sentence, on top of the
+# general English set check_linebreaks.py carries. These are this book's: the
+# language tags its notes cite sources in -- "Ch." for Chinese, "Skt." for
+# Sanskrit, and so on. Without them every citation starts a spurious new line.
+[tool.linebreaks]
+abbreviations = ["Ch", "Skt", "J", "Chin", "Jpn", "Kor", "Pkt", "Pali", "Tib", "Sk"]
+
+# ---------------------------------------------------------------------------
+
+[tool.status_table]
+
+# Where the generated table links each chapter.
+repo_url = "https://github.com/Kaaveh/linji-lu-farsi"
+
+# Markup to strip out of a heading before it lands in a table cell. Two headings
+# carry a note reference of their own -- ma-fang-preface.md's title, and Part
+# Three's in 24.md, which anchors.py reattaches to the section heading. Rendered
+# in README that would show a superscript whose anchor resolves nowhere.
+heading_markup = '<a id="[^"]*"></a>(\[\^[^\]]*\]\([^)]*\))?'
+
+# The labels, in the order the table renders them and the order of the progress
+# summary. This project uses two of the five -- `untranslated` for a stub and
+# `reviewed` for a finished file -- because the pipeline has no revision stage
+# for the other three to describe. See specs/000-overview.md.
+[tool.status_table.statuses]
+untranslated = "⬜ ترجمه‌نشده"
+claimed = "🟡 در دست ترجمه"
+draft = "🟠 پیش‌نویس"
+translated = "🔵 ترجمه‌شده"
+reviewed = "🟢 بازبینی‌شده"

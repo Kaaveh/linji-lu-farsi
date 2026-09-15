@@ -70,7 +70,8 @@ from _md import to_persian_digits
 
 REPO = _md.REPO
 
-EXCLUDE = {"README.md"}
+# source/ files with no translation to pair against, from [tool.book] exclude.
+EXCLUDE = set(_md.config("book").get("exclude", []))
 
 NOTES_HEADING = "یادداشت‌ها"
 
