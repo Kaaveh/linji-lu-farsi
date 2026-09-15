@@ -1,6 +1,9 @@
-# Configuration for tools/. This file is config only -- the checkers are
-# plain scripts, not an installed package. Install their dependencies with
+# Configuration for the checkers in linji_tools/. This file is config only --
+# they are imported from the tree, not installed. Their dependencies:
 #   pip install -r tools/requirements.txt
+#
+# Everything below is what makes general checkers run on *this* book. The
+# checkers themselves must work with none of it present; spec 010 has the why.
 
 # ---------------------------------------------------------------------------
 # [tool.book] is this project's own data, shared by whichever checkers need it.

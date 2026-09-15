@@ -107,8 +107,8 @@ restore too, since markers sit mid-sentence rather than at paragraph ends.
 A survey of placeholder forms found one the model does carry through intact,
 in place and mid-sentence, and it was verified absent from all 75 source files
 before being adopted. So requirement 7 is settled as **strip and restore**,
-scripted. The mechanism now lives in `linji_tools.anchors`; `tools/anchors.py`
-is the half that knows this book's markup.
+scripted. The general half is `linji_tools.anchors`; `tools/anchors.py` is the
+half that knows this book's markup.
 
 **2. `tools/anchors.py`** (+ `tools/tests/test_anchors.py`, 20 tests) does
 `strip` / `restore` / `--check`, and `--check` is wired into `just check`

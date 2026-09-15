@@ -54,16 +54,18 @@ and the status table tracks how far through it you are.
   reverses Latin-script runs inside Persian. Reasoning in `tex/preamble.tex`.
 - `just check` runs everything CI runs; `LOCAL=1 just check` skips the container
   and is what you want for a fast loop. `just venv` sets the host env up.
-- The four checkers are **not in this repository**. They are general, so they
-  live in [`linji-tools`](https://pypi.org/project/linji-tools/), pinned in
-  `tools/requirements.txt` and run as `python -m linji_tools.<name>`:
-  orthography (`normalize`), semantic line breaks (`check_linebreaks`),
-  source/translation block parity (`check_parity`), plus `status_table` and
-  `make_stubs`. What makes them this book's is the `[tool.*]` sections of
-  `pyproject.toml`; see spec 010.
-- `tools/anchors.py` **does** stay here. It is the adapter: Watson's token
-  pattern and the Persian form of every heading and marker. The round-trip it
-  calls is `linji_tools.anchors`. 20 tests here, 154 there.
+- The checkers live in `linji_tools/` and run as `python -m linji_tools.<name>`
+  from the repo root: orthography (`normalize`), semantic line breaks
+  (`check_linebreaks`), source/translation block parity (`check_parity`), plus
+  `status_table` and `make_stubs`. Imported from the tree, not installed —
+  `tools/requirements.txt` is just PyYAML and regex.
+- **They carry no knowledge of this book**, and that is enforced: their tests in
+  `linji_tools/tests/` must pass with no `[tool.*]` config present at all. What
+  makes them this book's is `pyproject.toml`. Spec 010 did this; read its notes
+  before putting a book fact back into one of them.
+- `tools/anchors.py` is the adapter, and is the one piece that *is* this book's:
+  Watson's token pattern and the Persian form of every heading and marker. The
+  round-trip it calls is `linji_tools.anchors`. 154 tests there, 20 here.
 - `check_parity` only works locally — CI has no `source/`.
 
 ## Quality bar

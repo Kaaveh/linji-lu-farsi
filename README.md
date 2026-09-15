@@ -23,7 +23,7 @@ Read this before contributing or forking.
 | | |
 |---|---|
 | **The Persian translation** | [CC BY-SA 4.0](LICENSE-TEXT) — share and adapt, keep it open |
-| **The build** — `tools/`, `.github/`, `Dockerfile`, `justfile`, `tex/`, `assets/` | [MIT](LICENSE-CODE) |
+| **The code and build** — `linji_tools/`, `tools/`, `.github/`, `Dockerfile`, `justfile`, `tex/`, `assets/` | [MIT](LICENSE-CODE) |
 | **The English source text** | © Burton Watson / Shambhala Publications, 1993. **Not redistributed here.** |
 | **The underlying Chinese text** | Public domain (Taishō T1985, compiled c. 1120) |
 
@@ -240,6 +240,7 @@ source/        the English source (gitignored, never committed)
 tex/           the LaTeX preamble for the PDF
 fonts/         vendored Vazirmatn + OFL
 assets/        RTL and EPUB stylesheets
+linji_tools/   the checkers -- general, know nothing about this book
 tools/         the note-apparatus adapter, dictionary, DCO hook, pins
 _quarto.yml    the book: three formats, 75 chapters in four parts
 _language.yml  Persian UI strings — Quarto ships no fa locale

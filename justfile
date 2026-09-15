@@ -32,9 +32,11 @@ check: test
     {{python}} tools/anchors.py --check
     {{python}} -m linji_tools.status_table --check
 
-# Tests for the note-apparatus adapter. The checkers have their own suite,
-# in the repository they now live in.
+# Two suites, kept apart on purpose. linji_tools/ is general and its tests must
+# pass without any of this book's config; tools/tests/ covers the adapter, which
+# is nothing but this book's config.
 test:
+    {{python}} -m unittest discover -s linji_tools/tests
     {{python}} -m unittest discover -s tools/tests
 
 # Bidi overrides are reported but never rewritten, so this can still leave

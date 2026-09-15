@@ -69,13 +69,13 @@ just status-write      # refresh the README progress table
 `just venv` sets up the host Python environment. Everything else runs in the
 pinned container; `LOCAL=1` opts out.
 
-**The checkers are not in this repository.** They are general — nothing in them
-knows about this book — so they live in
-[`linji-tools`](https://pypi.org/project/linji-tools/), pinned in
-`tools/requirements.txt` and run as `python -m linji_tools.<name>`. What makes
-them this book's is the `[tool.*]` sections of `pyproject.toml`. Spec 010 did
-this and records why. `tools/anchors.py` stays: it is the adapter that knows
-Watson's note markup, and it calls the general round-trip underneath.
+**The checkers know nothing about this book.** They live in `linji_tools/` and
+run as `python -m linji_tools.<name>` from the repo root, imported from the tree
+rather than installed. What makes them this book's is the `[tool.*]` sections of
+`pyproject.toml` — and the boundary is enforced, since their tests must pass
+with no such config present. `tools/anchors.py` is the exception and the
+adapter: it knows Watson's note markup and calls the general round-trip
+underneath. Spec 010 drew the line and records why.
 
 What they catch, so you do not have to:
 

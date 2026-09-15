@@ -53,14 +53,19 @@ Usage:
 
 from __future__ import annotations
 
+import sys
 from functools import partial
 from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+
+# Run as a script, sys.path[0] is tools/, so the checkers next door are not
+# importable without this. Before the imports on purpose.
+sys.path.insert(0, str(REPO))
 
 import regex
 from linji_tools import _md, anchors as engine
 from linji_tools._md import to_persian_digits
-
-REPO = Path(__file__).resolve().parent.parent
 
 # source/ files with no translation to pair against, from [tool.book] exclude.
 EXCLUDE = set(_md.config("book").get("exclude", []))

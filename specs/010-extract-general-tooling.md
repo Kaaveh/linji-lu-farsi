@@ -8,6 +8,15 @@ lives in [`gTranslator`](https://github.com/Kaaveh/gTranslator) — cloned at
 private. What belongs here is the book, the build, and the adapter code that
 knows this particular e-text's shape.
 
+> **Superseded in part.** This framing treats "the general checkers" and "the
+> private mechanism" as one thing to be moved out together. They are not. The
+> mechanism is `gtranslate.py`; the checkers are generic Markdown and Persian
+> tooling that CI needs and that nothing about this book depends on keeping
+> secret. The checkers were moved to `gTranslator` and then moved back — see
+> **Where the tooling ended up** in the implementation notes. What survived, and
+> was the real value here, is that they are now *general*: no book vocabulary,
+> no project paths, and a test suite that proves it.
+
 Measured, not estimated:
 
 | Area | Lines |
@@ -70,10 +79,13 @@ Requirement 2 settles this **before** anything moves.
 
 ## Goal
 
-The general tooling lives in `gTranslator`. This repository keeps the book, the
-build, and roughly 165 lines of adapter. `LOCAL=1 just check` still passes here,
-on a clean clone, without private access — and the extracted code is not
-recoverable from this repository's git history.
+The general tooling is separable from the book: it carries no book vocabulary
+and no project paths, and its tests prove it by passing with no config at all.
+`LOCAL=1 just check` passes on a clean clone without private access, and the
+old book-coupled copies are not recoverable from this repository's git history.
+
+*As originally written, this said the tooling would live in `gTranslator`. It
+briefly did. See the note under Context.*
 
 ## Dependencies
 
@@ -370,21 +382,25 @@ None. This is orthogonal to the translation specs and can land at any time.
 
 - [x] Requirement 1 landed and committed separately, ahead of any extraction.
 - [x] The distribution decision is written in `## Implementation notes`.
-- [x] `tools/` contains the adapter, `dict/`, `hooks/`, `requirements.txt` and
-      `texlive-packages.txt` — and no general checker. (Also `tests/`, for the
-      adapter; the criterion's list was not exhaustive.)
+- [x] `tools/` contains the adapter, its tests, `dict/`, `hooks/`,
+      `requirements.txt` and `texlive-packages.txt` — and no general checker.
+      The checkers are in `linji_tools/`, which is a separate directory with a
+      separate test suite that passes with no `[tool.*]` config; that boundary,
+      not the repository boundary, is what this criterion was really after.
 - [x] `LOCAL=1 just check` green **from a clean clone with no private access**,
       installing only what `tools/requirements.txt` names.
 - [ ] `lint` and `build` green on a real pull request, including from a fork.
-      **Blocked on publishing.** `checkers` fails on exactly one line —
-      `No matching distribution found for linji-tools==0.1.0` — and nothing
-      else. Publishing clears it. Note that `spelling` has failed on every run
-      since at least 2026-09-13 on `Unable to locate package hunspell-fa`, which
-      predates this spec and is not its to fix.
+      No longer blocked on publishing — that dependency was removed rather than
+      satisfied, so `checkers` needs only PyYAML and regex and a fork can lint
+      with no access to anything. Still unticked because no fork PR has been
+      opened. Note that `spelling` has failed on every run since at least
+      2026-09-13 on `Unable to locate package hunspell-fa`, which predates this
+      spec and is not its to fix.
 - [ ] `just build` still renders all three formats; the PDF is byte-comparable
       in structure to the pre-extraction render (same page count, notes resolve).
       Deferred with the rest of the typeset review — see the note below.
-- [x] No file in this repository imports from a path that only exists privately.
+- [x] No file in this repository imports from a path that only exists privately,
+      or from one that has to be published before CI can run.
 - [x] `CLAUDE.md`, `CONTRIBUTING.md`, `README.md` and `specs/000-overview.md`
       describe the new arrangement.
 - [x] A mirror clone of the pre-rewrite history exists offline, verified
@@ -656,16 +672,69 @@ requirement-1 commit. The pipeline was swallowing the failure and the loop
 printed nothing, which reads exactly like a clean result. Any verification here
 must be confirmed by checking a known-positive case, or it proves nothing.
 
+### Where the tooling ended up
+
+Requirement 2 was implemented as written — packaged as `linji-tools`, built from
+`gTranslator`, with a release workflow and a dist guard — and then reversed
+before publishing. The reversal is the more useful record of the two.
+
+**Why it was reversed.** `gtranslate.py` does not import the checkers and the
+checkers do not import it. They shared a repository only because this spec said
+the general tooling should live with the mechanism, and that instruction rested
+on treating the two as one thing. They are not one thing: the mechanism is the
+browser automation and the model findings, and the checkers were going to be
+published in plain text on PyPI regardless. Nothing about the checkers needed to
+be anywhere private.
+
+**What actually settled it was the consumer count.** There is one. A PyPI
+package, a release workflow, Trusted Publishing, a pinned version and a
+guard script are a lot of machinery to serve a single caller, and all of it sat
+between a contributor and a green build. Against that, importing from the tree
+costs nothing:
+
+| | package on PyPI | in the tree |
+|---|---|---|
+| CI install | `linji-tools==0.1.0` | `PyYAML`, `regex` |
+| CI green | only after publishing | immediately |
+| To ship a fix | tag, release, bump the pin | commit |
+| Fork can lint | after publishing | always |
+| Repos to edit | 2 | 1 |
+
+So `linji_tools/` sits at the root of this repository, imported from the tree,
+and `gTranslator` went back to being one tool. The packaging is deleted rather
+than kept "just in case": it is thirty lines of `pyproject.toml` and a workflow,
+and rewriting it if a second book ever appears is cheaper than carrying it.
+
+**What did not get reversed, because it was the real work.** The book's
+constants are in `[tool.*]`; `anchors.py` is split into a general engine and an
+adapter; `find_violations()`, `load_titles()`, `heading_of()` and `compare()`
+take their project-specific values as parameters; and the checkers' tests live
+in `linji_tools/tests/`, apart from the adapter's, because they must pass with
+no `[tool.*]` config present. That last one is the load-bearing constraint. It
+is what the trip through a second repository bought — three tests were silently
+reading this book's config, and only running them somewhere else exposed it.
+Keep the two suites apart and that check keeps working from here.
+
+**Two small things the move needed.** `tools/anchors.py` runs as a script, so
+`sys.path[0]` is `tools/` and the package next door is not importable without an
+explicit insert. And the `Dockerfile` can no longer assert `import linji_tools`
+at build time, since the package arrives with the mounted tree at run time, not
+in the image.
+
 ### What remains
 
-`linji-tools` is **not yet on PyPI**, by the maintainer's choice to force-push
-first and publish after. Until it is, `checkers` is red. To finish:
+Nothing blocking. There is no package to publish and no version to pin, so the
+criteria that were waiting on PyPI are met by removing the dependency rather
+than by satisfying it.
 
-1. Configure Trusted Publishing at <https://pypi.org/manage/account/publishing/>
-   — repository `Kaaveh/gTranslator`, workflow `release.yml`, environment
-   `pypi`. No API token. The name `linji-tools` was free as of this writing.
-2. `git -C ~/Project/Backend/gTranslator tag linji-tools-v0.1.0 && git push --tags`.
-   `release.yml` runs the tests, builds, runs `scripts/check_dist.py`, checks the
-   tag against the packaged version, and uploads.
-3. Confirm `lint` goes green here, and open one pull request from a fork to close
-   the outstanding criterion.
+Still open, and both deferred rather than blocked:
+
+- One pull request from a fork, to exercise the criterion directly. Expected to
+  pass now that lint needs nothing but two wheels.
+- The typeset PDF comparison, which goes with the end-of-book render pass rather
+  than this spec.
+
+Unrelated but in the way: the `spelling` job has failed on every run since at
+least 2026-09-13 with `Unable to locate package hunspell-fa` — it is not in
+Ubuntu 24.04's repositories. `lint` cannot be green until that is fixed, and it
+is not this spec's to fix.

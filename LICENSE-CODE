@@ -1,5 +1,6 @@
 This licence covers the code and build configuration in this repository:
 
+    linji_tools/    the checkers, and their tests
     tools/          the note-apparatus adapter, the DCO hook, the wordlist
     tex/            the LaTeX preamble
     assets/         the RTL and EPUB stylesheets
@@ -13,11 +14,6 @@ It does not cover the two things in this repository that are not code:
   * The English source text is © Burton Watson / Shambhala Publications, 1993.
     It is licensed to the maintainer for the purpose of producing this
     translation and is not redistributed here. source/ is gitignored.
-
-Nor does it cover the checkers that `just check` runs. Those are not in this
-repository: they are distributed separately as the `linji-tools` package and
-carry their own copy of the MIT licence. Only tools/anchors.py, the adapter
-that supplies this book's markup to them, is covered here.
 
 The fonts under fonts/ are Vazirmatn, under the SIL Open Font License; see the
 OFL file alongside them.

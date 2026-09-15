@@ -1,14 +1,13 @@
 name: lint
 
-# Deliberately does not use the container. The checkers need Python and one
-# small package; pulling a multi-gigabyte TeX image to run a two-second lint
+# Deliberately does not use the container. The checkers need Python and two
+# small wheels; pulling a multi-gigabyte TeX image to run a two-second lint
 # would make every PR slower for no benefit. build.yml uses the container,
 # which is where it earns its keep.
 #
-# The checkers are installed from PyPI rather than run out of the tree. They are
-# general, so they live in `linji-tools`; what stays here is tools/anchors.py,
-# the adapter that knows this book's note markup. Installing from an index
-# rather than a private remote is what keeps this job working on a fork.
+# The checkers are in linji_tools/ in this repository and run straight from the
+# tree -- nothing to install, nothing to publish, and a fork's pull request
+# lints with no access to anything private.
 
 on:
   pull_request:
@@ -35,6 +34,11 @@ jobs:
           cache-dependency-path: tools/requirements.txt
 
       - run: pip install -r tools/requirements.txt
+
+      # Two suites: linji_tools/ is general and must pass with none of this
+      # book's config; tools/tests/ covers the adapter, which is all config.
+      - name: Tests for the checkers
+        run: python -m unittest discover -s linji_tools/tests
 
       - name: Tests for the note-apparatus adapter
         run: python -m unittest discover -s tools/tests

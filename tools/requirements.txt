@@ -1,10 +1,9 @@
-# Runtime dependencies for the checks in `just check`.
+# Runtime dependencies for `just check`.
 #
-# The checkers themselves are no longer in this repository. They are general --
-# nothing in them knows about this book -- so they live in `linji-tools` and are
-# configured from the [tool.*] sections of pyproject.toml. What stays here is
-# tools/anchors.py, the adapter that teaches them Watson's note markup.
+# Deliberately tiny: CI runs the checks on every pull request and they should
+# finish in seconds. Nothing here pulls a compiler or a model.
 #
-# Pinned exactly. A checker that changes behaviour between two runs of CI is
-# worse than one that is a version behind.
-linji-tools==0.1.0
+# The checkers themselves are in linji_tools/ in this repository and are
+# imported from the tree, not installed. See linji_tools/__init__.py.
+PyYAML==6.0.3
+regex==2026.9.10
