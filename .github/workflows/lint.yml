@@ -1,9 +1,14 @@
 name: lint
 
-# Deliberately does not use the container. The checkers need Python and two
-# small wheels; pulling a multi-gigabyte TeX image to run a two-second lint
+# Deliberately does not use the container. The checkers need Python and one
+# small package; pulling a multi-gigabyte TeX image to run a two-second lint
 # would make every PR slower for no benefit. build.yml uses the container,
 # which is where it earns its keep.
+#
+# The checkers are installed from PyPI rather than run out of the tree. They are
+# general, so they live in `linji-tools`; what stays here is tools/anchors.py,
+# the adapter that knows this book's note markup. Installing from an index
+# rather than a private remote is what keeps this job working on a fork.
 
 on:
   pull_request:
@@ -31,24 +36,27 @@ jobs:
 
       - run: pip install -r tools/requirements.txt
 
-      - name: Tests for the checkers
+      - name: Tests for the note-apparatus adapter
         run: python -m unittest discover -s tools/tests
 
       # Each on its own step so a red run names the failing check in the UI.
       - name: Orthography
-        run: python tools/normalize.py --check
+        run: python -m linji_tools.normalize --check
 
       - name: Semantic line breaks
-        run: python tools/check_linebreaks.py --check
+        run: python -m linji_tools.check_linebreaks --check
 
       # Exits 0 with a notice here: source/ is licensed to the maintainer for
       # translation, not for redistribution, so CI never has it. This step is
       # kept so the notice appears in the log and nobody assumes it ran.
       - name: Parity
-        run: python tools/check_parity.py --check
+        run: python -m linji_tools.check_parity --check
+
+      - name: Note anchors
+        run: python tools/anchors.py --check
 
       - name: README status table is current
-        run: python tools/status_table.py --check
+        run: python -m linji_tools.status_table --check
 
   spelling:
     runs-on: ubuntu-24.04

@@ -23,7 +23,7 @@ Read this before contributing or forking.
 | | |
 |---|---|
 | **The Persian translation** | [CC BY-SA 4.0](LICENSE-TEXT) — share and adapt, keep it open |
-| **The tooling** in `tools/`, `.github/`, `Dockerfile`, `justfile` | [MIT](LICENSE-CODE) |
+| **The build** — `tools/`, `.github/`, `Dockerfile`, `justfile`, `tex/`, `assets/` | [MIT](LICENSE-CODE) |
 | **The English source text** | © Burton Watson / Shambhala Publications, 1993. **Not redistributed here.** |
 | **The underlying Chinese text** | Public domain (Taishō T1985, compiled c. 1120) |
 
@@ -32,7 +32,7 @@ this translation. It is **not** public domain — Watson died in 2017 and the
 1993 edition is under copyright until 2087 — and it is **not** in this
 repository. `source/` is in `.gitignore` and must stay there.
 
-One consequence worth knowing: `tools/check_parity.py`, which catches dropped
+One consequence worth knowing: the parity check, which catches dropped
 paragraphs by comparing block counts between the two trees, cannot run in CI.
 It reports "skipped" there and runs locally for the maintainer.
 
@@ -128,7 +128,7 @@ It reports "skipped" there and runs locally for the maintainer.
 <!-- END status table -->
 
 Generated from the `status:` front matter in each `fa/` file by
-`tools/status_table.py`. Statuses run `untranslated` → `claimed` → `draft` →
+`linji_tools.status_table`. Statuses run `untranslated` → `claimed` → `draft` →
 `translated` → `reviewed`.
 
 ## Contributing
@@ -240,7 +240,7 @@ source/        the English source (gitignored, never committed)
 tex/           the LaTeX preamble for the PDF
 fonts/         vendored Vazirmatn + OFL
 assets/        RTL and EPUB stylesheets
-tools/         checkers, stub generator, status table, tests
+tools/         the note-apparatus adapter, dictionary, DCO hook, pins
 _quarto.yml    the book: three formats, 75 chapters in four parts
 _language.yml  Persian UI strings — Quarto ships no fa locale
 ```

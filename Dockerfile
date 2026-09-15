@@ -67,9 +67,13 @@ RUN tlmgr install $(tr '\n' ' ' < /tmp/texlive-packages.txt) \
 COPY fonts/ /usr/share/fonts/truetype/vazirmatn/
 RUN fc-cache -f && fc-list | grep -q Vazirmatn
 
+# The checkers come from PyPI as `linji-tools` -- they are general and live
+# outside this repository. tools/anchors.py, the adapter, is mounted with the
+# rest of the tree at run time.
 COPY tools/requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements.txt \
-    && rm /tmp/requirements.txt
+    && rm /tmp/requirements.txt \
+    && python3 -c "import linji_tools; print(linji_tools.__version__)"
 
 WORKDIR /book
 

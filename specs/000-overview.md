@@ -40,11 +40,11 @@ project chrome, not translated content, and has no `source/` counterpart.
 **The source text is not public domain.** Watson died in 2017; the 1993 edition
 is under copyright until 2087. It is licensed to the maintainer for producing
 this translation, and nothing else. `source/` is gitignored and must stay that
-way. This is why `check_parity.py` runs locally and reports "skipped" in CI.
+way. This is why `check_parity` runs locally and reports "skipped" in CI.
 
 **One sentence per line.** Git diffs by line, and a word-level diff of
 right-to-left text is unreadable — changed words scatter in visual order, which
-has nothing to do with storage order. `check_linebreaks.py` enforces it.
+has nothing to do with storage order. `check_linebreaks` enforces it.
 
 **Terminology goes through issues.** Open an issue and argue it there. The
 thread is the decision log; in two years the most valuable thing here may be a
@@ -69,14 +69,22 @@ just status-write      # refresh the README progress table
 `just venv` sets up the host Python environment. Everything else runs in the
 pinned container; `LOCAL=1` opts out.
 
-What the checkers catch, so you do not have to:
+**The checkers are not in this repository.** They are general — nothing in them
+knows about this book — so they live in
+[`linji-tools`](https://pypi.org/project/linji-tools/), pinned in
+`tools/requirements.txt` and run as `python -m linji_tools.<name>`. What makes
+them this book's is the `[tool.*]` sections of `pyproject.toml`. Spec 010 did
+this and records why. `tools/anchors.py` stays: it is the adapter that knows
+Watson's note markup, and it calls the general round-trip underneath.
+
+What they catch, so you do not have to:
 
 | Check | Catches |
 |---|---|
-| `normalize.py` | Arabic Yeh/Kaf, ZWNJ discipline, Arabic-Indic digits, Tatweel, quotes, **bidi overrides** (reported, never auto-fixed) |
-| `check_linebreaks.py` | more than one sentence on a line |
-| `check_parity.py` | a dropped paragraph, by block count against `source/` |
-| `anchors.py --check` | a note anchor that drifted from `source/` |
+| `linji_tools.normalize` | Arabic Yeh/Kaf, ZWNJ discipline, Arabic-Indic digits, Tatweel, quotes, **bidi overrides** (reported, never auto-fixed) |
+| `linji_tools.check_linebreaks` | more than one sentence on a line |
+| `linji_tools.check_parity` | a dropped paragraph, by block count against `source/` |
+| `tools/anchors.py --check` | a note anchor that drifted from `source/` |
 
 ## Translating a file
 
@@ -86,11 +94,22 @@ the findings behind it; the parts that matter here:
 
 ```bash
 GT=~/Project/Backend/gTranslator
+[ -f "$GT/gtranslate.py" ] || { echo "gTranslator is not at $GT.
+
+It is a private repository: the translation mechanism is not public, and no
+part of this repository depends on it. Everything in 'just check' works
+without it — only producing a *new* draft needs it. Clone it to \$GT, or set
+GT to where it already is." >&2; exit 1; }
+
 tools/anchors.py strip source/42.md -o /tmp/42.en.md
 "$GT/.venv/bin/python" "$GT/gtranslate.py" \
     -f /tmp/42.en.md -t fa -w --raw -o /tmp/42.fa.md
 tools/anchors.py restore source/42.md /tmp/42.fa.md -o fa/42.md
 ```
+
+The guard is the point of the first two lines: without it the shell reports
+only "no such file or directory" against a path most readers have never heard
+of.
 
 Use `-o`, not `>`: a shell redirect truncates the target before the tool runs,
 so a draft `restore` correctly refuses would destroy the existing translation.
@@ -161,8 +180,8 @@ ids must stay byte-identical to `source/`.
 
 **Spec 002 settled this.** Never send a file to gTranslator raw. Run it through
 `tools/anchors.py strip` first and `tools/anchors.py restore` after; the
-procedure is in `STYLE.md` §6 and `anchors.py --check` enforces the result in
-`just check`.
+procedure is in `STYLE.md` §6 and `tools/anchors.py --check` enforces the result
+in `just check`.
 
 Note that two links cross files — `record-title-page.md` → `01.md#n2-1`, and the
 back-link returning — so anchor ids are globally unique but a file is not
@@ -170,7 +189,7 @@ necessarily self-contained.
 
 ## Conventions in `fa/`
 
-Front matter is `status:` only. `tools/status_table.py` knows five values —
+Front matter is `status:` only. `linji_tools.status_table` knows five values —
 `untranslated`, `claimed`, `draft`, `translated`, `reviewed` — but this project
 uses two: **`untranslated`** for a stub, **`reviewed`** for a finished file.
 There is no revision stage in between for the other three to describe. The

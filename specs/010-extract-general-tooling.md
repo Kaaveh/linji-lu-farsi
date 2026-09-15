@@ -330,3 +330,119 @@ back to its general default — which is the property that makes them movable.
 `tools/tests/test_config.py` is new, five tests on `_md.config()`. The fallback
 it covers fails silently by design: a renamed section means every caller quietly
 goes permissive, and nothing else in the suite would notice. 153 → 158 tests.
+
+### Requirement 2 — the distribution decision
+
+**PyPI, packaged from `gTranslator`.** The spec's recommendation, chosen for the
+reason the spec gives: a fork has no access to a private remote, so any
+deploy-key arrangement costs outside contributors their lint entirely, and
+vendoring a copy back defeats the exercise. CI is
+`pip install -r tools/requirements.txt`, which names `linji-tools==0.1.0`.
+
+**One correction to the spec's framing, made before choosing.** Requirement 2
+describes this as "private source, public wheel — a normal arrangement". A wheel
+is a zip of `.py` files, not a compiled artifact: publishing puts
+`normalize.py` in plain text on PyPI, `RE_ZWNJ_LOOSE` included — the very string
+requirement 9 greps for as proof of purge. So publishing does not make the
+checkers unreadable, and nothing here should be taken to claim it does.
+
+That is fine, because the two things the spec bundles together are not the same
+thing:
+
+- The **checkers** are generic Markdown and Persian tooling. Nothing in them is
+  sensitive, and they are exactly what CI needs.
+- The **mechanism** is `gtranslate.py` — the browser automation and the
+  Advanced-versus-Classic findings. CI never touches it, and it stays private
+  under any of the three options.
+
+The Goal scopes the purge to "this repository's git history", and that still
+holds exactly as written. What changes is only the claim one may make about it.
+
+`gTranslator` therefore now holds two halves, documented as such in its README.
+`[tool.setuptools] packages = ["linji_tools"]` is an explicit list rather than a
+discovery glob, and `MANIFEST.in` excludes the rest.
+
+**Both were necessary.** The first build shipped `gTranslator`'s own README —
+the findings document — inside the sdist, because setuptools includes a
+top-level `README.md` without being asked. `scripts/check_dist.py` now opens the
+built wheel and sdist and fails on anything outside `linji_tools/`; it runs in
+`release.yml` before the upload step, and it was itself tested by planting
+`gtranslate.py` in a wheel and confirming it fails. A secret defended only by a
+manifest is not defended.
+
+### Requirements 4 and 5 — the move and the adapter
+
+`anchors.py` split where the spec said it would. The engine took `tokenize`,
+`strip`, `restore`, `compare`, `hard_breaks`, `anchors_of` and the CLI shell;
+the adapter kept `TOKEN`, `fa_heading`, `fa_token`, `ORPHAN_MARKER`,
+`NOTES_HEADING`, `FINAL_STATUS`, `SUPERSCRIPT` and `TITLES`. Two seams rather
+than one, because `restore` had adapter work on both sides of it: the engine's
+`restore` returns the restored body, and the adapter wraps it with the
+orphan-marker reattachment and the `status: reviewed` front matter. The engine's
+`main()` takes `strip_text` and `restore_text` callables, so the write-only-
+if-valid discipline moved without dragging the markup along.
+
+The name `tools/anchors.py` is unchanged, so `CLAUDE.md`, `000-overview.md` and
+`002` did not need rewriting for it — though all three needed other edits.
+
+**Moving the tests found three real leaks.** `test_check_linebreaks`,
+`test_make_stubs` and `test_check_parity` passed in this repository only because
+they were reading the *book's* abbreviations, titles and exclusions out of the
+installed config instead of supplying their own. In `gTranslator`, which has no
+`[tool.book]` section, they failed. That is the leak the extraction was meant to
+expose and it would have shipped silently otherwise. `find_violations()`,
+`split_text()`, `process()`, `load_titles()`, `heading_of()` and
+`check_parity.compare()` all take the relevant value as a parameter now, and the
+tests pass fixtures.
+
+**What deliberately did not change.** `source` and `fa` remain hardcoded
+defaults for the directory names, and `render()` still writes `/blob/main/fa/`
+into a status-table link. These are target-language knowledge, not book
+knowledge; every one is CLI-overridable; and the spec's requirement 3 does not
+list them. Left alone rather than widened into config nobody asked for.
+
+### Requirement 6, 7, 8 — CI, licence, docs
+
+`lint.yml` installs from PyPI and runs `python -m linji_tools.<name>`, which is
+what keeps a fork's pull request able to lint. It gained a **Note anchors** step
+that was not there before: the adapter is the one piece of checker code left in
+the repository, and nothing in CI was exercising it. Like parity, it exits 0
+with a notice when `source/` is absent.
+
+`release.yml` had a real break, not just stale prose — it called
+`python3 tools/status_table.py` to put the progress table in the release notes,
+and that file no longer exists. It runs inside the container, which installs the
+package, so it is now `python3 -m linji_tools.status_table`.
+
+The `Dockerfile` installs the same pinned `tools/requirements.txt` and now
+asserts `import linji_tools` at build time, so a broken pin fails the image
+build rather than every later `just check`.
+
+`LICENSE-CODE` gained a scope preamble. The MIT grant is untouched; what it
+needed was to stop implying it covers the checkers, which are now distributed
+separately with their own copy of the licence. It now names what it does cover
+— the adapter, `tex/`, `assets/`, `.github/`, the build files — and points at
+`LICENSE-TEXT` for the translation, at Shambhala for the source, and at
+`fonts/OFL.txt` for Vazirmatn.
+
+The pipeline command in `000-overview.md` now opens with a guard on
+`$GT/gtranslate.py`. Without it, a reader with no private access gets only "no
+such file or directory" against a path they have never heard of; with it they
+get told that the mechanism is private, that nothing in `just check` depends on
+it, and that only producing a *new* draft needs it. Written first with `-x`,
+which was wrong — `gtranslate.py` is not executable, so the guard would have
+blocked the maintainer too. Tested both ways.
+
+### Verification
+
+- `LOCAL=1 just check` green **on a clean clone with no `source/`**, in a fresh
+  venv built from `tools/requirements.txt` alone. `tools/` in that clone is the
+  adapter, its tests, `dict/`, `hooks/`, `requirements.txt` and
+  `texlive-packages.txt`, and nothing else.
+- The adapter is **byte-identical** to the pre-extraction `anchors.py` for both
+  `strip` and `restore` across all 75 source files.
+- `status_table --check` passes, which it only can if the generated README table
+  matches the committed one exactly.
+- 154 tests in `gTranslator` pass there with no project config at all; 20 here.
+- No file in this repository imports from a private path. The only mentions of
+  `gTranslator` in code are two lines of prose in the adapter's docstring.

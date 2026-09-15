@@ -60,7 +60,7 @@ jobs:
         id: progress
         run: |
           echo 'table<<EOF' >> "$GITHUB_OUTPUT"
-          python3 tools/status_table.py >> "$GITHUB_OUTPUT"
+          python3 -m linji_tools.status_table >> "$GITHUB_OUTPUT"
           echo 'EOF' >> "$GITHUB_OUTPUT"
 
       - uses: softprops/action-gh-release@v2

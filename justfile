@@ -23,15 +23,17 @@ python := if local == "1" { py } else { "docker run --rm -v " + justfile_directo
 _default:
     @just --list
 
-# Everything CI runs on a pull request.
+# Everything CI runs on a pull request. The checkers come from the installed
+# linji-tools package; tools/anchors.py is the adapter that stays here.
 check: test
-    {{python}} tools/normalize.py --check
-    {{python}} tools/check_linebreaks.py --check
-    {{python}} tools/check_parity.py --check
+    {{python}} -m linji_tools.normalize --check
+    {{python}} -m linji_tools.check_linebreaks --check
+    {{python}} -m linji_tools.check_parity --check
     {{python}} tools/anchors.py --check
-    {{python}} tools/status_table.py --check
+    {{python}} -m linji_tools.status_table --check
 
-# Unit and end-to-end tests for the checkers.
+# Tests for the note-apparatus adapter. The checkers have their own suite,
+# in the repository they now live in.
 test:
     {{python}} -m unittest discover -s tools/tests
 
@@ -39,8 +41,8 @@ test:
 # `just check` failing. That is by design -- a human has to look at those.
 # Correct what can be corrected automatically.
 fix:
-    {{python}} tools/normalize.py --fix
-    {{python}} tools/check_linebreaks.py --fix
+    {{python}} -m linji_tools.normalize --fix
+    {{python}} -m linji_tools.check_linebreaks --fix
 
 # HTML, PDF and EPUB.
 build:
@@ -58,14 +60,14 @@ serve:
 
 # Create or refresh fa/ stubs from source/. Never overwrites existing work.
 stubs:
-    {{python}} tools/make_stubs.py
+    {{python}} -m linji_tools.make_stubs
 
 # Chapter status table for the README.
 status:
-    {{python}} tools/status_table.py
+    {{python}} -m linji_tools.status_table
 
 status-write:
-    {{python}} tools/status_table.py --write
+    {{python}} -m linji_tools.status_table --write
 
 docker-build:
     docker build -t {{image}} .

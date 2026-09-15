@@ -40,7 +40,7 @@ Two things need settling before any section is translated, because retrofitting
 
 3. **Anchor ids stay untouched.** `m2-2` / `n2-2` are ASCII and must remain
    byte-identical to the source — they are what the back-links resolve against,
-   and `tools/_md.py` deliberately protects them from the orthography pass.
+   and the checkers' protected-span logic keeps the orthography pass off them.
    Confirm this in §6 so a future contributor does not "translate" them.
 
 4. **Translator's notes.** The translation will need notes the source does not
@@ -109,7 +109,7 @@ bracket styles in one pass; twelve sentinels in, twelve out, all correctly
 positioned. `⟦n⟧` (U+27E6/U+27E7) was chosen and verified absent from all 75
 source files. So requirement 7 is settled as **strip and restore**, scripted.
 
-**2. `tools/anchors.py`** (+ `tools/tests/test_anchors.py`, 17 tests) does
+**2. `tools/anchors.py`** (+ `tools/tests/test_anchors.py`, 20 tests) does
 `strip` / `restore` / `--check`, and `--check` is wired into `just check`
 alongside `check_parity.py`, skipping in CI for the same reason. Tokens are
 re-derived from `source/` at restore time rather than stashed in a sidecar, so

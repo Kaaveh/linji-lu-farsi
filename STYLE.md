@@ -64,7 +64,7 @@ someone else said — so whatever is chosen has to survive two levels.
 - Punctuation inside or outside the closing guillemet: `<<<TBD>>>`
 - How a shout (喝 / "the Master gave a shout") is set: `<<<TBD>>>`
 
-`tools/normalize.py` converts ASCII and curly quotes to «» automatically. If
+`just fix` converts ASCII and curly quotes to «» automatically. If
 the decision goes the other way, turn `quotes` off in `pyproject.toml`.
 
 ## 4. Proper nouns
@@ -145,7 +145,7 @@ none of these are per-chapter judgement calls.
   precedes the digit, so the block classifies as a paragraph rather than a
   Markdown list — which is what the source does too, so parity is unaffected.
 - **Anchor ids are never translated.** `m2-2` / `n2-2` stay byte-identical ASCII;
-  they are what the 506 cross-references resolve against. `tools/_md.py` protects
+  they are what the 506 cross-references resolve against. The checkers protect
   them from the orthography pass, and `anchors.py` re-emits them from `source/`
   rather than from the translation, so they cannot drift. If you are ever
   hand-editing an anchor id, something has gone wrong upstream.
@@ -254,11 +254,11 @@ These are not up for discussion per-chapter; they are checked in CI.
 
 | Rule | Enforced by |
 |---|---|
-| One sentence per line | `tools/check_linebreaks.py` |
-| Farsi Yeh, Keheh, Persian digits, no Tatweel | `tools/normalize.py` |
-| ZWNJ in `می‌`, `ها`, `تر`/`ترین` | `tools/normalize.py` |
-| No bidi override characters | `tools/normalize.py` (never auto-fixed) |
-| No dropped paragraphs | `tools/check_parity.py` (maintainer, locally) |
+| One sentence per line | `linji_tools.check_linebreaks` |
+| Farsi Yeh, Keheh, Persian digits, no Tatweel | `linji_tools.normalize` |
+| ZWNJ in `می‌`, `ها`, `تر`/`ترین` | `linji_tools.normalize` |
+| No bidi override characters | `linji_tools.normalize` (never auto-fixed) |
+| No dropped paragraphs | `linji_tools.check_parity` (maintainer, locally) |
 | Note anchors match the source | `tools/anchors.py --check` (maintainer, locally) |
 
 Harakat are **preserved** by default, because they carry meaning in verse and

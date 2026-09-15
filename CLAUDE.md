@@ -54,9 +54,17 @@ and the status table tracks how far through it you are.
   reverses Latin-script runs inside Persian. Reasoning in `tex/preamble.tex`.
 - `just check` runs everything CI runs; `LOCAL=1 just check` skips the container
   and is what you want for a fast loop. `just venv` sets the host env up.
-- Four checkers in `tools/`: orthography (`normalize.py`), semantic line breaks,
-  source/translation block parity, note anchors (`anchors.py`). 150 tests.
-- `check_parity.py` only works locally — CI has no `source/`.
+- The four checkers are **not in this repository**. They are general, so they
+  live in [`linji-tools`](https://pypi.org/project/linji-tools/), pinned in
+  `tools/requirements.txt` and run as `python -m linji_tools.<name>`:
+  orthography (`normalize`), semantic line breaks (`check_linebreaks`),
+  source/translation block parity (`check_parity`), plus `status_table` and
+  `make_stubs`. What makes them this book's is the `[tool.*]` sections of
+  `pyproject.toml`; see spec 010.
+- `tools/anchors.py` **does** stay here. It is the adapter: Watson's token
+  pattern and the Persian form of every heading and marker. The sentinel
+  round-trip it calls is `linji_tools.anchors`. 20 tests here, 154 there.
+- `check_parity` only works locally — CI has no `source/`.
 
 ## Quality bar
 

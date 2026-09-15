@@ -55,7 +55,7 @@ It is licensed to the maintainer for translation, not for redistribution. The
 committed anywhere, please report it privately rather than opening a public
 issue.
 
-This is why `tools/check_parity.py` reports "skipped" in CI — it has nothing to
+This is why the parity check reports "skipped" in CI — it has nothing to
 compare against there. It runs locally for the maintainer.
 
 ## Getting set up
@@ -119,7 +119,7 @@ and it changes from unreadable to obvious.
 
 ## Orthography
 
-`tools/normalize.py` enforces Persian orthography that is invisible in review:
+The orthography check enforces Persian spelling rules invisible in review:
 Arabic Yeh where Farsi Yeh belongs, missing ZWNJ in `می‌رود` and `کتاب‌ها`,
 Arabic-Indic digits, stray Tatweel. These are the errors that accumulate for
 years and then break search and sorting all at once.
