@@ -224,30 +224,37 @@ None. This is orthogonal to the translation specs and can land at any time.
 
 ## Acceptance criteria
 
-- [ ] Requirement 1 landed and committed separately, ahead of any extraction.
-- [ ] The distribution decision is written in `## Implementation notes`.
-- [ ] `tools/` contains the adapter, `dict/`, `hooks/`, `requirements.txt` and
-      `texlive-packages.txt` — and no general checker.
-- [ ] `LOCAL=1 just check` green **from a clean clone with no private access**,
+- [x] Requirement 1 landed and committed separately, ahead of any extraction.
+- [x] The distribution decision is written in `## Implementation notes`.
+- [x] `tools/` contains the adapter, `dict/`, `hooks/`, `requirements.txt` and
+      `texlive-packages.txt` — and no general checker. (Also `tests/`, for the
+      adapter; the criterion's list was not exhaustive.)
+- [x] `LOCAL=1 just check` green **from a clean clone with no private access**,
       installing only what `tools/requirements.txt` names.
 - [ ] `lint` and `build` green on a real pull request, including from a fork.
+      **Blocked on publishing.** `checkers` fails on exactly one line —
+      `No matching distribution found for linji-tools==0.1.0` — and nothing
+      else. Publishing clears it. Note that `spelling` has failed on every run
+      since at least 2026-09-13 on `Unable to locate package hunspell-fa`, which
+      predates this spec and is not its to fix.
 - [ ] `just build` still renders all three formats; the PDF is byte-comparable
       in structure to the pre-extraction render (same page count, notes resolve).
-- [ ] No file in this repository imports from a path that only exists privately.
-- [ ] `CLAUDE.md`, `CONTRIBUTING.md`, `README.md` and `specs/000-overview.md`
+      Deferred with the rest of the typeset review — see the note below.
+- [x] No file in this repository imports from a path that only exists privately.
+- [x] `CLAUDE.md`, `CONTRIBUTING.md`, `README.md` and `specs/000-overview.md`
       describe the new arrangement.
-- [ ] A mirror clone of the pre-rewrite history exists offline, verified
-      readable, **before** the rewrite runs.
-- [ ] History rewritten: `git log --all -- tools/normalize.py` is empty, and the
+- [x] A mirror clone of the pre-rewrite history exists offline, verified
+      readable, **before** the rewrite runs. Taken twice — the first predated
+      the prose commit — and proven by cloning from it and recovering
+      `normalize.py`, `check_glossary.py` and all 75 `fa/` files.
+- [x] History rewritten: `git log --all -- tools/normalize.py` is empty, and the
       identifier grep across all commits returns nothing for `*.py`.
-- [ ] `git log --all --oneline -- 'source/*'` empty, re-confirmed post-rewrite.
-- [ ] Force-pushed; `v0.0.1` still resolves and its GitHub Release is intact or
-      re-created.
-- [ ] The decision on the residual GitHub objects (Support GC, fresh repo, or
-      accept) is recorded in `## Implementation notes`.
-- [ ] The decision on the spec prose describing the placeholder technique is
-      recorded, and acted on in the same rewrite if it is to go.
-- [ ] `LOCAL=1 just check` green on a fresh clone of the **rewritten** remote.
+- [x] `git log --all --oneline -- 'source/*'` empty, re-confirmed post-rewrite.
+- [x] Force-pushed; `v0.0.1` still resolves. There was no GitHub Release object
+      attached to it — only the tag — so nothing needed re-creating.
+- [x] The decision on the residual GitHub objects is recorded below: **accept**.
+- [x] The decision on the spec prose is recorded below, and acted on.
+- [x] `LOCAL=1 just check` green on a fresh clone of the **rewritten** remote.
 
 ## Out of scope
 
@@ -448,3 +455,73 @@ blocked the maintainer too. Tested both ways.
 - 154 tests in `gTranslator` pass there with no project config at all; 20 here.
 - No file in this repository imports from a private path. The only mentions of
   `gTranslator` in code are two lines of prose in the adapter's docstring.
+
+### Requirement 9 — the history rewrite
+
+**Three judgement calls, decided by the maintainer and recorded here.**
+
+**1. `tools/check_glossary.py` joined the purge list, which the spec omitted.**
+197 lines of general checker, plus its tests and `glossary.yml`, removed after
+spec 005 but still fully readable in history. Strictly it is not "the extracted
+code" — it was deleted rather than moved, and exists nowhere now — but it is the
+same class of thing, and leaving it would have meant a public repository
+shipping a general checker in its history while six others were purged for being
+exactly that. Three extra `--path` flags. Sixteen paths went in total.
+
+**2. The prose describing the technique goes; the procedure stays.** Decided
+against the spec's "keeping it is defensible". Out of the working tree: the
+placeholder form and its codepoints, the measurements behind choosing it, how
+validation works, and the moved modules' identifier names. Kept: the rule —
+never send a file raw, `strip` before, `restore -o` after, re-run rather than
+repair by hand — and the one-line hazard that makes the rule make sense. Cutting
+the rule too would have left `STYLE.md` §6 telling translators to run two
+commands for no stated reason, which is the fastest way to get the step skipped
+on a file that needed it.
+
+Wider than the spec anticipated: it named `000-overview.md` and `002`; it was
+ten files, because the body specs' work logs record per-file failures in detail.
+Those logs stay — which file failed, how, what fixed it — with the particulars
+removed.
+
+**3. That decision was then *not* applied to history, on purpose.** It would
+have been theatre. `tools/anchors.py` keeps its path through the rewrite, because
+the adapter carries the same name, and the maintainer's separate decision was to
+accept its history rather than redact it — which leaves the pre-split engine,
+`SENTINEL` and all, plainly readable four commits back. Scrubbing the prose that
+*describes* the technique while the code that *is* the technique sits in the same
+repository achieves nothing. The two decisions were in direct conflict; this is
+how it was resolved. The working-tree scrub stands on its own as tidying.
+
+**4. Residual GitHub objects: accepted.** Not Support GC, not a fresh repository.
+The repository has always been private and has no forks, so nobody holds a SHA to
+resolve; unreachable objects stay addressable for a while and are then collected.
+And the checkers are going onto PyPI as readable source by decision 2 anyway, so
+what the residue could expose is a copy of something already public.
+
+**What the rewrite did.** 20 commits, every SHA changed, `v0.0.1` rewritten and
+force-pushed. Verified from a fresh clone of the rewritten remote: all sixteen
+paths at 0 commits; `RE_ZWNJ_LOOSE`, `RE_ZWNJ_RUN`, `ARABIC_INDIC`,
+`apply_outside_protected`, `toggle_regions` and `COMMENT_ONLY` all empty across
+every commit's `*.py`; `source/` still never committed; `LOCAL=1 just check`
+green.
+
+**One trap worth recording.** A `git rev-list --all | while read c; do git
+cat-file -e "$c:path" ...; done` loop reported the engine as absent from
+`anchors.py` history. It was not — `SENTINEL = ⟦…⟧` is on line 92 of the
+requirement-1 commit. The pipeline was swallowing the failure and the loop
+printed nothing, which reads exactly like a clean result. Any verification here
+must be confirmed by checking a known-positive case, or it proves nothing.
+
+### What remains
+
+`linji-tools` is **not yet on PyPI**, by the maintainer's choice to force-push
+first and publish after. Until it is, `checkers` is red. To finish:
+
+1. Configure Trusted Publishing at <https://pypi.org/manage/account/publishing/>
+   — repository `Kaaveh/gTranslator`, workflow `release.yml`, environment
+   `pypi`. No API token. The name `linji-tools` was free as of this writing.
+2. `git -C ~/Project/Backend/gTranslator tag linji-tools-v0.1.0 && git push --tags`.
+   `release.yml` runs the tests, builds, runs `scripts/check_dist.py`, checks the
+   tag against the packaged version, and uploads.
+3. Confirm `lint` goes green here, and open one pull request from a fork to close
+   the outstanding criterion.
