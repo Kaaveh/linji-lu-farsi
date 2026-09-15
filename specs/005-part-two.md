@@ -57,7 +57,7 @@ Fourteen sections at `status: translated`, `just check` green, PDF read.
 ## Sections
 
 - [x] `10.md` — 5 notes · part heading, offset
-- [ ] `11.md` — 16 notes · large — **hand-finish:** dropped 4–9, 12–16, 47; duplicated 46
+- [x] `11.md` — 16 notes · large
 - [ ] `12.md` — 3 notes — **hand-finish:** a paragraph merged (10 blocks, source has 11)
 - [x] `13.md` — 5 notes
 - [ ] `14.md` — 3 notes — **hand-finish:** dropped 3, 4
@@ -67,9 +67,9 @@ Fourteen sections at `status: translated`, `just check` green, PDF read.
 - [ ] `18.md` — 10 notes — **hand-finish:** dropped 7, 8
 - [ ] `19.md` — **47 notes · the largest single unit in the book** — **hand-finish:** dropped 12, 24, 25, 40–43
 - [x] `20.md` — 2 notes
-- [ ] `21.md` — 7 notes — **hand-finish:** a paragraph merged (21 blocks, source has 22)
+- [x] `21.md` — 7 notes
 - [x] `22.md` — 6 notes
-- [ ] `23.md` — 17 notes · large — **hand-finish:** duplicated 23, 25, 27
+- [x] `23.md` — 17 notes · large
 
 ## Acceptance criteria
 
