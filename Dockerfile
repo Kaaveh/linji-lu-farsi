@@ -48,8 +48,15 @@ RUN curl -fsSL -o /tmp/quarto.deb \
 # and so on), so it is discovered rather than hardcoded. `tlmgr path add`
 # symlinks everything into /usr/local/bin, which is already on PATH, so every
 # later step and every `just` recipe finds lualatex without knowing the name.
+#
+# Searched from the root, not from /root/.TinyTeX: Quarto chooses the install
+# prefix itself and does not put it there. The `test -n` is the difference
+# between a named failure and `/bin/sh: 1: : Permission denied`, which is what
+# an unguarded empty command substitution reports.
 RUN quarto install tinytex --no-prompt \
-    && "$(find /root/.TinyTeX/bin -name tlmgr -type f | head -1)" path add \
+    && tlmgr_bin="$(find / -name tlmgr -type f -perm -u+x 2>/dev/null | head -1)" \
+    && test -n "$tlmgr_bin" \
+    && "$tlmgr_bin" path add \
     && tlmgr --version \
     && lualatex --version | head -1
 
