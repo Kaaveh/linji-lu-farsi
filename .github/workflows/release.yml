@@ -10,12 +10,18 @@ on:
 
 permissions:
   contents: write
+  # The image belongs to a private repository; pulling it needs authentication,
+  # and an explicit permissions block grants nothing it does not name.
+  packages: read
 
 jobs:
   release:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/kaaveh/linji-lu-farsi:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,6 +30,11 @@ jobs:
       - name: Render
         run: quarto render
 
+      # Second PDF pass, phone page size. Separate output tree, so it cannot
+      # disturb anything the previous step produced.
+      - name: Render the mobile PDF
+        run: quarto render --profile mobile --to pdf
+
       - name: Name the artefacts after the tag
         id: name
         run: |
@@ -31,6 +42,7 @@ jobs:
           mkdir -p dist
           cp _book/*.pdf  "dist/linji-lu-farsi-${version}.pdf"
           cp _book/*.epub "dist/linji-lu-farsi-${version}.epub"
+          cp _book-mobile/*.pdf "dist/linji-lu-farsi-${version}-mobile.pdf"
 
           # The whole rendered site, for kaavehdev.ir to unpack into
           # public/translations/linji-lu/. Cloudflare Workers Builds has no
@@ -67,6 +79,7 @@ jobs:
         with:
           files: |
             dist/linji-lu-farsi-${{ steps.name.outputs.version }}.pdf
+            dist/linji-lu-farsi-${{ steps.name.outputs.version }}-mobile.pdf
             dist/linji-lu-farsi-${{ steps.name.outputs.version }}.epub
             dist/linji-lu-farsi-${{ steps.name.outputs.version }}-html.tar.gz
           generate_release_notes: true

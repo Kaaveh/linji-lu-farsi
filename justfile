@@ -53,6 +53,11 @@ build:
 pdf:
     {{run}}quarto render --to pdf
 
+# The phone edition: a 90x160mm page, so the same 12pt fills the screen.
+# Lands in _book-mobile/, never touching the desktop PDF. See _quarto-mobile.yml.
+pdf-mobile:
+    {{run}}quarto render --profile mobile --to pdf
+
 epub:
     {{run}}quarto render --to epub
 
@@ -81,4 +86,4 @@ venv:
     .venv/bin/pip install -r tools/requirements.txt
 
 clean:
-    rm -rf _book .quarto
+    rm -rf _book _book-mobile .quarto

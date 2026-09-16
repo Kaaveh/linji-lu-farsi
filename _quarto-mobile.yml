@@ -1,0 +1,45 @@
+# Mobile PDF flavour. `just pdf-mobile`, i.e.
+# `quarto render --profile mobile --to pdf`. Everything not named here is
+# inherited from _quarto.yml, including the LuaLaTeX engine and tex/preamble.tex.
+#
+# Raising the point size alone would achieve nothing: the page grows with it,
+# and a phone reads a PDF fitted to the screen. What makes the type big on a
+# phone is a *small page* -- the same 12pt, far less of it per line, so fitting
+# the width leaves the glyphs about twice the size they are in the desktop PDF.
+
+project:
+  # Its own tree, so a mobile render never overwrites the desktop PDF and the
+  # two can sit side by side on a release.
+  output-dir: _book-mobile
+
+book:
+  # Named, not titled. This file is downloaded next to the desktop one and has
+  # to say which it is.
+  output-file: linji-lu-farsi-mobile
+
+format:
+  pdf:
+    # 90x160mm is 9:16 -- the shape of the screen it is read on, so fit-to-width
+    # and fit-to-page agree and no scrolling sideways is ever needed. 6mm all
+    # round: a phone has no binding gutter and no thumb resting on the paper,
+    # so the asymmetric inner/outer margins of the print edition are pure waste.
+    geometry:
+      - paperwidth=90mm
+      - paperheight=160mm
+      - margin=6mm
+      # Without this the folio is laid out *outside* the 6mm margin -- off the
+      # paper -- so every page loses its number and the head's descenders show
+      # as a clipped sliver above the first line. `includefoot` and not
+      # `includeheadfoot` because tex/mobile.tex drops the running head.
+      - includefoot
+    # `oneside` in addition to `openany`: with symmetric margins there is no
+    # recto/verso distinction left to keep, and the page number can stay centred.
+    classoption: [openany, oneside]
+    # Both files, spelled out. A profile concatenates most lists onto the base
+    # -- `geometry` and `classoption` here do -- but include-in-header is one
+    # Quarto replaces, and naming only the second silently drops the Persian
+    # preamble: Latin page numbers, no ZWNJ mapping, no mirrored footnote rule,
+    # in a PDF that otherwise renders and looks plausible.
+    include-in-header:
+      - tex/preamble.tex
+      - tex/mobile.tex

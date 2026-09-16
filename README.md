@@ -157,6 +157,7 @@ just build          # HTML, PDF and EPUB into _book/
 | `just fix` | correct what can be corrected automatically |
 | `just build` | all three formats |
 | `just pdf` / `just epub` | one format |
+| `just pdf-mobile` | the phone-sized PDF, into `_book-mobile/` |
 | `just serve` | live preview on <http://localhost:4200> |
 | `just status-write` | refresh the progress table above |
 | `just --list` | everything |
@@ -230,7 +231,9 @@ Releases are tagged `vMAJOR.MINOR.PATCH`.
 | **PATCH** | Typos, orthography, formatting, tooling |
 
 Tagging builds the PDF and EPUB from a clean tree and attaches them to the
-GitHub release, along with the progress table at that point.
+GitHub release, along with the progress table at that point. Two PDFs go up:
+the print one, and `-mobile.pdf` — the same book on a 90×160mm page, so a phone
+fitting it to the screen shows type about twice the size.
 
 ## Repository layout
 
@@ -243,5 +246,6 @@ assets/        RTL and EPUB stylesheets
 linji_tools/   the checkers -- general, know nothing about this book
 tools/         the note-apparatus adapter, dictionary, DCO hook, pins
 _quarto.yml    the book: three formats, 75 chapters in four parts
+_quarto-mobile.yml  the phone PDF: same book, small page (--profile mobile)
 _language.yml  Persian UI strings — Quarto ships no fa locale
 ```

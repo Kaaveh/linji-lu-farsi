@@ -6,6 +6,7 @@ source/
 
 # Quarto
 /_book/
+/_book-mobile/
 /.quarto/
 /_freeze/
 /site_libs/

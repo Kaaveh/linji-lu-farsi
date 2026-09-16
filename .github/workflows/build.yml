@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  # The image is a package of a private repository, so pulling it is an
+  # authenticated operation. An explicit permissions block grants nothing it
+  # does not name.
+  packages: read
 
 concurrency:
   group: build-${{ github.ref }}
@@ -23,6 +27,9 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/kaaveh/linji-lu-farsi:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,12 +45,19 @@ jobs:
       - name: Render HTML, PDF and EPUB
         run: quarto render
 
+      # Rendered on every PR, not just at a tag: the mobile flavour is the one
+      # output nobody looks at, so a broken profile would otherwise surface for
+      # the first time during a release.
+      - name: Render the mobile PDF
+        run: quarto render --profile mobile --to pdf
+
       - name: Name the outputs predictably
         id: outputs
         run: |
           mkdir -p dist
           cp _book/*.pdf  dist/linji-lu-farsi.pdf
           cp _book/*.epub dist/linji-lu-farsi.epub
+          cp _book-mobile/*.pdf dist/linji-lu-farsi-mobile.pdf
           echo "pages=$(find _book -name '*.html' | wc -l)" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@v4
@@ -51,6 +65,13 @@ jobs:
         with:
           name: pdf
           path: dist/linji-lu-farsi.pdf
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        id: pdf-mobile
+        with:
+          name: pdf-mobile
+          path: dist/linji-lu-farsi-mobile.pdf
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
@@ -71,6 +92,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           PDF_URL: ${{ steps.pdf.outputs.artifact-url }}
+          PDF_MOBILE_URL: ${{ steps.pdf-mobile.outputs.artifact-url }}
           EPUB_URL: ${{ steps.epub.outputs.artifact-url }}
           PAGES: ${{ steps.outputs.pages }}
         with:
@@ -81,6 +103,7 @@ jobs:
               '### Typeset output for this PR',
               '',
               `- [PDF](${process.env.PDF_URL})`,
+              `- [PDF, phone page size](${process.env.PDF_MOBILE_URL})`,
               `- [EPUB](${process.env.EPUB_URL})`,
               `- ${process.env.PAGES} HTML pages (in the \`site\` artifact)`,
               '',
