@@ -36,101 +36,6 @@ One consequence worth knowing: the parity check, which catches dropped
 paragraphs by comparing block counts between the two trees, cannot run in CI.
 It reports "skipped" there and runs locally for the maintainer.
 
-## Progress
-
-<!-- BEGIN status table -->
-
-**۷۵ از ۷۵ بخش (۱۰۰٪)**
-
-<details>
-<summary>Per-section status (75 files)</summary>
-
-| بخش | عنوان | وضعیت |
-|---|---|---|
-| [`01.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/01.md) | ۱ | 🟢 بازبینی‌شده |
-| [`02.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/02.md) | ۲ | 🟢 بازبینی‌شده |
-| [`03.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/03.md) | ۳ | 🟢 بازبینی‌شده |
-| [`04.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/04.md) | ۴ | 🟢 بازبینی‌شده |
-| [`05.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/05.md) | ۵ | 🟢 بازبینی‌شده |
-| [`06.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/06.md) | ۶ | 🟢 بازبینی‌شده |
-| [`07.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/07.md) | ۷ | 🟢 بازبینی‌شده |
-| [`08.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/08.md) | ۸ | 🟢 بازبینی‌شده |
-| [`09.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/09.md) | ۹ | 🟢 بازبینی‌شده |
-| [`10.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/10.md) | ۱۰ | 🟢 بازبینی‌شده |
-| [`11.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/11.md) | ۱۱ | 🟢 بازبینی‌شده |
-| [`12.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/12.md) | ۱۲ | 🟢 بازبینی‌شده |
-| [`13.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/13.md) | ۱۳ | 🟢 بازبینی‌شده |
-| [`14.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/14.md) | ۱۴ | 🟢 بازبینی‌شده |
-| [`15.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/15.md) | ۱۵ | 🟢 بازبینی‌شده |
-| [`16.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/16.md) | ۱۶ | 🟢 بازبینی‌شده |
-| [`17.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/17.md) | ۱۷ | 🟢 بازبینی‌شده |
-| [`18.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/18.md) | ۱۸ | 🟢 بازبینی‌شده |
-| [`19.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/19.md) | ۱۹ | 🟢 بازبینی‌شده |
-| [`20.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/20.md) | ۲۰ | 🟢 بازبینی‌شده |
-| [`21.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/21.md) | ۲۱ | 🟢 بازبینی‌شده |
-| [`22.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/22.md) | ۲۲ | 🟢 بازبینی‌شده |
-| [`23.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/23.md) | ۲۳ | 🟢 بازبینی‌شده |
-| [`24.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/24.md) | ۲۴ | 🟢 بازبینی‌شده |
-| [`25.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/25.md) | ۲۵ | 🟢 بازبینی‌شده |
-| [`26.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/26.md) | ۲۶ | 🟢 بازبینی‌شده |
-| [`27.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/27.md) | ۲۷ | 🟢 بازبینی‌شده |
-| [`28.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/28.md) | ۲۸ | 🟢 بازبینی‌شده |
-| [`29.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/29.md) | ۲۹ | 🟢 بازبینی‌شده |
-| [`30.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/30.md) | ۳۰ | 🟢 بازبینی‌شده |
-| [`31.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/31.md) | ۳۱ | 🟢 بازبینی‌شده |
-| [`32.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/32.md) | ۳۲ | 🟢 بازبینی‌شده |
-| [`33.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/33.md) | ۳۳ | 🟢 بازبینی‌شده |
-| [`34.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/34.md) | ۳۴ | 🟢 بازبینی‌شده |
-| [`35.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/35.md) | ۳۵ | 🟢 بازبینی‌شده |
-| [`36.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/36.md) | ۳۶ | 🟢 بازبینی‌شده |
-| [`37.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/37.md) | ۳۷ | 🟢 بازبینی‌شده |
-| [`38.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/38.md) | ۳۸ | 🟢 بازبینی‌شده |
-| [`39.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/39.md) | ۳۹ | 🟢 بازبینی‌شده |
-| [`40.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/40.md) | ۴۰ | 🟢 بازبینی‌شده |
-| [`41.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/41.md) | ۴۱ | 🟢 بازبینی‌شده |
-| [`42.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/42.md) | ۴۲ | 🟢 بازبینی‌شده |
-| [`43.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/43.md) | ۴۳ | 🟢 بازبینی‌شده |
-| [`44.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/44.md) | ۴۴ | 🟢 بازبینی‌شده |
-| [`45.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/45.md) | ۴۵ | 🟢 بازبینی‌شده |
-| [`46.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/46.md) | ۴۶ | 🟢 بازبینی‌شده |
-| [`47.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/47.md) | ۴۷ | 🟢 بازبینی‌شده |
-| [`48.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/48.md) | ۴۸ | 🟢 بازبینی‌شده |
-| [`49.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/49.md) | ۴۹ | 🟢 بازبینی‌شده |
-| [`50.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/50.md) | ۵۰ | 🟢 بازبینی‌شده |
-| [`51.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/51.md) | ۵۱ | 🟢 بازبینی‌شده |
-| [`52.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/52.md) | ۵۲ | 🟢 بازبینی‌شده |
-| [`53.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/53.md) | ۵۳ | 🟢 بازبینی‌شده |
-| [`54.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/54.md) | ۵۴ | 🟢 بازبینی‌شده |
-| [`55.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/55.md) | ۵۵ | 🟢 بازبینی‌شده |
-| [`56.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/56.md) | ۵۶ | 🟢 بازبینی‌شده |
-| [`57.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/57.md) | ۵۷ | 🟢 بازبینی‌شده |
-| [`58.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/58.md) | ۵۸ | 🟢 بازبینی‌شده |
-| [`59.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/59.md) | ۵۹ | 🟢 بازبینی‌شده |
-| [`60.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/60.md) | ۶۰ | 🟢 بازبینی‌شده |
-| [`61.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/61.md) | ۶۱ | 🟢 بازبینی‌شده |
-| [`62.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/62.md) | ۶۲ | 🟢 بازبینی‌شده |
-| [`63.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/63.md) | ۶۳ | 🟢 بازبینی‌شده |
-| [`64.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/64.md) | ۶۴ | 🟢 بازبینی‌شده |
-| [`65.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/65.md) | ۶۵ | 🟢 بازبینی‌شده |
-| [`66.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/66.md) | ۶۶ | 🟢 بازبینی‌شده |
-| [`67.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/67.md) | ۶۷ | 🟢 بازبینی‌شده |
-| [`68.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/68.md) | ۶۸ | 🟢 بازبینی‌شده |
-| [`69.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/69.md) | ۶۹ | 🟢 بازبینی‌شده |
-| [`appendix.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/appendix.md) | پیوست | 🟢 بازبینی‌شده |
-| [`glossary.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/glossary.md) | واژه‌نامه | 🟢 بازبینی‌شده |
-| [`ma-fang-preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/ma-fang-preface.md) | دیباچهٔ ما فانگ | 🟢 بازبینی‌شده |
-| [`preface.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/preface.md) | پیش‌گفتار | 🟢 بازبینی‌شده |
-| [`record-title-page.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/record-title-page.md) | صفحهٔ عنوان | 🟢 بازبینی‌شده |
-| [`translators-introduction.md`](https://github.com/Kaaveh/linji-lu-farsi/blob/main/fa/translators-introduction.md) | مقدمهٔ مترجم | 🟢 بازبینی‌شده |
-
-</details>
-
-<!-- END status table -->
-
-Generated from the `status:` front matter in each `fa/` file by
-`linji_tools.status_table`. Statuses run `untranslated` → `claimed` → `draft` →
-`translated` → `reviewed`.
-
 ## Contributing
 
 **Chapter translation is coordinated**; typos, orthography, terminology
@@ -159,7 +64,6 @@ just build          # HTML, PDF and EPUB into _book/
 | `just pdf` / `just epub` | one format |
 | `just pdf-mobile` | the phone-sized PDF, into `_book-mobile/` |
 | `just serve` | live preview on <http://localhost:4200> |
-| `just status-write` | refresh the progress table above |
 | `just --list` | everything |
 
 Without Docker, for the Python checks only:
@@ -230,10 +134,10 @@ Releases are tagged `vMAJOR.MINOR.PATCH`.
 | **MINOR** | A new chapter, or a substantive revision to an existing one |
 | **PATCH** | Typos, orthography, formatting, tooling |
 
-Tagging builds the PDF and EPUB from a clean tree and attaches them to the
-GitHub release, along with the progress table at that point. Two PDFs go up:
-the print one, and `-mobile.pdf` — the same book on a 90×160mm page, so a phone
-fitting it to the screen shows type about twice the size.
+Tagging builds the book from a clean tree and attaches it to the GitHub
+release. Two PDFs go up: the print one, and `-mobile.pdf` — the same book on a
+90×160mm page, so a phone fitting it to the screen shows type about twice the
+size.
 
 ## Repository layout
 

@@ -30,7 +30,6 @@ check: test
     {{python}} -m linji_tools.check_linebreaks --check
     {{python}} -m linji_tools.check_parity --check
     {{python}} tools/anchors.py --check
-    {{python}} -m linji_tools.status_table --check
 
 # Two suites, kept apart on purpose. linji_tools/ is general and its tests must
 # pass without any of this book's config; tools/tests/ covers the adapter, which
@@ -68,13 +67,6 @@ serve:
 # Create or refresh fa/ stubs from source/. Never overwrites existing work.
 stubs:
     {{python}} -m linji_tools.make_stubs
-
-# Chapter status table for the README.
-status:
-    {{python}} -m linji_tools.status_table
-
-status-write:
-    {{python}} -m linji_tools.status_table --write
 
 docker-build:
     docker build -t {{image}} .

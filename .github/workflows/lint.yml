@@ -59,9 +59,6 @@ jobs:
       - name: Note anchors
         run: python tools/anchors.py --check
 
-      - name: README status table is current
-        run: python -m linji_tools.status_table --check
-
   # There is no `spelling` job. It was written to install `hunspell-fa`, which
   # is in neither Debian nor Ubuntu -- no distribution packages a Persian
   # hunspell dictionary -- so the job failed on the package installation on

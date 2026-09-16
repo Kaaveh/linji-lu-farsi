@@ -7,7 +7,6 @@ being run against. What makes them specific to a project is that project's
     python -m linji_tools.normalize --check
     python -m linji_tools.check_linebreaks --check
     python -m linji_tools.check_parity --check
-    python -m linji_tools.status_table --check
     python -m linji_tools.make_stubs
 
 Run from the project root; every command works on the current directory.

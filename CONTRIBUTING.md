@@ -159,8 +159,7 @@ pull request that silently changes a term leaves no trace of why.
    [chapter claim template](../../issues/new?template=chapter-claim.yml).
 2. A maintainer applies the `chapter:claimed` label and updates the tracking
    issue.
-3. Set `status: claimed` in the file's front matter in your first commit, so the
-   [README status table](README.md) reflects reality.
+3. Set `status: claimed` in the file's front matter in your first commit.
 
 A claim lapses after a month of silence. That is not a judgement — life happens.
 Say so and re-claim whenever you like.

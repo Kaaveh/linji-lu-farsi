@@ -41,8 +41,8 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(book["titles"]["a.md"], "الف")
 
     def test_declaration_order_is_preserved(self):
-        # status_table renders its labels in the order they are written, so a
-        # dict that reordered them would silently reorder the README table.
+        # A checker that renders configured labels in order would silently
+        # reorder its output if the loader handed back an unordered dict.
         self.assertEqual(list(_md.config("book", self.path)["titles"]), ["b.md", "a.md"])
 
     def test_an_absent_section_is_empty_not_an_error(self):

@@ -6,26 +6,12 @@ and EPUB. Published as a section of **kaavehdev.ir/translations/linji-lu/**.
 
 The infrastructure is finished. What remains is the translation.
 
-## Spec-driven workflow
+## Rules
 
-Work is organised one spec at a time, in `specs/`. This mirrors the workflow in
-the `kaavehdev` repository, with one adaptation: **a translation spec is not one
-session.** A part takes weeks. Each body spec carries a per-section checklist,
-and the status table tracks how far through it you are.
+There is no `specs/` directory. The book is translated — all 75 sections — so
+the roadmap that carried it there was deleted rather than left to rot. Work is
+whatever the user asks for.
 
-1. Read `specs/README.md` (roadmap + status) and `specs/000-overview.md` (shared
-   context — read it every session).
-2. Pick the spec the user asked for. If they did not name one, propose the first
-   `⬜ Not started` spec whose dependencies are `✅ Done`, and confirm.
-3. Set the status to `🟨 In progress` in `specs/README.md`.
-4. Work **only** on that spec.
-5. Verify the spec's **Acceptance criteria**.
-6. Set `✅ Done`, commit.
-
-### Rules
-
-- **The spec is the contract.** If reality forces a deviation, do the sensible
-  thing and record it in an `## Implementation notes` section on that spec.
 - **Never invent a Persian rendering and present it as settled.** A rendering
   that has not been argued out is a suggestion, and must be labelled as one.
   Nothing enforces terminology mechanically any more — see `STYLE.md` §4.
@@ -34,11 +20,24 @@ and the status table tracks how far through it you are.
 - **Never add the source text to this repository.** `source/` is gitignored
   because the English is licensed to the maintainer for translation only. It is
   not public domain.
-- **Translate with `gTranslator`, one file at a time.** See
-  `specs/000-overview.md` for the command and the reasoning. `-w` is mandatory —
-  every other mode serves a much weaker model, and it fails silently. Never
-  concatenate files: the book is 245,394 characters against a 5,000-character
-  cap, and `fa/` must mirror `source/` file-for-file or parity cannot pair them.
+- **Translate with `gTranslator`, one file at a time.** It lives at
+  `~/Project/Backend/gTranslator`, is private, and nothing in `just check`
+  depends on it — only producing a *new* draft does:
+
+  ```bash
+  GT=~/Project/Backend/gTranslator
+  tools/anchors.py strip source/42.md -o /tmp/42.en.md
+  "$GT/.venv/bin/python" "$GT/gtranslate.py" \
+      -f /tmp/42.en.md -t fa -w --raw -o /tmp/42.fa.md
+  tools/anchors.py restore source/42.md /tmp/42.fa.md -o fa/42.md
+  ```
+
+  `-w` is mandatory — every other mode serves the Classic model, which
+  translates clause by clause and is markedly worse here. The failure is
+  silent: the model picker claims "Advanced" while Classic is served, so judge
+  the output text, never the picker. Never concatenate files: the book is
+  245,394 characters against a 5,000-character cap, and `fa/` must mirror
+  `source/` file-for-file or parity cannot pair them.
 - **Always through `tools/anchors.py`.** `strip` before, `restore -o` after.
   Sent raw, the translator silently deletes every note anchor. Never `>` into
   `fa/` — a redirect truncates the file before the tool can refuse a bad draft.
@@ -57,12 +56,12 @@ and the status table tracks how far through it you are.
 - The checkers live in `linji_tools/` and run as `python -m linji_tools.<name>`
   from the repo root: orthography (`normalize`), semantic line breaks
   (`check_linebreaks`), source/translation block parity (`check_parity`), plus
-  `status_table` and `make_stubs`. Imported from the tree, not installed —
+  `make_stubs`. Imported from the tree, not installed —
   `tools/requirements.txt` is just PyYAML and regex.
 - **They carry no knowledge of this book**, and that is enforced: their tests in
   `linji_tools/tests/` must pass with no `[tool.*]` config present at all. What
-  makes them this book's is `pyproject.toml`. Spec 010 did this; read its notes
-  before putting a book fact back into one of them.
+  makes them this book's is `pyproject.toml`. Keep it that way — a book fact
+  belongs in the config, not in a checker.
 - `tools/anchors.py` is the adapter, and is the one piece that *is* this book's:
   Watson's token pattern and the Persian form of every heading and marker. The
   round-trip it calls is `linji_tools.anchors`. 154 tests there, 20 here.
