@@ -39,3 +39,47 @@ main a[href^="#m"] {
   margin-inline-start: 0.35em;
   text-decoration: none;
 }
+
+/* ---- Sidebar collapse toggle -------------------------------------------
+   Quarto's own rules are written for left-to-right and none of the three
+   survive the flip. Selectors below match Quarto's specificity exactly
+   (`.sidebar-item .sidebar-item-...`); this file is the last stylesheet in
+   <head>, so equal specificity is enough and !important is only needed
+   against Bootstrap's spacing utilities, which carry it themselves. */
+
+/* `justify-content: space-between` throws the toggle to the edge opposite the
+   title, and the title -- which Quarto gives `width: 100%` -- is squeezed past
+   it, so "دفتر یکم: برآمدن به تالار" breaks after "به". Pack the row from the
+   start instead and let the title have what is left. */
+.sidebar-item .sidebar-item-container {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* The toggle comes after the title in the DOM, which under dir="rtl" lands it
+   at the far left. Kaaveh's call is for it to lead the title, at the right. */
+.sidebar-item .sidebar-item-container > .sidebar-item-toggle {
+  order: -1;
+  flex: 0 0 auto;
+}
+
+.sidebar-item .sidebar-item-container > .sidebar-item-text {
+  min-width: 0;                     /* so it can shrink rather than overflow */
+}
+
+/* Quarto ships the LTR Bootstrap bundle, where `ms-2` is `margin-left: .5rem`
+   -- physical, so in RTL it pads the wrong side of the chevron. Replace it
+   with the logical equivalent, which puts the gap between the toggle and the
+   title it now leads. */
+.sidebar-item .sidebar-item-toggle .bi.ms-2 {
+  margin-left: 0 !important;
+  margin-inline-end: 0.5rem;
+}
+
+/* The glyph is `bi-chevron-right`, and Quarto leaves it unrotated when
+   collapsed -- so a collapsed section points away from the text direction.
+   Point it left. Expanded still rotates to point down, and both still ride
+   Quarto's `transition: transform 200ms ease`. */
+.sidebar-item .sidebar-item-toggle[aria-expanded="false"] .bi-chevron-right::before {
+  transform: rotate(180deg);
+}

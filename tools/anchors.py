@@ -3,8 +3,8 @@
 
 The round-trip itself is general and lives in `linji_tools.anchors`, which knows
 nothing about Watson's markup. This file is the half that does: the token
-pattern, the Persian form each token takes, and the two irregularities the book
-turns out to have. Roughly a hundred lines of knowledge about one text.
+pattern and the Persian form each token takes. Roughly a hundred lines of
+knowledge about one text.
 
 The book's 253 notes resolve through 1,012 inline markup tokens that sit
 mid-sentence:
@@ -95,18 +95,22 @@ TOKEN = regex.compile(
     regex.VERBOSE | regex.MULTILINE,
 )
 
-# Two headings carry their own note reference: Part Three's title in 24.md and
-# ma-fang-preface.md's. The title pattern above stops short of the anchor so the
-# reference is tokenized separately rather than swallowed -- but Part headings
-# are dropped from fa/, which would leave 24.md's marker stranded on a line of
-# its own and its back-link resolving to nothing. Reattach it to the heading
-# that follows, which also keeps the file's declared `parity: offset -1` true.
-# Matched against the *restored* body, so the marker is already in its Persian
-# form -- `[^۱^](#n25-1)`, not `[<sup>¹</sup>](#n25-1)`.
-ORPHAN_MARKER = regex.compile(
-    r'^(?P<marker>(?:<a id="[^"]*"></a>\[[^\]]*\]\([^)]*\))+)\n+(?P<head>\#{1,6} .*)$',
-    regex.MULTILINE,
-)
+# No heading in source/ may carry a note reference. Quarto reuses a chapter's
+# heading verbatim for the sidebar and for <title>, and neither gets the inline
+# processing the page body gets, so the marker ships as raw Markdown in the nav
+# of every page -- `دیباچهٔ ما فانگ<a id="m1-1"></a>[^۱^](#n1-1)` -- which bidi
+# then scrambles on screen, and as a bare digit in the tab. Two files used to do
+# this, 24.md and ma-fang-preface.md; both now carry the marker on the paragraph
+# below the heading instead, and release.yml asserts the rendered nav stays
+# clean.
+#
+# The title pattern above stops short of `<a id="`, so such a marker survives
+# the round trip instead of being swallowed -- landing back on the heading, or,
+# when the heading is a Part title that fa/ drops, alone on a line of its own
+# with its back-link resolving to nothing. Neither is worth writing out, and
+# both are the author's to fix by moving the marker down a paragraph, so this
+# is checked against source/ and raised on.
+MARKUP_IN_HEADING = regex.compile(r'^\#{1,6} .*<a id="', regex.MULTILINE)
 
 
 def fa_heading(name: str, hashes: str, title: str) -> str | None:
@@ -152,9 +156,14 @@ def strip(name: str, text: str) -> str:
 
 
 def restore(name: str, source_text: str, draft: str) -> str:
-    """The engine's round-trip, plus the two things only this book needs."""
+    """The engine's round-trip, plus the front matter only this book needs."""
+    if MARKUP_IN_HEADING.search(source_text):
+        raise ValueError(
+            f"{name}: a heading carries inline markup, which Quarto would leak "
+            "verbatim into the sidebar and <title>. Move the marker to the "
+            "paragraph below the heading."
+        )
     body = engine.restore(name, source_text, draft, TOKEN, render_for(name))
-    body = ORPHAN_MARKER.sub(lambda m: m.group("head") + m.group("marker"), body)
     return f"---\nstatus: {FINAL_STATUS}\n---\n\n{body.strip()}\n"
 
 
