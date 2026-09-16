@@ -32,9 +32,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libfontconfig1 \
         python3 \
         python3-pip \
-        # hunspell drives the Persian spell check in lint.yml
-        hunspell \
-        hunspell-fa \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL -o /tmp/quarto.deb \

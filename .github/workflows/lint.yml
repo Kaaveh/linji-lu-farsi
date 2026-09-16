@@ -62,30 +62,16 @@ jobs:
       - name: README status table is current
         run: python -m linji_tools.status_table --check
 
-  spelling:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install hunspell and the Persian dictionary
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends hunspell hunspell-fa
-
-      # en_US is loaded alongside fa_IR because the translation carries
-      # transliterated names and Latin technical terms in ordinary prose.
-      # tools/dict/project.dic is the project's own wordlist.
-      - name: Spell check
-        run: |
-          set -o pipefail
-          unknown=$(hunspell -d fa_IR,en_US -p tools/dict/project.dic -l fa/*.md \
-                    | sort -u)
-          if [ -n "$unknown" ]; then
-            echo "Unrecognised words. Fix them, or add genuine terms to tools/dict/project.dic:"
-            echo "$unknown"
-            exit 1
-          fi
-          echo "spelling: clean"
+  # There is no `spelling` job. It was written to install `hunspell-fa`, which
+  # is in neither Debian nor Ubuntu -- no distribution packages a Persian
+  # hunspell dictionary -- so the job failed on the package installation on
+  # every run and never once reached a `.md` file. The same package in the
+  # Dockerfile is why the container was never published, which is why `build`
+  # and `release` had never run either.
+  #
+  # tools/dict/project.dic is kept. To bring the check back, vendor a Persian
+  # dictionary into the repository and point hunspell at it by path
+  # (`-d path/to/fa_IR,en_US`), rather than expecting apt to supply one.
 
   dco:
     runs-on: ubuntu-24.04
