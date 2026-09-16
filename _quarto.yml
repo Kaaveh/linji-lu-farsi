@@ -13,7 +13,7 @@
 # `{{< meta book-version >}}` for HTML and EPUB, which have no title-page slot.
 # Top-level rather than under `book:` so pandoc exposes it to the LaTeX
 # template as a plain $book-version$ variable.
-book-version: "نسخهٔ ۰.۰.۲"
+book-version: "نسخهٔ ۰.۰.۳"
 
 # The edition's date, Jalali, written out. Bump it with the version above, in
 # the same commit.
@@ -156,7 +156,20 @@ number-sections: false
 
 format:
   html:
-    theme: cosmo
+    # A pair, not a single theme. Given two, Quarto renders the light/dark
+    # toggle in the top-right corner itself and remembers the choice in local
+    # storage; nothing here has to script it. `darkly` is the Bootswatch
+    # partner for `cosmo` -- same lineage, so the two modes agree on type and
+    # spacing and only the palette moves.
+    theme:
+      light: cosmo
+      dark: darkly
+    # Follow the OS on a first visit rather than always opening light. The site
+    # that hosts this book behaves the same way, so the two halves land on the
+    # same answer without talking to each other.
+    respect-user-color-scheme: true
+    # Applies to both modes, and carries no colors -- deliberately. Anything it
+    # gains has to be defined for light and dark alike.
     css: assets/rtl.css
     toc: true
     # 2, not 1. Quarto puts the "Edit this page" link in the margin beside

@@ -83,16 +83,25 @@ class TestRestore(unittest.TestCase):
         out = restore("42.md", SECTION, self.draft().replace("پرسید.⟦2⟧", "⟦2⟧پرسید."))
         self.assertIn('<a id="m39-1"></a>[^۱^](#n39-1)پرسید.', out)
 
-    def test_a_dropped_part_heading_reattaches_its_marker(self):
-        # Part Three's title in 24.md carries a note reference. The heading is
-        # dropped from fa/, which would strand the marker on a line of its own
-        # with its back-link resolving to nothing.
+    def test_a_marker_on_a_heading_is_refused(self):
+        # Quarto reuses a heading verbatim for the sidebar and <title>, with no
+        # inline processing, so a marker there ships as raw Markdown in the nav.
+        # 24.md and ma-fang-preface.md both used to do this; the fix is to move
+        # the marker a paragraph down, in source/, which is the author's call
+        # and not something restore can make for them.
         source = (
             '## Part Three: Testing and Rating<a id="m25-1"></a>[<sup>¹</sup>](#n25-1)'
             "\n\n### 24\n\nHe asked.\n"
         )
+        with self.assertRaises(ValueError) as caught:
+            restore("24.md", source, strip("24.md", source))
+        self.assertIn("inline markup", str(caught.exception))
+
+    def test_a_marker_below_the_heading_survives(self):
+        source = '## Part Three\n\n### 24\n\nHe asked.<a id="m25-1"></a>[<sup>¹</sup>](#n25-1)\n'
         out = restore("24.md", source, strip("24.md", source))
-        self.assertIn('# ۲۴<a id="m25-1"></a>[^۱^](#n25-1)', out)
+        self.assertIn('He asked.<a id="m25-1"></a>[^۱^](#n25-1)', out)
+        self.assertIn("# ۲۴\n", out)
 
     def test_a_dropped_sentinel_is_still_refused_through_the_adapter(self):
         with self.assertRaises(ValueError) as caught:
