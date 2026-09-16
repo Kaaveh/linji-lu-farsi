@@ -32,6 +32,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libfontconfig1 \
         python3 \
         python3-pip \
+        # TinyTeX ships as .tar.xz and the slim base has no xz, so tar's child
+        # process dies with "xz: Cannot exec" and Quarto reports only that the
+        # extraction failed.
+        xz-utils \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL -o /tmp/quarto.deb \
