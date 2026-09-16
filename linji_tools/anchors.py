@@ -26,6 +26,10 @@ and a render function, which between them are the only markup-aware parts:
 
 `render(match)` returns the form the token should take in the translation, or
 None to drop it. See the calling project's adapter for a worked example.
+
+When the model drops one anyway, `restore` refuses and quotes the source line
+that sentinel sat in, so the caller can put it back in the draft and run again
+rather than diff two whole files to find where it belonged.
 """
 
 from __future__ import annotations
@@ -81,14 +85,84 @@ def strip(text: str, token_re, render) -> str:
     return tokenize(text, token_re, render)[0]
 
 
+# How much of the source line to quote around a lost sentinel. Long enough to
+# carry the clause it sits in, short enough that a file's worth of them is still
+# cheaper to read than the two whole files.
+WINDOW = 240
+
+
+def repair_brief(stripped: str, ids) -> str:
+    """The source line each of `ids` sits in, so a caller can place it by hand.
+
+    Read off the sentinel form of the source, not the source itself, so the
+    neighbouring sentinels come along in the quote and localise the missing one
+    even when the line is repetitive. An id with no sentinel in the source -- an
+    invented one -- has no line to quote and is skipped; the caller's message
+    for that case already says everything there is to say.
+    """
+    lines = []
+    for n in ids:
+        index = stripped.find(SENTINEL.format(n))
+        if index < 0:
+            continue
+        start = stripped.rfind("\n", 0, index) + 1
+        end = stripped.find("\n", index)
+        end = len(stripped) if end < 0 else end
+
+        # Window on the sentinel, not on the line, so a marker late in a long
+        # paragraph is not the part that gets elided.
+        left = max(start, index - WINDOW // 2)
+        right = min(end, index + WINDOW // 2)
+        quote = ("…" if left > start else "") + stripped[left:right] + ("…" if right < end else "")
+        lines.append(f"  ⟦{n}⟧  {quote}")
+    return "\n".join(lines)
+
+
+def align_hard_breaks(source_text: str, draft: str) -> tuple[str, str | None]:
+    """Re-apply the source's hard line breaks to a draft the model stripped them from.
+
+    Returns (draft, problem or None). The two trailing spaces are invisible, and
+    losing them reflows a stanza of verse into a paragraph, so this is worth
+    putting back rather than only counting.
+
+    Positional, and only where that is provably safe: if the model kept the line
+    count, source line i and draft line i are the same line and the break goes
+    back on. If it did not, there is no alignment to trust, and the caller is
+    told which lines to fix instead.
+    """
+    wanted = hard_breaks(source_text)
+    if not wanted or hard_breaks(draft) == wanted:
+        # Nothing to carry, or the breaks are already there -- the model kept
+        # them, or a previous refusal was acted on. The second case is what lets
+        # a hand-repaired draft pass on the next run instead of looping.
+        return draft, None
+
+    src_lines, draft_lines = source_text.split("\n"), draft.split("\n")
+    if len(src_lines) != len(draft_lines):
+        broken = [line for line in src_lines if line.endswith("  ") and line.strip()]
+        return draft, (
+            f"the model dropped {wanted - hard_breaks(draft)} hard line break(s) and "
+            f"moved {len(draft_lines) - len(src_lines):+d} line(s), so they cannot be "
+            "put back by position. End the matching draft line(s) with two spaces:\n"
+            + "\n".join(f"  ␣␣  {line.strip()}" for line in broken)
+        )
+
+    for i, line in enumerate(src_lines):
+        if line.endswith("  ") and line.strip() and draft_lines[i].strip():
+            draft_lines[i] = draft_lines[i].rstrip() + "  "
+    return "\n".join(draft_lines), None
+
+
 def restore(name: str, source_text: str, draft: str, token_re, render) -> str:
     """Put the tokens back where the model left the sentinels.
 
     Returns the restored body. Refuses -- by raising -- rather than returning a
     damaged file: a dropped sentinel means a note has been lost, and writing
-    that out is worse than failing.
+    that out is worse than failing. The refusal quotes the source line each lost
+    sentinel sat in, which is what a caller needs to put it back.
     """
-    _, forms = tokenize(source_text, token_re, render)
+    stripped, forms = tokenize(source_text, token_re, render)
+    draft, break_problem = align_hard_breaks(source_text, draft)
 
     seen = [int(m.group(1)) for m in SENTINEL_RE.finditer(draft)]
     expected = set(range(1, len(forms) + 1))
@@ -103,8 +177,11 @@ def restore(name: str, source_text: str, draft: str, token_re, render) -> str:
         problems.append(f"sentinel(s) {unknown} are not in source/{name}")
     if duplicated:
         problems.append(f"the model duplicated sentinel(s) {duplicated}")
+    if break_problem:
+        problems.append(break_problem)
     if problems:
-        raise ValueError(f"{name}: " + "; ".join(problems))
+        brief = repair_brief(stripped, missing + duplicated)
+        raise ValueError(f"{name}: " + "; ".join(problems) + (f"\n{brief}" if brief else ""))
 
     return SENTINEL_RE.sub(lambda m: forms[int(m.group(1)) - 1] or "", draft)
 
@@ -119,10 +196,10 @@ def hard_breaks(text: str) -> int:
     """Lines ending in a Markdown hard line break (two trailing spaces).
 
     The model strips these. Lose them and a stanza of verse reflows into one
-    paragraph, which reads as prose and is easy to miss in a diff. `restore`
-    cannot put them back reliably, because that needs the translated block to
-    line up with the source line for line, so this counts them instead and says
-    so when they go missing.
+    paragraph, which reads as prose and is easy to miss in a diff. Putting them
+    back needs the draft to line up with the source line for line, which is
+    `align_hard_breaks`' job and is not always possible; this is the count both
+    that and `compare` are measured against.
     """
     return sum(1 for line in text.split("\n") if line.endswith("  ") and line.strip())
 

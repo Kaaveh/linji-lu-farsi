@@ -41,6 +41,35 @@ whatever the user asks for.
 - **Always through `tools/anchors.py`.** `strip` before, `restore -o` after.
   Sent raw, the translator silently deletes every note anchor. Never `>` into
   `fa/` — a redirect truncates the file before the tool can refuse a bad draft.
+- **When `restore` refuses, place the marker yourself — do not hand it back.**
+  The model drops or duplicates a sentinel on some sections. The refusal quotes
+  the English line each lost sentinel sat in, so the position is recoverable
+  without reading `source/` and the draft back in full:
+
+  ```
+  error: 42.md: the model dropped sentinel(s) [2]
+    ⟦2⟧  …asked; “In the case of the twelve-faced Kuan-yin, which face is the
+         real one?”⟦2⟧
+  ```
+
+  Insert a bare `⟦2⟧` into `/tmp/42.fa.md` at the matching point in the Persian
+  — the same clause, the same side of it — and run `restore` again. Three rules
+  hold this together:
+
+  - **Edit the draft in `/tmp`, never `fa/`.** `restore` is the only thing that
+    writes `fa/`, and it validates first.
+  - **Only ever insert or delete a bare `⟦n⟧`.** Never write anchor markup by
+    hand; `restore` re-emits the token from `source/`, so what you are choosing
+    is a position and nothing else. A bad guess is a marker in the wrong clause,
+    never a lost note.
+  - **If most of the file's sentinels are missing, re-translate instead.** That
+    is the silent `-w` failure above — Classic was served — and placing a dozen
+    markers into a bad draft only makes it look finished.
+
+  A hard-line-break refusal works the same way: end the named draft lines with
+  two spaces. Say in the commit body which markers were placed by hand —
+  `Markers ⟦2⟧ and ⟦7⟧ placed by hand — Google dropped them.` Nothing goes in
+  the frontmatter.
 - **A translated file is `status: reviewed`.** There is no hand-revision stage
   after the pipeline, so there is no later step to promote a `draft` into place:
   what `restore` writes is the edition. Do not use `draft` or `translated`.

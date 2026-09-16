@@ -15,6 +15,7 @@ import unittest
 from pathlib import Path
 
 from linji_tools.anchors import (
+    align_hard_breaks,
     compare,
     hard_breaks,
     main,
@@ -83,12 +84,83 @@ class TestRestore(unittest.TestCase):
         self.assertEqual(restore("f.md", "plain", "plain", PATTERN, render), "plain")
 
 
+class TestRepairBrief(unittest.TestCase):
+    """A refusal has to carry enough to put the sentinel back.
+
+    Reading both whole files to place one marker is the cost this exists to
+    avoid, so the message quotes the source line the sentinel sat in.
+    """
+
+    def message(self, draft, text=TEXT):
+        with self.assertRaises(ValueError) as caught:
+            restore("f.md", text, draft, PATTERN, render)
+        return str(caught.exception)
+
+    def test_a_dropped_sentinel_is_quoted_in_its_source_line(self):
+        message = self.message("one two ⟦2⟧ three")
+        self.assertIn("⟦1⟧ two ⟦2⟧ three", message)
+
+    def test_the_quote_keeps_the_neighbouring_sentinels(self):
+        # What localises a marker in a repetitive line is the sentinel either
+        # side of it, so the quote comes off the stripped source, not the raw.
+        self.assertIn("⟦2⟧", self.message("one ⟦1⟧ two three"))
+
+    def test_a_duplicated_sentinel_is_quoted_too(self):
+        self.assertIn("one ⟦1⟧ two", self.message("⟦1⟧ ⟦1⟧ ⟦2⟧"))
+
+    def test_an_invented_sentinel_has_no_line_to_quote(self):
+        message = self.message(strip(TEXT, PATTERN, render) + "⟦99⟧")
+        self.assertIn("not in source", message)
+        self.assertNotIn("⟦99⟧  ", message)
+
+    def test_a_long_line_is_elided_around_the_sentinel(self):
+        text = "x" * 400 + " {{alpha}} " + "y" * 400
+        self.assertIn("…", self.message("nothing here", text))
+
+
+VERSE = "{{alpha}} one  \ntwo  \nthree\n"
+
+
 class TestHardBreaks(unittest.TestCase):
     def test_counts_only_real_hard_breaks(self):
         self.assertEqual(hard_breaks("a  \nb  \nc\n"), 2)
 
     def test_a_blank_line_of_spaces_is_not_a_hard_break(self):
         self.assertEqual(hard_breaks("a\n   \nb\n"), 0)
+
+    def stripped(self):
+        return strip(VERSE, PATTERN, render)
+
+    def test_breaks_the_model_dropped_are_put_back_by_position(self):
+        draft = self.stripped().replace("  \n", "\n")
+        out = restore("f.md", VERSE, draft, PATTERN, render)
+        self.assertEqual(hard_breaks(out), 2)
+
+    def test_a_draft_that_kept_its_breaks_is_left_alone(self):
+        draft, problem = align_hard_breaks(VERSE, self.stripped())
+        self.assertIsNone(problem)
+        self.assertEqual(draft, self.stripped())
+
+    def test_a_file_with_no_breaks_is_never_touched(self):
+        draft, problem = align_hard_breaks(TEXT, "anything at all")
+        self.assertIsNone(problem)
+        self.assertEqual(draft, "anything at all")
+
+    def test_hand_repaired_breaks_pass_even_though_the_lines_moved(self):
+        # The branch that makes the repair loop terminate: once the breaks are
+        # back, a re-run must not keep refusing because the counts still differ.
+        draft = self.stripped() + "an added line\n"
+        out = restore("f.md", VERSE, draft, PATTERN, render)
+        self.assertEqual(hard_breaks(out), 2)
+
+    def test_lost_breaks_with_moved_lines_are_refused_and_listed(self):
+        draft = self.stripped().replace("  \n", "\n") + "an added line\n"
+        with self.assertRaises(ValueError) as caught:
+            restore("f.md", VERSE, draft, PATTERN, render)
+        message = str(caught.exception)
+        self.assertIn("cannot be put back by position", message)
+        self.assertIn("one", message)
+        self.assertIn("two", message)
 
 
 SRC = '### 1\n\nHe asked.<a id="m1-1"></a>[<sup>1</sup>](#n1-1) He sat.\n'

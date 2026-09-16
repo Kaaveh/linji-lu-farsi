@@ -42,7 +42,10 @@ this repository.
   machine translation; it is deleted outright, silently. `strip` swaps every
   token for a sentinel the model does preserve, `restore` puts the tokens back
   where the sentinels landed, and a dropped or duplicated sentinel is refused
-  rather than written out. Supply your own token pattern and renderer; see the
-  module docstring.
+  rather than written out — quoting the source line it sat in, so a caller can
+  put it back without diffing two whole files. Hard line breaks the model
+  stripped are re-applied where the draft still lines up with the source, and
+  listed for the caller where it does not. Supply your own token pattern and
+  renderer; see the module docstring.
 
 MIT licensed — see `LICENSE-CODE` at the repo root.

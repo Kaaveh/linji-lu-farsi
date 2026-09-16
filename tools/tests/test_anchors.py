@@ -108,6 +108,19 @@ class TestRestore(unittest.TestCase):
             restore("42.md", SECTION, self.draft().replace("⟦2⟧", ""))
         self.assertIn("dropped", str(caught.exception))
 
+    def test_a_refusal_quotes_the_english_the_marker_belongs_in(self):
+        # Google Translate deletes a marker outright on some sections. The whole
+        # point of the quote is that the position can be worked out from the
+        # English without reading source/ and the draft back in full.
+        with self.assertRaises(ValueError) as caught:
+            restore("42.md", SECTION, self.draft().replace("⟦2⟧", ""))
+        self.assertIn("He asked.⟦2⟧ Then he sat down.", str(caught.exception))
+
+    def test_a_marker_placed_back_by_hand_restores_at_that_position(self):
+        repaired = self.draft().replace("پرسید.⟦2⟧", "⟦2⟧پرسید.")
+        out = restore("42.md", SECTION, repaired)
+        self.assertIn('<a id="m39-1"></a>[^۱^](#n39-1)پرسید.', out)
+
 
 class TestHeadings(unittest.TestCase):
     def test_part_headings_are_dropped(self):

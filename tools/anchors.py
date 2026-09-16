@@ -45,6 +45,20 @@ markers at full size, inline with the body text. `^۲^` compiles to
 is correct in all three outputs. Caught by reading the typeset page, invisible
 in the Markdown.
 
+On some sections the model drops or duplicates a sentinel anyway, and `restore`
+refuses rather than write a translation with a note missing from it. The refusal
+quotes the English line each lost sentinel sat in, which is enough to put it back
+without reading both files end to end:
+
+    error: 42.md: the model dropped sentinel(s) [2]
+      ⟦2⟧  …asked; “In the case of the twelve-faced Kuan-yin, which face is
+           the real one?”⟦2⟧
+
+Insert a bare `⟦2⟧` at the matching point in the *draft* -- never in fa/, and
+never touching the token text, which restore re-emits from source/ -- and run
+restore again. See CLAUDE.md for the full procedure and when to re-translate
+instead.
+
 Usage:
     tools/anchors.py strip SOURCE -o OUT
     tools/anchors.py restore SOURCE DRAFT -o OUT
