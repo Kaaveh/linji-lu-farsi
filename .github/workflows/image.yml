@@ -59,9 +59,13 @@ jobs:
 
       # The Dockerfile's own smoke test proves lualatex can typeset Persian.
       # This proves the published image can render the actual book.
+      # Spelled out in lowercase, like build.yml and release.yml. The owner is
+      # `Kaaveh`, and `docker run` rejects an uppercase repository name -- only
+      # metadata-action lowercases it for you, which is why the push above
+      # works and this would not.
       - name: Render the book with the image just pushed
         run: |
           docker run --rm -v "$PWD:/book" -w /book \
-            ghcr.io/${{ github.repository_owner }}/linji-lu-farsi:latest \
+            ghcr.io/kaaveh/linji-lu-farsi:latest \
             quarto render --to pdf
           test -f _book/*.pdf
