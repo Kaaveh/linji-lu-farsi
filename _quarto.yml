@@ -15,6 +15,17 @@
 # template as a plain $book-version$ variable.
 book-version: "نسخهٔ ۰.۰.۱"
 
+# The edition's date, Jalali, written out. Bump it with the version above, in
+# the same commit.
+#
+# Not `book: date:`. Quarto parses that key as a Gregorian date and reformats
+# it -- a Jalali string comes back out as "Invalid Date", and there is no
+# date-format that would produce one, because the whole date machinery is
+# Gregorian. `today` was also the wrong fact: a title page dates the edition,
+# not the afternoon someone ran the build. Same top-level treatment as
+# book-version, and read the same two ways.
+book-date: "۲۵ شهریور ۱۴۰۵"
+
 project:
   type: book
   output-dir: _book
@@ -23,7 +34,7 @@ book:
   title: "آموزه‌های ذن استاد لین‌چی"        # TBD
   subtitle: "برگردان فارسی از متن انگلیسی برتون واتسون"   # TBD
   author: "کاوه"                             # TBD: how you want to be credited
-  date: today
+  # No `date:` here -- see book-date at the top of this file.
 
   repo-url: https://github.com/Kaaveh/linji-lu-farsi
   repo-branch: main
@@ -162,6 +173,10 @@ format:
     # embedded in Persian text.
     pdf-engine: lualatex
     documentclass: book
+    # 1, so the printed contents lists sections only. Every section ends in a
+    # `## یادداشت‌ها`, and at the default depth each one got its own dotted
+    # line under its section -- 65 entries of the same word.
+    toc-depth: 1
     # `openany`, not the book class's default `openright`. Under openright every
     # \chapter does a \cleardoublepage to start on a recto, and 75 of this book's
     # sections are a page or less -- Part Three averages 170 words -- so each one

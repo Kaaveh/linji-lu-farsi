@@ -1,8 +1,11 @@
 % Title block. A copy of Quarto's stock pdf/pandoc/title.tex with one change:
-% the last line also typesets `book-version` from _quarto.yml, on its own line
-% above the date. \maketitle sets \date in a centred block, so the \\ breaks the
-% line there and nowhere else. The conditional means the file still renders if
-% the key is ever removed.
+% the last line typesets `book-version` and `book-date` from _quarto.yml, the
+% version on its own line above the date. \maketitle sets \date in a centred
+% block, so the \\ breaks the line there and nowhere else. The conditional
+% means the file still renders if the key is ever removed.
+%
+% `book-date`, not pandoc's `$date$`: the date is Jalali, and Quarto's own
+% `date` key is parsed and reformatted as a Gregorian one. See _quarto.yml.
 %
 % Careful editing this header: pandoc parses template syntax inside LaTeX
 % comments too. A dollar-delimited conditional written out in prose here is
@@ -27,4 +30,4 @@ $if(subtitle)$
 $endif$
 $-- This supports Quarto's authors normalization
 \author{$for(authors)$$it.name.literal$$sep$ \and $endfor$}
-\date{$if(book-version)$$book-version$\\[0.35em]$endif$$date$}
+\date{$if(book-version)$$book-version$\\[0.35em]$endif$$book-date$}
