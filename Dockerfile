@@ -19,7 +19,7 @@ ARG QUARTO_VERSION=1.10.18
 ARG TARGETARCH=amd64
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH=/usr/local/bin:$PATH \
+    PATH=/opt/texbin:/usr/local/bin:$PATH \
     PYTHONDONTWRITEBYTECODE=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -44,20 +44,26 @@ RUN curl -fsSL -o /tmp/quarto.deb \
     && rm /tmp/quarto.deb \
     && quarto --version
 
-# The binary directory is named after the platform (x86_64-linux, aarch64-linux
-# and so on), so it is discovered rather than hardcoded. `tlmgr path add`
-# symlinks everything into /usr/local/bin, which is already on PATH, so every
-# later step and every `just` recipe finds lualatex without knowing the name.
+# Quarto picks the install prefix and the binary directory is named after the
+# platform (x86_64-linux, aarch64-linux and so on), so both are discovered
+# rather than hardcoded, and the result is pinned to one stable path:
+# /opt/texbin, already on PATH above. Every later step and every `just` recipe
+# finds lualatex without knowing where TinyTeX went, and binaries that appear
+# when the package list is installed below are on PATH the moment they exist --
+# a symlinked *directory*, not a copy of its contents.
 #
-# No `-type f` in the find: every binary in TinyTeX's bin directory is a
-# symlink into texmf-dist/scripts, so `-type f` matches nothing and the command
-# substitution expands to the empty string. Searched from the root rather than
-# a guessed prefix, and `test -n` turns the next surprise into a named failure
-# instead of `/bin/sh: 1: : Permission denied`.
+# `tlmgr path add` is not used. It reports success and links into a directory
+# that is not on PATH, leaving `tlmgr: not found` one line later.
+#
+# No `-type f` in the find: every binary in that directory is a symlink into
+# texmf-dist/scripts, so `-type f` matches nothing however right the path is.
+# `test -n` turns the next surprise into a named failure rather than
+# `/bin/sh: 1: : Permission denied`, which is what an empty command
+# substitution reports.
 RUN quarto install tinytex --no-prompt \
-    && tlmgr_bin="$(find / -name tlmgr 2>/dev/null | head -1)" \
+    && tlmgr_bin="$(find / -path '*/bin/*' -name tlmgr 2>/dev/null | head -1)" \
     && test -n "$tlmgr_bin" \
-    && "$tlmgr_bin" path add \
+    && ln -s "$(dirname "$tlmgr_bin")" /opt/texbin \
     && tlmgr --version \
     && lualatex --version | head -1
 
@@ -66,7 +72,6 @@ RUN quarto install tinytex --no-prompt \
 # build things in, which is the opposite of reproducible.
 COPY tools/texlive-packages.txt /tmp/texlive-packages.txt
 RUN tlmgr install $(tr '\n' ' ' < /tmp/texlive-packages.txt) \
-    && tlmgr path add \
     && rm /tmp/texlive-packages.txt \
     && luaotfload-tool --update
 
