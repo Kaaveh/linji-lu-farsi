@@ -255,7 +255,6 @@ tikzfill
 times
 tipa
 titlesec
-tlgpg
 tools
 totcount
 totpages
