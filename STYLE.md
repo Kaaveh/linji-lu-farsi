@@ -254,11 +254,11 @@ These are not up for discussion per-chapter; they are checked in CI.
 
 | Rule | Enforced by |
 |---|---|
-| One sentence per line | `linji_tools.check_linebreaks` |
-| Farsi Yeh, Keheh, Persian digits, no Tatweel | `linji_tools.normalize` |
-| ZWNJ in `می‌`, `ها`, `تر`/`ترین` | `linji_tools.normalize` |
-| No bidi override characters | `linji_tools.normalize` (never auto-fixed) |
-| No dropped paragraphs | `linji_tools.check_parity` (maintainer, locally) |
+| One sentence per line | `bargardan_tools.check_linebreaks` |
+| Farsi Yeh, Keheh, Persian digits, no Tatweel | `bargardan_tools.normalize` |
+| ZWNJ in `می‌`, `ها`, `تر`/`ترین` | `bargardan_tools.normalize` |
+| No bidi override characters | `bargardan_tools.normalize` (never auto-fixed) |
+| No dropped paragraphs | `bargardan_tools.check_parity` (maintainer, locally) |
 | Note anchors match the source | `tools/anchors.py --check` (maintainer, locally) |
 
 Harakat are **preserved** by default, because they carry meaning in verse and

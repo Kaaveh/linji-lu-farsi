@@ -1,4 +1,4 @@
-# Configuration for the checkers in linji_tools/. This file is config only --
+# Configuration for the checkers in bargardan_tools/. This file is config only --
 # they are imported from the tree, not installed. Their dependencies:
 #   pip install -r tools/requirements.txt
 #

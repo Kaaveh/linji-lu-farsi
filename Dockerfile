@@ -81,9 +81,10 @@ RUN tlmgr install $(tr '\n' ' ' < /tmp/texlive-packages.txt) \
 COPY fonts/ /usr/share/fonts/truetype/vazirmatn/
 RUN fc-cache -f && fc-list | grep -q Vazirmatn
 
-# Only the two wheels the checkers need. The checkers themselves are in
-# linji_tools/ and arrive with the rest of the tree at run time, mounted at
-# /book -- so they are deliberately not installed here.
+# The checkers and the two wheels they need. bargardan-tools is pinned to a tag
+# in requirements.txt, so the image and CI run the same version of it. Only the
+# book's own adapter under tools/ arrives at run time, with the tree mounted at
+# /book, which is why editing it needs no rebuild.
 COPY tools/requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir --break-system-packages -r /tmp/requirements.txt \
     && rm /tmp/requirements.txt
