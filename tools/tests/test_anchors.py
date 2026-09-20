@@ -1,6 +1,6 @@
 """The adapter: what this book's markup becomes on the way into fa/.
 
-The sentinel round-trip itself is `linji_tools.anchors` and is tested there,
+The sentinel round-trip itself is `bargardan_tools.anchors` and is tested there,
 against a toy markup, precisely so that nothing about Watson's anchors can leak
 into it. What is left here is the book's own knowledge -- the token pattern, the
 Persian form of every token, and the two irregularities the text turns out to

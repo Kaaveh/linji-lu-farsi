@@ -32,9 +32,14 @@ repos:
 
   - repo: local
     hooks:
+      # These two ran `tools/normalize.py` and `tools/check_linebreaks.py` long
+      # after both files moved out of tools/, so the hooks failed to start and
+      # nothing was being checked on commit. Invoked as modules now, which is
+      # also how `just check` and CI invoke them, so there is one spelling to
+      # keep right instead of two.
       - id: normalize
         name: Persian orthography
-        entry: python tools/normalize.py --fix
+        entry: python -m bargardan_tools.normalize --fix
         language: system
         files: ^fa/.*\.md$
         # Exits non-zero if a bidi override is present, which --fix will not
@@ -42,7 +47,7 @@ repos:
 
       - id: linebreaks
         name: Semantic line breaks
-        entry: python tools/check_linebreaks.py --fix
+        entry: python -m bargardan_tools.check_linebreaks --fix
         language: system
         files: ^fa/.*\.md$
 

@@ -5,9 +5,10 @@ name: lint
 # would make every PR slower for no benefit. build.yml uses the container,
 # which is where it earns its keep.
 #
-# The checkers are in linji_tools/ in this repository and run straight from the
-# tree -- nothing to install, nothing to publish, and a fork's pull request
-# lints with no access to anything private.
+# The checkers are the bargardan-tools package, installed from its own public
+# repository by tools/requirements.txt and pinned to a tag. A fork's pull
+# request lints with no access to anything private: the package repo is public
+# and nothing here reaches the maintainer's machine.
 
 on:
   pull_request:
@@ -35,26 +36,24 @@ jobs:
 
       - run: pip install -r tools/requirements.txt
 
-      # Two suites: linji_tools/ is general and must pass with none of this
-      # book's config; tools/tests/ covers the adapter, which is all config.
-      - name: Tests for the checkers
-        run: python -m unittest discover -s linji_tools/tests
-
+      # Only the adapter. The checkers' own suite runs in bargardan-tools' CI,
+      # where it can prove what matters about it -- that it passes with none of
+      # any book's config present.
       - name: Tests for the note-apparatus adapter
         run: python -m unittest discover -s tools/tests
 
       # Each on its own step so a red run names the failing check in the UI.
       - name: Orthography
-        run: python -m linji_tools.normalize --check
+        run: python -m bargardan_tools.normalize --check
 
       - name: Semantic line breaks
-        run: python -m linji_tools.check_linebreaks --check
+        run: python -m bargardan_tools.check_linebreaks --check
 
       # Exits 0 with a notice here: source/ is licensed to the maintainer for
       # translation, not for redistribution, so CI never has it. This step is
       # kept so the notice appears in the log and nobody assumes it ran.
       - name: Parity
-        run: python -m linji_tools.check_parity --check
+        run: python -m bargardan_tools.check_parity --check
 
       - name: Note anchors
         run: python tools/anchors.py --check

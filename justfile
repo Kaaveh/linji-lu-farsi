@@ -24,26 +24,25 @@ _default:
     @just --list
 
 # Everything CI runs on a pull request. The checkers come from the installed
-# linji-tools package; tools/anchors.py is the adapter that stays here.
+# bargardan-tools package; tools/anchors.py is the adapter that stays here.
 check: test
-    {{python}} -m linji_tools.normalize --check
-    {{python}} -m linji_tools.check_linebreaks --check
-    {{python}} -m linji_tools.check_parity --check
+    {{python}} -m bargardan_tools.normalize --check
+    {{python}} -m bargardan_tools.check_linebreaks --check
+    {{python}} -m bargardan_tools.check_parity --check
     {{python}} tools/anchors.py --check
 
-# Two suites, kept apart on purpose. linji_tools/ is general and its tests must
-# pass without any of this book's config; tools/tests/ covers the adapter, which
-# is nothing but this book's config.
+# Only the adapter now. The engine's own suite moved out with it and runs in
+# bargardan-tools' CI, where it belongs: those tests have to pass with none of
+# this book's config present, which they cannot demonstrate from inside a book.
 test:
-    {{python}} -m unittest discover -s linji_tools/tests
     {{python}} -m unittest discover -s tools/tests
 
 # Bidi overrides are reported but never rewritten, so this can still leave
 # `just check` failing. That is by design -- a human has to look at those.
 # Correct what can be corrected automatically.
 fix:
-    {{python}} -m linji_tools.normalize --fix
-    {{python}} -m linji_tools.check_linebreaks --fix
+    {{python}} -m bargardan_tools.normalize --fix
+    {{python}} -m bargardan_tools.check_linebreaks --fix
 
 # HTML, PDF and EPUB.
 build:
@@ -66,7 +65,7 @@ serve:
 
 # Create or refresh fa/ stubs from source/. Never overwrites existing work.
 stubs:
-    {{python}} -m linji_tools.make_stubs
+    {{python}} -m bargardan_tools.make_stubs
 
 docker-build:
     docker build -t {{image}} .

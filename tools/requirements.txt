@@ -3,7 +3,15 @@
 # Deliberately tiny: CI runs the checks on every pull request and they should
 # finish in seconds. Nothing here pulls a compiler or a model.
 #
-# The checkers themselves are in linji_tools/ in this repository and are
-# imported from the tree, not installed. See linji_tools/__init__.py.
+# The checkers used to live in linji_tools/ in this repository and be imported
+# from the tree. They were copy-pasted into three book repositories and drifted
+# apart, so they now have a home of their own and are installed like anything
+# else. Nothing in them knows which book they are checking: they read the
+# [tool.*] sections of the pyproject.toml in the current directory.
+#
+# Pinned to a tag on purpose. Tracking @main would mean one bad commit there
+# breaks this book's CI with nothing in this history to show what changed.
+bargardan-tools @ git+https://github.com/Kaaveh/bargardan-tools@v0.1.0
+
 PyYAML==6.0.3
 regex==2026.9.10

@@ -82,18 +82,22 @@ whatever the user asks for.
   reverses Latin-script runs inside Persian. Reasoning in `tex/preamble.tex`.
 - `just check` runs everything CI runs; `LOCAL=1 just check` skips the container
   and is what you want for a fast loop. `just venv` sets the host env up.
-- The checkers live in `linji_tools/` and run as `python -m linji_tools.<name>`
-  from the repo root: orthography (`normalize`), semantic line breaks
-  (`check_linebreaks`), source/translation block parity (`check_parity`), plus
-  `make_stubs`. Imported from the tree, not installed —
-  `tools/requirements.txt` is just PyYAML and regex.
-- **They carry no knowledge of this book**, and that is enforced: their tests in
-  `linji_tools/tests/` must pass with no `[tool.*]` config present at all. What
-  makes them this book's is `pyproject.toml`. Keep it that way — a book fact
-  belongs in the config, not in a checker.
+- The checkers are the `bargardan-tools` package, installed from
+  `tools/requirements.txt` and pinned to a tag. They run as
+  `python -m bargardan_tools.<name>` from the repo root: orthography
+  (`normalize`), semantic line breaks (`check_linebreaks`), source/translation
+  block parity (`check_parity`), plus `make_stubs`. They used to live in
+  `linji_tools/` here; three books each had a copy and the copies drifted, so
+  they now have a repository of their own and this one carries none.
+- **They carry no knowledge of this book**, and that is enforced: their tests
+  must pass with no `[tool.*]` config present at all, which is checked in their
+  own CI, where no book's config exists. What makes them this book's is
+  `pyproject.toml`. Keep it that way — a book fact belongs in the config, not
+  in a checker. To try a change to them, `pip install -e ../bargardan-tools`.
 - `tools/anchors.py` is the adapter, and is the one piece that *is* this book's:
   Watson's token pattern and the Persian form of every heading and marker. The
-  round-trip it calls is `linji_tools.anchors`. 154 tests there, 20 here.
+  round-trip it calls is `bargardan_tools.anchors`. 23 tests here; the engine's
+  165 run in its own repository.
 - `check_parity` only works locally — CI has no `source/`.
 
 ## Quality bar
